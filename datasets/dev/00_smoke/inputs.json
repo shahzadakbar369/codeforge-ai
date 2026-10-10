@@ -1,0 +1,7 @@
+[
+  {"function": "calculate_invoice", "args": [100, 0.17, 10]},
+  {"function": "calculate_invoice", "args": [100, 0, 0]},
+  {"function": "calculate_invoice", "args": [0, 0.17, 0]},
+  {"function": "calculate_invoice", "args": [50, 0.17, 80]},
+  {"function": "calculate_invoice", "args": [19.99, 0.0825, 2.5]}
+]
