@@ -83,7 +83,7 @@ See the work log above.
 
 ### Ayesha (UI/UX and documentation)
 
-(Ayesha: add your paragraph and table rows here.)
+| Ayesha | Improved frontend UI styling, created `USER_FLOW.md` and `WIREFRAME.md`, and updated project progress documentation. | `frontend/index.html`, `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, `docs/PROGRESS.md` | Completed |
 
 ## 7. How to add an entry
 
