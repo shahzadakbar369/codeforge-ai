@@ -22,7 +22,7 @@ git log --date=short --pretty=format:"%h %ad %an %s"
 | Baseline scripts (single-pass migration and comparison) | Generation and comparison scripts done and committed; run on all dev programs pending Tahir's runner and dev programs | Shahzad | Commits 25d07b5, 6eb0156 |
 | Legacy PHP runner (golden master) | Not reported yet | Tahir | pending |
 | Dev programs 1 to 3 | Not reported yet | Tahir | pending |
-| User flow and wireframes | Done | Ayesha | `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commit `598721c` |ing |
+| User flow and wireframes | Done | Ayesha | `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commits `598721c`, `4bedab0` |
 
 No equivalence rate, security count or test result exists yet. They will be reported only after real runs.
 
