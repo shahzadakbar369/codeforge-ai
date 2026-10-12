@@ -22,7 +22,7 @@ git log --date=short --pretty=format:"%h %ad %an %s"
 | Baseline scripts (single-pass migration and comparison) | Generation and comparison scripts done and committed; run on all dev programs pending Tahir's runner and dev programs | Shahzad | Commits 25d07b5, 6eb0156 |
 | Legacy PHP runner (golden master) | Not reported yet | Tahir | pending |
 | Dev programs 1 to 3 | Not reported yet | Tahir | pending |
-| User flow and wireframes | Not reported yet | Ayesha | pending |
+| User flow and wireframes | Done | Ayesha | `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commits `598721c`, `4bedab0` |
 
 No equivalence rate, security count or test result exists yet. They will be reported only after real runs.
 
@@ -40,6 +40,8 @@ No equivalence rate, security count or test result exists yet. They will be repo
 | 2026-10-11 | Shahzad | Wrote the baseline migration script: sends each dev program to the LLM once, caches answers, pauses between calls to respect rate limits, validates the JSON answer with Pydantic, checks the Python parses, and saves the result. | Python 3.14.5, groq 1.7.0, pydantic 2.14.0, model openai/gpt-oss-20b | `baseline/run_baseline.py`, commit 25d07b5 |
 | 2026-10-11 | Shahzad | Ran it on the smoke sample: valid JSON and valid Python on the first run (1,098 tokens); the second run reused the cache and used no API quota. | Same | Local output, not committed (smoke runs are not results) |
 | 2026-10-11 | Shahzad | Wrote the comparison harness: runs the migrated code in a separate process with a timeout and compares its results with the old PHP's recorded outputs. Numbers compare as numbers (100 equals 100.0) and a function counts as equivalent only if every input matches. The rules pass a self-test. Run on the smoke sample, it correctly reports that it is waiting for the legacy outputs. | Python 3.14.5 | `baseline/compare.py`, `baseline/run_migrated.py`, commit 6eb0156 |
+
+| 2026-10-12 | Ayesha | Improved frontend styling and created user-flow and wireframe documentation. | HTML/CSS, Markdown, VS Code, Git | `frontend/index.html`, `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commits `64bb8cd` and `598721c` |
 
 ## 3. Decisions
 
@@ -67,7 +69,7 @@ First migration test: 1,327 tokens for a 10-line function on `openai/gpt-oss-20b
 - Old PHP must run in Docker (network off) before any equivalence number can exist. Owner: Tahir.
 - Dev programs 1 to 3 (calculator, student grading, invoice calculation) with inputs. Owner: Tahir.
 - Run the baseline on all dev programs once the programs and their recorded legacy outputs exist. Owner: Shahzad, after Tahir's runner.
-- User flow and wireframes. Owner: Ayesha.
+
 
 ## 6. Team contributions
 
@@ -88,7 +90,7 @@ I built the legacy PHP runner (golden master) and recorded the real outputs of t
 
 ### Ayesha (UI/UX and documentation)
 
-(Ayesha: add your paragraph and table rows here.)
+I worked on the CodeForge AI UI prototype by improving the styling of the frontend. I also created the user flow and wireframe documentation to explain the application's workflow and planned interface. The AI conversion and security scanning features still require backend integration.
 
 ## 7. How to add an entry
 
