@@ -83,7 +83,7 @@ See the work log above.
 
 ### Ayesha (UI/UX and documentation)
 
-| Ayesha | Improved frontend UI styling, created `USER_FLOW.md` and `WIREFRAME.md`, and updated project progress documentation. | `frontend/index.html`, `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, `docs/PROGRESS.md` | Completed |
+I worked on the CodeForge AI UI prototype by improving the styling of the frontend. I also created the user flow and wireframe documentation to explain the application's workflow and planned interface. The AI conversion and security scanning features still require backend integration.
 
 ## 7. How to add an entry
 
