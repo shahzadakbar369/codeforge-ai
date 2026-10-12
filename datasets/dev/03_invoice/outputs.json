@@ -1,0 +1,463 @@
+[
+  {
+    "function": "line_total",
+    "args": [
+      10,
+      3
+    ],
+    "value": 30.0,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      19.99,
+      2,
+      10
+    ],
+    "value": 35.98,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      100,
+      1,
+      100
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      0,
+      5,
+      20
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      7.5,
+      4,
+      12.5
+    ],
+    "value": 26.25,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      1.005,
+      1
+    ],
+    "value": 1.01,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 10,
+          "qty": 2
+        },
+        {
+          "price": 5.5,
+          "qty": 4
+        }
+      ]
+    ],
+    "value": 42.0,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 100,
+          "qty": 1,
+          "discount": 15
+        },
+        {
+          "price": 20,
+          "qty": 3
+        }
+      ]
+    ],
+    "value": 145.0,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      []
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 33.33,
+          "qty": 3,
+          "discount": 10
+        }
+      ]
+    ],
+    "value": 89.99,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 10,
+          "qty": 1
+        },
+        {
+          "qty": 2
+        }
+      ]
+    ],
+    "ok": false,
+    "error": "ErrorException: Undefined array key \"price\""
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      500
+    ],
+    "value": 25.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      1000
+    ],
+    "value": 50.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      1000.01
+    ],
+    "value": 100.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      5000
+    ],
+    "value": 500.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      5000.01
+    ],
+    "value": 750.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      0
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      19.99
+    ],
+    "value": 1.0,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      0.5
+    ],
+    "value": 5,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      1
+    ],
+    "value": 5,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      3
+    ],
+    "value": 12.5,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      5
+    ],
+    "value": 12.5,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      20
+    ],
+    "value": 25,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      21
+    ],
+    "value": 33.0,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      50
+    ],
+    "value": 49.0,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Weight must be positive"
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      -2
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Weight must be positive"
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      1000,
+      0
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      1000,
+      10
+    ],
+    "value": 15.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      1000,
+      31
+    ],
+    "value": 30.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      1000,
+      400
+    ],
+    "value": 210.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      250.75,
+      45
+    ],
+    "value": 7.52,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      500,
+      -3
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "format_invoice_number",
+    "args": [
+      7
+    ],
+    "value": "INV-00007",
+    "ok": true
+  },
+  {
+    "function": "format_invoice_number",
+    "args": [
+      12345
+    ],
+    "value": "INV-12345",
+    "ok": true
+  },
+  {
+    "function": "format_invoice_number",
+    "args": [
+      123456
+    ],
+    "value": "INV-123456",
+    "ok": true
+  },
+  {
+    "function": "format_invoice_number",
+    "args": [
+      0
+    ],
+    "value": "INV-00000",
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [
+        {
+          "price": 100,
+          "qty": 2
+        }
+      ],
+      3
+    ],
+    "value": 222.5,
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [
+        {
+          "price": 450,
+          "qty": 10,
+          "discount": 5
+        }
+      ],
+      25
+    ],
+    "value": 4735.5,
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [
+        {
+          "price": 19.99,
+          "qty": 3
+        }
+      ],
+      0.8
+    ],
+    "value": 67.97,
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [
+        {
+          "price": 10,
+          "qty": 1
+        }
+      ],
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Weight must be positive"
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      100,
+      3
+    ],
+    "value": [
+      33.33,
+      33.33,
+      33.34
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      100,
+      4
+    ],
+    "value": [
+      25.0,
+      25.0,
+      25.0,
+      25.0
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      10,
+      1
+    ],
+    "value": [
+      10.0
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      99.99,
+      2
+    ],
+    "value": [
+      49.99,
+      50.0
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      50,
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Need at least one installment"
+  }
+]
