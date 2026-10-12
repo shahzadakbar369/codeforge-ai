@@ -79,7 +79,12 @@ See the work log above.
 
 ### Tahir (security and testing)
 
-(Tahir: add your paragraph and table rows here.)
+I built the legacy PHP runner (golden master) and recorded the real outputs of the first three dev programs. The runner executes each legacy PHP program in a Docker container with the network off and writes its outputs to `outputs.json`, which `baseline/compare.py` reads. The three dev programs (calculator, student grading, invoice) and their inputs were drafted with Claude. I ran them through the runner in Docker to record the outputs. The Security Agent and test work are not started yet.
+
+| Date | Person | What was done | Tools and versions | Evidence |
+|---|---|---|---|---|
+| 2026-10-12 | Tahir | Built the legacy PHP runner: a PHP harness that calls each function with the recorded inputs and a Python script that runs it in Docker (network off, read-only, resource limits). Tested on the smoke sample: 5 results. | Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a807 |
+| 2026-10-12 | Tahir | Added dev programs 1 to 3 (calculator, student grading, invoice), drafted with Claude, and recorded their legacy outputs in Docker: 47, 48 and 46 results. | Claude (drafting), Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `datasets/dev/01_calculator`, `02_student_grading`, `03_invoice`, commit f570b2b |
 
 ### Ayesha (UI/UX and documentation)
 

@@ -1,0 +1,52 @@
+[
+  {
+    "function": "calculate_invoice",
+    "args": [
+      100,
+      0.17,
+      10
+    ],
+    "value": 105.3,
+    "ok": true
+  },
+  {
+    "function": "calculate_invoice",
+    "args": [
+      100,
+      0,
+      0
+    ],
+    "value": 100.0,
+    "ok": true
+  },
+  {
+    "function": "calculate_invoice",
+    "args": [
+      0,
+      0.17,
+      0
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "calculate_invoice",
+    "args": [
+      50,
+      0.17,
+      80
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "calculate_invoice",
+    "args": [
+      19.99,
+      0.0825,
+      2.5
+    ],
+    "value": 18.93,
+    "ok": true
+  }
+]
