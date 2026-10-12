@@ -1,16 +1,12 @@
 # CodeForge AI: Progress Log
 
-Last updated: 2026-10-11 by Shahzad Akbar
+Last updated: 2026-10-12 by Tahir Husnain
 
 This file records what the team has actually done, who did it, which tools they used, and where the evidence is. Every entry must point to something that exists (a commit, a file in the repo, a screenshot). Numbers appear here only if they came from a real run.
 
 Dates come from the commit history where possible. Check any entry with:
 
-```
-git log --date=short --pretty=format:"%h %ad %an %s"
-```
-
-## 1. Status snapshot (2026-10-11)
+## 1. Status snapshot (2026-10-12)
 
 | Area | Status | Owner | Evidence |
 |---|---|---|---|
@@ -19,9 +15,9 @@ git log --date=short --pretty=format:"%h %ad %an %s"
 | LLM access (Groq free tier) | Done | Shahzad | `tools/test_groq.py`, `tools/list_models.py` |
 | First real LLM migration (one function) | Done as a plumbing test, not counted in any result | Shahzad | Local scratch file, not committed |
 | Dev dataset layout and smoke sample | Started | Shahzad | `datasets/dev/00_smoke`, commit 585839b |
-| Baseline scripts (single-pass migration and comparison) | Generation and comparison scripts done and committed; run on all dev programs pending Tahir's runner and dev programs | Shahzad | Commits 25d07b5, 6eb0156 |
-| Legacy PHP runner (golden master) | Not reported yet | Tahir | pending |
-| Dev programs 1 to 3 | Not reported yet | Tahir | pending |
+| Baseline scripts (single-pass migration and comparison) | Generation and comparison scripts done and committed; run on all dev programs pending baseline execution | Shahzad | Commits 25d07b5, 6eb0156 |
+| Legacy PHP runner (golden master) | Done | Tahir | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a007 |
+| Dev programs 1 to 3 | Done | Tahir | `datasets/dev/01_calculator`, `02_student_grading`, `03_invoice`, commit f570b2b |
 | User flow and wireframes | Not reported yet | Ayesha | pending |
 
 No equivalence rate, security count or test result exists yet. They will be reported only after real runs.
@@ -40,6 +36,8 @@ No equivalence rate, security count or test result exists yet. They will be repo
 | 2026-10-11 | Shahzad | Wrote the baseline migration script: sends each dev program to the LLM once, caches answers, pauses between calls to respect rate limits, validates the JSON answer with Pydantic, checks the Python parses, and saves the result. | Python 3.14.5, groq 1.7.0, pydantic 2.14.0, model openai/gpt-oss-20b | `baseline/run_baseline.py`, commit 25d07b5 |
 | 2026-10-11 | Shahzad | Ran it on the smoke sample: valid JSON and valid Python on the first run (1,098 tokens); the second run reused the cache and used no API quota. | Same | Local output, not committed (smoke runs are not results) |
 | 2026-10-11 | Shahzad | Wrote the comparison harness: runs the migrated code in a separate process with a timeout and compares its results with the old PHP's recorded outputs. Numbers compare as numbers (100 equals 100.0) and a function counts as equivalent only if every input matches. The rules pass a self-test. Run on the smoke sample, it correctly reports that it is waiting for the legacy outputs. | Python 3.14.5 | `baseline/compare.py`, `baseline/run_migrated.py`, commit 6eb0156 |
+| 2026-10-12 | Tahir | Built the legacy PHP runner: a PHP harness that calls each function with the recorded inputs and a Python script that runs it in Docker (network off, read-only, resource limits). Tested on the smoke sample: 5 results. | Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a007 |
+| 2026-10-12 | Tahir | Added dev programs 1 to 3 (calculator, student grading, invoice), drafted with Claude, and recorded their legacy outputs in Docker: 47, 48 and 46 results. | Claude (drafting), Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `datasets/dev/01_calculator`, `02_student_grading`, `03_invoice`, commit f570b2b |
 
 ## 3. Decisions
 
@@ -64,9 +62,7 @@ First migration test: 1,327 tokens for a 10-line function on `openai/gpt-oss-20b
 
 ## 5. Open items and blockers
 
-- Old PHP must run in Docker (network off) before any equivalence number can exist. Owner: Tahir.
-- Dev programs 1 to 3 (calculator, student grading, invoice calculation) with inputs. Owner: Tahir.
-- Run the baseline on all dev programs once the programs and their recorded legacy outputs exist. Owner: Shahzad, after Tahir's runner.
+- Run the baseline on all dev programs now that programs 1 to 3 and their recorded legacy outputs exist. Owner: Shahzad.
 - User flow and wireframes. Owner: Ayesha.
 
 ## 6. Team contributions
@@ -83,7 +79,7 @@ I built the legacy PHP runner (golden master) and recorded the real outputs of t
 
 | Date | Person | What was done | Tools and versions | Evidence |
 |---|---|---|---|---|
-| 2026-10-12 | Tahir | Built the legacy PHP runner: a PHP harness that calls each function with the recorded inputs and a Python script that runs it in Docker (network off, read-only, resource limits). Tested on the smoke sample: 5 results. | Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a807 |
+| 2026-10-12 | Tahir | Built the legacy PHP runner: a PHP harness that calls each function with the recorded inputs and a Python script that runs it in Docker (network off, read-only, resource limits). Tested on the smoke sample: 5 results. | Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a007 |
 | 2026-10-12 | Tahir | Added dev programs 1 to 3 (calculator, student grading, invoice), drafted with Claude, and recorded their legacy outputs in Docker: 47, 48 and 46 results. | Claude (drafting), Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `datasets/dev/01_calculator`, `02_student_grading`, `03_invoice`, commit f570b2b |
 
 ### Ayesha (UI/UX and documentation)
