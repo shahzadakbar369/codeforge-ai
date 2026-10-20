@@ -1,0 +1,13 @@
+{
+  "explanation": "The Python code replicates the functionality of the original PHP functions while maintaining identical behavior.\n\n* **Rounding** \u2013 PHP\u2019s `round()` uses half\u2011up rounding (rounds .5 up). Python\u2019s built\u2011in `round()` uses banker's rounding, so a helper `round_half_up()` implements half\u2011up rounding with the `decimal` module.\n* **Exception handling** \u2013 PHP throws `InvalidArgumentException`; the Python version raises `ValueError` with the same messages.\n* **Mathematical functions** \u2013 `ceil()` and `floor()` are imported from `math`, matching PHP\u2019s behavior.\n* **Data structures** \u2013 Items are expected to be a list of dictionaries with keys `price`, `qty`, and optionally `discount`. The functions return floats or lists exactly as PHP would.\n\nAll functions return their result and do not produce side effects such as printing or reading input.\n\nThe code only uses the Python standard library, satisfying the constraints.\n\n",
+  "assumptions": [
+    "All numeric inputs are compatible with Python float arithmetic; rounding is performed on the final results.",
+    "The `items` iterable in `invoice_subtotal` and `invoice_total` is a list of dictionaries with keys `price`, `qty`, and optional `discount`.",
+    "The `format_invoice_number` function expects an integer or a numeric string that can be converted to an integer.",
+    "The rounding helper `round_half_up` is sufficient to emulate PHP\u2019s `round` for all cases required by the original functions.",
+    "The `shipping_cost` function\u2019s logic for extra weight beyond 20\u202fkg assumes the same step size as PHP (ceil of weight\u201120 divided by 10, times 8)."
+  ],
+  "warnings": [
+    "The implementation uses the `decimal` module only for rounding; all other arithmetic is performed with native Python floats, which may introduce minor floating\u2011point inaccuracies in intermediate calculations. However, the final results are rounded with `round_half_up` to match PHP\u2019s output.\nIf absolute precision is critical, consider performing all arithmetic with `Decimal` objects throughout."
+  ]
+}

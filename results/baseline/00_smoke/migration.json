@@ -1,0 +1,9 @@
+{
+  "explanation": "The PHP function uses `round($total, 2)` which rounds half up (e.g., 2.345 \u2192 2.35). Python\u2019s built\u2011in `round` uses bankers rounding, so we replicate PHP\u2019s behaviour with the `decimal` module and `ROUND_HALF_UP`. All calculations are performed with `Decimal` to avoid floating\u2011point inaccuracies. The function accepts numeric types, clamps negative totals to zero, applies tax, rounds to two decimal places, and returns a float as PHP would.\n",
+  "assumptions": [
+    "Inputs are numeric (int or float); tax_rate is expressed as a decimal fraction; the function should behave the same as the PHP version for all numeric inputs.\n"
+  ],
+  "warnings": [
+    "None."
+  ]
+}

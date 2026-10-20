@@ -1,0 +1,261 @@
+[
+  {
+    "program": "00_smoke",
+    "counted": false,
+    "functions": [
+      {
+        "function": "calculate_invoice",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "01_calculator",
+    "counted": true,
+    "functions": [
+      {
+        "function": "add",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "average",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "celsius_to_fahrenheit",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "clamp",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "divide",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "factorial",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "is_even",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "modulo",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "multiply",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "percent_of",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "power",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "round_to",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "subtract",
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "02_student_grading",
+    "counted": true,
+    "functions": [
+      {
+        "function": "calculate_average",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "count_passing",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "curve_scores",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "gpa",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "grade_distribution",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "grade_points",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "highest_score",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "is_honor_roll",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "letter_grade",
+        "verdict": "EQUIVALENT",
+        "total": 9,
+        "matched": 9,
+        "failures": []
+      },
+      {
+        "function": "rank_scores",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "weighted_grade",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "03_invoice",
+    "counted": true,
+    "functions": [
+      {
+        "function": "format_invoice_number",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "invoice_subtotal",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "invoice_total",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "late_fee",
+        "verdict": "EQUIVALENT",
+        "total": 6,
+        "matched": 6,
+        "failures": []
+      },
+      {
+        "function": "line_total",
+        "verdict": "EQUIVALENT",
+        "total": 6,
+        "matched": 6,
+        "failures": []
+      },
+      {
+        "function": "shipping_cost",
+        "verdict": "EQUIVALENT",
+        "total": 9,
+        "matched": 9,
+        "failures": []
+      },
+      {
+        "function": "split_payment",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "tax_for_amount",
+        "verdict": "EQUIVALENT",
+        "total": 7,
+        "matched": 7,
+        "failures": []
+      }
+    ],
+    "status": "compared"
+  }
+]

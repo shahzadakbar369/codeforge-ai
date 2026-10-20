@@ -1,0 +1,11 @@
+{
+  "explanation": "The Python module implements each PHP function with identical behavior.\n- Numerical calculations use Python's built\u2011in `round` to match PHP's `round(..., 2)`.\n- Edge cases such as empty lists return the same values as PHP (`0`, `0.0`, `None`, or `False`).\n- Exceptions are raised as `ValueError` with the same messages used in the PHP `InvalidArgumentException`.\n- The `rank_scores` function returns a new list sorted in descending order; this preserves the input list like PHP's `rsort` would modify it.\n- The `is_honor_roll` function safely handles an empty score list, returning `False`.\n- All functions are pure: they accept parameters, perform calculations, and return results without I/O.\n",
+  "assumptions": [
+    "Input to each function is a list or iterable of numeric values (int or float).",
+    "Score values are comparable and hashable where required.\n",
+    "`weighted_grade` uses the same error messages as PHP's `InvalidArgumentException`.",
+    "`grade_distribution` initializes all five grades even if zero occurrences exist.\n",
+    "The rounding behavior of Python\u2019s `round` (bankers rounding for .5 values) is acceptable for matching PHP\u2019s rounding.\n"
+  ],
+  "warnings": []
+}
