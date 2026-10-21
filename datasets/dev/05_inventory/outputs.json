@@ -1,0 +1,426 @@
+[
+  {
+    "function": "reset_inventory",
+    "args": [],
+    "value": 6,
+    "ok": true
+  },
+  {
+    "function": "count_products",
+    "args": [],
+    "value": 6,
+    "ok": true
+  },
+  {
+    "function": "get_product",
+    "args": [
+      1
+    ],
+    "value": {
+      "id": 1,
+      "name": "Widget",
+      "category": "tools",
+      "price": 2.5,
+      "stock": 100
+    },
+    "ok": true
+  },
+  {
+    "function": "get_product",
+    "args": [
+      6
+    ],
+    "value": {
+      "id": 6,
+      "name": "Widget Pro",
+      "category": "tools",
+      "price": 19.99,
+      "stock": 8
+    },
+    "ok": true
+  },
+  {
+    "function": "get_product",
+    "args": [
+      99
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Product not found: 99"
+  },
+  {
+    "function": "get_product",
+    "args": [
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Product not found: 0"
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "Widget"
+    ],
+    "value": [
+      "Widget",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "gi"
+    ],
+    "value": [
+      "Gizmo"
+    ],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "zzz"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      ""
+    ],
+    "value": [
+      "Widget",
+      "Gadget",
+      "Gizmo",
+      "Doohickey",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "' OR '1'='1"
+    ],
+    "value": [
+      "Widget",
+      "Gadget",
+      "Gizmo",
+      "Doohickey",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "nothing%' OR 1=1 --"
+    ],
+    "value": [
+      "Widget",
+      "Gadget",
+      "Gizmo",
+      "Doohickey",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "O'Brien"
+    ],
+    "ok": false,
+    "error": "PDOException: SQLSTATE[HY000]: General error: 1 near \"Brien\": syntax error"
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      "tools"
+    ],
+    "value": [
+      "Widget",
+      "Gadget",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      "toys"
+    ],
+    "value": [
+      "Gizmo",
+      "Doohickey"
+    ],
+    "ok": true
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      "food"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      "' OR '1'='1"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "low_stock",
+    "args": [],
+    "value": [
+      "Gizmo",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "low_stock",
+    "args": [
+      1
+    ],
+    "value": [
+      "Gizmo"
+    ],
+    "ok": true
+  },
+  {
+    "function": "low_stock",
+    "args": [
+      0
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "low_stock",
+    "args": [
+      1000
+    ],
+    "value": [
+      "Gizmo",
+      "Thingamajig",
+      "Widget Pro",
+      "Gadget",
+      "Doohickey",
+      "Widget"
+    ],
+    "ok": true
+  },
+  {
+    "function": "inventory_value",
+    "args": [],
+    "value": 1087.5,
+    "ok": true
+  },
+  {
+    "function": "inventory_value",
+    "args": [
+      "tools"
+    ],
+    "value": 559.92,
+    "ok": true
+  },
+  {
+    "function": "inventory_value",
+    "args": [
+      "food"
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "category_summary",
+    "args": [],
+    "value": {
+      "misc": {
+        "items": 1,
+        "units": 3
+      },
+      "tools": {
+        "items": 3,
+        "units": 123
+      },
+      "toys": {
+        "items": 2,
+        "units": 42
+      }
+    },
+    "ok": true
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      3,
+      10
+    ],
+    "value": 10,
+    "ok": true
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      3,
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Quantity must be positive"
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      3,
+      -5
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Quantity must be positive"
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      99,
+      5
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Product not found: 99"
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      3,
+      4
+    ],
+    "value": 6,
+    "ok": true
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      3,
+      6
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      3,
+      1
+    ],
+    "ok": false,
+    "error": "RuntimeException: Not enough stock for Gizmo"
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      5,
+      3
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      2,
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Quantity must be positive"
+  },
+  {
+    "function": "low_stock",
+    "args": [
+      10
+    ],
+    "value": [
+      "Gizmo",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "toys",
+      10
+    ],
+    "value": 2,
+    "ok": true
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "nothing",
+      10
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "tools",
+      101
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Percent must be between 0 and 100"
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "tools",
+      -1
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Percent must be between 0 and 100"
+  },
+  {
+    "function": "inventory_value",
+    "args": [
+      "toys"
+    ],
+    "value": 150.78,
+    "ok": true
+  },
+  {
+    "function": "get_product",
+    "args": [
+      4
+    ],
+    "value": {
+      "id": 4,
+      "name": "Doohickey",
+      "category": "toys",
+      "price": 3.59,
+      "stock": 42
+    },
+    "ok": true
+  },
+  {
+    "function": "reset_inventory",
+    "args": [],
+    "value": 6,
+    "ok": true
+  },
+  {
+    "function": "inventory_value",
+    "args": [],
+    "value": 1087.5,
+    "ok": true
+  }
+]
