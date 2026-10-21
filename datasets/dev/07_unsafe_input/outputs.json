@@ -1,0 +1,263 @@
+[
+  {
+    "function": "greeting_html",
+    "args": [
+      "Sara"
+    ],
+    "value": "<h1>Hello Sara</h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html",
+    "args": [
+      ""
+    ],
+    "value": "<h1>Hello </h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html",
+    "args": [
+      "<script>alert(1)</script>"
+    ],
+    "value": "<h1>Hello <script>alert(1)</script></h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html",
+    "args": [
+      "<img src=x onerror=alert(1)>"
+    ],
+    "value": "<h1>Hello <img src=x onerror=alert(1)></h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html",
+    "args": [
+      "Tom & Jerry"
+    ],
+    "value": "<h1>Hello Tom & Jerry</h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html_safe",
+    "args": [
+      "<script>alert(1)</script>"
+    ],
+    "value": "<h1>Hello &lt;script&gt;alert(1)&lt;/script&gt;</h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html_safe",
+    "args": [
+      "O'Brien \"Bob\""
+    ],
+    "value": "<h1>Hello O&#039;Brien &quot;Bob&quot;</h1>",
+    "ok": true
+  },
+  {
+    "function": "comment_html",
+    "args": [
+      "amy",
+      "nice post"
+    ],
+    "value": "<div class=\"comment\"><b>amy</b>: nice post</div>",
+    "ok": true
+  },
+  {
+    "function": "comment_html",
+    "args": [
+      "<b>x</b>",
+      "<a href=\"http://evil.test\">click</a>"
+    ],
+    "value": "<div class=\"comment\"><b><b>x</b></b>: <a href=\"http://evil.test\">click</a></div>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "php",
+      3
+    ],
+    "value": "<p>You searched for: php</p><p>3 results found.</p>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "php",
+      0
+    ],
+    "value": "<p>You searched for: php</p><p>No results.</p>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "\"><script>x()</script>",
+      1
+    ],
+    "value": "<p>You searched for: \"><script>x()</script></p><p>1 results found.</p>",
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "hello"
+    ],
+    "value": [
+      "Message: hello"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      ""
+    ],
+    "value": [
+      "Message:"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "one two three"
+    ],
+    "value": [
+      "Message: one two three"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "hi; echo INJECTED"
+    ],
+    "value": [
+      "Message: hi",
+      "INJECTED"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "hi && echo SECOND"
+    ],
+    "value": [
+      "Message: hi",
+      "SECOND"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "$(echo SUBSTITUTED)"
+    ],
+    "value": [
+      "Message: SUBSTITUTED"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "a | tr a-z A-Z"
+    ],
+    "value": [
+      "MESSAGE: A"
+    ],
+    "ok": true
+  },
+  {
+    "function": "count_words_shell",
+    "args": [
+      "one two three"
+    ],
+    "value": 3,
+    "ok": true
+  },
+  {
+    "function": "count_words_shell",
+    "args": [
+      ""
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "count_words_shell",
+    "args": [
+      "hello; echo extra words here"
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "report.pdf"
+    ],
+    "value": "report.pdf",
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "../../etc/passwd"
+    ],
+    "value": ".._.._etc_passwd",
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "my file (1).txt"
+    ],
+    "value": "my_file__1_.txt",
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "tahir_01"
+    ],
+    "value": true,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "ab"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "1abc"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "Abc"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "a_very_long_username_here"
+    ],
+    "value": false,
+    "ok": true
+  }
+]

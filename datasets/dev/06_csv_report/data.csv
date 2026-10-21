@@ -1,0 +1,9 @@
+id,name,region,units,price
+1,Alpha Kit,north,10,2.50
+2,"Beta, Large",south,5,19.99
+3,Gamma,north,0,7.25
+4,Delta,east,12,3.10
+5,Epsilon,south,7,
+6,Zeta,west,-2,4.00
+7,Eta,north,20,1.05
+8,Theta,east,3,100.00
