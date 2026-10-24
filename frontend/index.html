@@ -14,11 +14,11 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #0f172a;
+            background: #111827;
             color: #f8fafc;
         }
 
-        
+
 header {
     background: #172033;
     padding: 20px 40px;
@@ -33,7 +33,7 @@ header {
             color: #2563eb;
         }
 
-       
+
 nav a {
     margin-left: 12px;
     text-decoration: none;
@@ -84,7 +84,7 @@ nav a:hover {
     border: 1px solid #475569;
     font-weight: 600;
 }
-       
+
 .workspace {
     background: #172033;
     color: #f8fafc;
@@ -94,7 +94,7 @@ nav a:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-        
+
 .upload {
     padding: 30px;
     text-align: center;
@@ -111,8 +111,7 @@ nav a:hover {
     background: #111c32;
 }
 
-button
- {
+button {
     background: linear-gradient(135deg, #0284c7, #6366f1);
     color: white;
     padding: 12px 20px;
@@ -168,8 +167,7 @@ button:hover {
             line-height: 1.8;
         }
 
-        
-.notice {
+        .notice {
     margin-top: 20px;
     padding: 15px;
     background: #172033;
@@ -179,6 +177,28 @@ button:hover {
     border-radius: 10px;
     line-height: 1.7;
 }
+
+#fileList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+#fileList button {
+    width: 100%;
+    text-align: left;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+}
+
+#fileList button:hover {
+    background: #334155;
+    border-color: #38bdf8;
+}
+
 
 
 textarea {
@@ -210,15 +230,42 @@ textarea:focus {
             nav a {
                 margin: 0 10px 0 0;
             }
-
             main {
                 padding: 20px;
             }
-
             .panels {
                 grid-template-columns: 1fr;
             }
         }
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    header {
+        padding: 16px;
+    }
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .panels {
+        grid-template-columns: 1fr;
+    }
+    .panel,
+    .workspace {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
+        max-width: 100%;
+    }
+}
     </style>
 </head>
 
@@ -227,13 +274,13 @@ textarea:focus {
     <header>
         <h2>⚡ CodeForge AI</h2>
         <nav>
-            <a href="#">Dashboard</a>
-            <a href="#migration">Migration</a>
-            <a href="#security">Security</a>
-        </nav>
+    <a href="#">Dashboard</a>
+    <a href="#migration">Migration</a>
+    <a href="#security">Security</a>
+    <a href="#results">Results</a>
+</nav>
     </header>
-
-    <main>
+       <main>
         <section class="welcome">
             <h1>Code Migration Workspace</h1>
             <p>Convert legacy PHP code into modern Python.</p>
@@ -248,15 +295,37 @@ textarea:focus {
 
         <section class="workspace" id="migration">
             <h2>Start a New Migration</h2>
-            <p class="notice">Select a PHP file to begin your workflow.</p>
-
+            <p class="notice">Select multiple PHP files or a folder to begin.</p>
             <div class="upload">
-                <p>Choose your legacy PHP file</p>
+                <p>Choose your legacy PHP files or folder</p>
                 <br>
-                <input type="file" id="phpFile" accept=".php">
+<input
+    type="file"
+    id="phpFile"
+    accept=".php"
+    multiple
+    onchange="showFiles()"
+>
+
+<label for="phpFolder">Or choose a folder:</label>
+<input
+    type="file"
+    id="phpFolder"
+    accept=".php"
+    webkitdirectory
+    multiple
+    onchange="showFiles()"
+>
+
                 <br><br>
-                <button onclick="showFile()">Select File</button>
-                <p id="fileStatus" class="notice">No file selected.</p>
+<button onclick="showFiles()">Select File</button>
+
+<p id="fileStatus" class="notice">No file selected.</p>
+
+<div id="fileList" class="notice">
+    Selected PHP files will appear here.
+</div>
+
             </div>
 
             <div class="panels">
@@ -277,53 +346,104 @@ placeholder="Your PHP code will appear here..." readonly></textarea>
             </div>
 
             <section id="security" class="notice">
-                <h3>Security Report</h3>           
+                <h3>Security Report</h3>
 <p id="securityReport">
     Security scan results will appear here when connected to the backend.
 </p>
 <button onclick="scanSecurity()">Scan Security</button>
-            </section>
+                      </section>
         </section>
+
+        <!-- Migration Results Section -->
+        <section class="workspace" id="results" style="margin-top: 25px;">
+            <h2>Migration Results</h2>
+
+            <p class="notice">
+                Migration results will appear here when project data is connected.
+            </p>
+
+            <div class="panels">
+                <div class="panel">
+                    <h3>Migration Status</h3>
+                    <p>Waiting for migration data.</p>
+                </div>
+
+                <div class="panel">
+                    <h3>Model &amp; Tokens</h3>
+                    <p>Information will appear when available.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Function Comparison</h3>
+                <p>Comparison data is not available yet.</p>
+            </div>
+        </section>
+
     </main>
 
     <script>
-    function showFile() {
-        const input = document.getElementById("phpFile");
-        const status = document.getElementById("fileStatus");
-        const codeBox = document.getElementById("phpCode");
+function showFiles() {
+    const fileInput = document.getElementById("phpFile");
+    const folderInput = document.getElementById("phpFolder");
+    const status = document.getElementById("fileStatus");
+    const fileList = document.getElementById("fileList");
 
-        if (input.files.length > 0) {
-            const file = input.files[0];
-            status.textContent = "Selected file: " + file.name;
+    const files = [
+        ...fileInput.files,
+        ...folderInput.files
+    ];
 
+    fileList.innerHTML = "";
+
+    const phpFiles = files.filter(file =>
+        file.name.toLowerCase().endsWith(".php")
+    );
+
+    if (phpFiles.length === 0) {
+        status.textContent = "Please select PHP files or a folder.";
+        fileList.textContent = "No PHP files selected.";
+        document.getElementById("phpCode").value = "";
+        return;
+    }
+
+    status.textContent = phpFiles.length + " PHP file(s) selected.";
+
+    phpFiles.forEach(file => {
+        const fileButton = document.createElement("button");
+        fileButton.textContent = file.webkitRelativePath || file.name;
+
+        fileButton.onclick = function () {
             const reader = new FileReader();
 
-            reader.onload = function(event) {
-                codeBox.value = event.target.result;
+            reader.onload = function (event) {
+                document.getElementById("phpCode").value = event.target.result;
             };
 
             reader.readAsText(file);
-        } else {
-            status.textContent = "Please select a PHP file first.";
-            codeBox.value = "";
-        }
-    }
-    function convertCode()
- {
+        };
+
+        fileList.appendChild(fileButton);
+    });
+}
+
+function convertCode() {
     const pythonBox = document.getElementById("pythonCode");
 
-    pythonBox.value = "def add_numbers(a, b):\n    return a + b\n\nprint(add_numbers(10, 20))";
+    pythonBox.value =
+        "AI migration is not connected yet. Demo only.\n\n" +
+        "Connect the backend to generate real Python code.";
 }
-function scanSecurity() 
-{
-    alert("Security scan demo started!");
 
-    const report = document.querySelector("#securityReport");
 
-    if (report) {
-        report.textContent = "Demo scan complete. Backend connection is required for real security results.";
-    }
+function scanSecurity() {
+    const report = document.getElementById("securityReport");
+
+    report.textContent =
+        "Security scanning is not connected yet. Demo only. " +
+        "Connect the security backend to show real scan results.";
 }
+
 </script>
 </body>
 </html>
