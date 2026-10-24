@@ -1,0 +1,55 @@
+{
+  "tool": "semgrep",
+  "ruleset": "p/php",
+  "total_findings": 0,
+  "programs": {
+    "00_smoke": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "01_calculator": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "02_student_grading": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "03_invoice": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "04_payroll": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "05_inventory": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "06_csv_report": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    },
+    "07_unsafe_input": {
+      "findings": 0,
+      "errors": 0,
+      "rules": {},
+      "lines": []
+    }
+  }
+}
