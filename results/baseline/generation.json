@@ -60,7 +60,7 @@
     "model": "openai/gpt-oss-20b",
     "status": "generated",
     "tokens": 2610,
-    "cached": false,
+    "cached": true,
     "detail": ""
   },
   {
@@ -68,7 +68,7 @@
     "model": "openai/gpt-oss-20b",
     "status": "generated",
     "tokens": 1252,
-    "cached": false,
+    "cached": true,
     "detail": ""
   }
 ]
