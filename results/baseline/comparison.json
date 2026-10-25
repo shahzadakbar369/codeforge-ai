@@ -460,336 +460,45 @@
     "functions": [
       {
         "function": "average_units",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 2,
-        "matched": 1,
-        "failures": [
-          {
-            "args": [],
-            "legacy": {
-              "function": "average_units",
-              "args": [],
-              "value": 6.88,
-              "ok": true
-            },
-            "migrated": {
-              "function": "average_units",
-              "args": [],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 2,
+        "failures": []
       },
       {
         "function": "find_by_id",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 5,
-        "matched": 1,
-        "failures": [
-          {
-            "args": [
-              1
-            ],
-            "legacy": {
-              "function": "find_by_id",
-              "args": [
-                1
-              ],
-              "value": {
-                "id": 1,
-                "name": "Alpha Kit",
-                "region": "north",
-                "units": 10,
-                "price": 2.5
-              },
-              "ok": true
-            },
-            "migrated": {
-              "function": "find_by_id",
-              "args": [
-                1
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              2
-            ],
-            "legacy": {
-              "function": "find_by_id",
-              "args": [
-                2
-              ],
-              "value": {
-                "id": 2,
-                "name": "Beta, Large",
-                "region": "south",
-                "units": 5,
-                "price": 19.99
-              },
-              "ok": true
-            },
-            "migrated": {
-              "function": "find_by_id",
-              "args": [
-                2
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              5
-            ],
-            "legacy": {
-              "function": "find_by_id",
-              "args": [
-                5
-              ],
-              "value": {
-                "id": 5,
-                "name": "Epsilon",
-                "region": "south",
-                "units": 7,
-                "price": null
-              },
-              "ok": true
-            },
-            "migrated": {
-              "function": "find_by_id",
-              "args": [
-                5
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "names_in_region",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 4,
-        "matched": 0,
-        "failures": [
-          {
-            "args": [
-              "north"
-            ],
-            "legacy": {
-              "function": "names_in_region",
-              "args": [
-                "north"
-              ],
-              "value": [
-                "Alpha Kit",
-                "Gamma",
-                "Eta"
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "names_in_region",
-              "args": [
-                "north"
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              "south"
-            ],
-            "legacy": {
-              "function": "names_in_region",
-              "args": [
-                "south"
-              ],
-              "value": [
-                "Beta, Large",
-                "Epsilon"
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "names_in_region",
-              "args": [
-                "south"
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              "North"
-            ],
-            "legacy": {
-              "function": "names_in_region",
-              "args": [
-                "North"
-              ],
-              "value": [],
-              "ok": true
-            },
-            "migrated": {
-              "function": "names_in_region",
-              "args": [
-                "North"
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "report_line",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 5,
-        "matched": 1,
-        "failures": [
-          {
-            "args": [
-              2
-            ],
-            "legacy": {
-              "function": "report_line",
-              "args": [
-                2
-              ],
-              "value": "#2 Beta, Large (south): 5 units, revenue 99.95",
-              "ok": true
-            },
-            "migrated": {
-              "function": "report_line",
-              "args": [
-                2
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              3
-            ],
-            "legacy": {
-              "function": "report_line",
-              "args": [
-                3
-              ],
-              "value": "#3 Gamma (north): 0 units, revenue 0.00",
-              "ok": true
-            },
-            "migrated": {
-              "function": "report_line",
-              "args": [
-                3
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              5
-            ],
-            "legacy": {
-              "function": "report_line",
-              "args": [
-                5
-              ],
-              "value": "#5 Epsilon (south): 7 units, revenue 0.00",
-              "ok": true
-            },
-            "migrated": {
-              "function": "report_line",
-              "args": [
-                5
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "revenue_by_region",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 1,
-        "matched": 0,
-        "failures": [
-          {
-            "args": [],
-            "legacy": {
-              "function": "revenue_by_region",
-              "args": [],
-              "value": {
-                "east": 337.2,
-                "north": 46.0,
-                "south": 99.95,
-                "west": 0.0
-              },
-              "ok": true
-            },
-            "migrated": {
-              "function": "revenue_by_region",
-              "args": [],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "row_count",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 3,
-        "matched": 1,
-        "failures": [
-          {
-            "args": [],
-            "legacy": {
-              "function": "row_count",
-              "args": [],
-              "value": 8,
-              "ok": true
-            },
-            "migrated": {
-              "function": "row_count",
-              "args": [],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              "data.csv"
-            ],
-            "legacy": {
-              "function": "row_count",
-              "args": [
-                "data.csv"
-              ],
-              "value": 8,
-              "ok": true
-            },
-            "migrated": {
-              "function": "row_count",
-              "args": [
-                "data.csv"
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "row_revenue",
@@ -800,137 +509,24 @@
       },
       {
         "function": "rows_missing_price",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 1,
-        "matched": 0,
-        "failures": [
-          {
-            "args": [],
-            "legacy": {
-              "function": "rows_missing_price",
-              "args": [],
-              "value": [
-                5
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "rows_missing_price",
-              "args": [],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "top_sellers",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 4,
-        "matched": 1,
-        "failures": [
-          {
-            "args": [
-              1
-            ],
-            "legacy": {
-              "function": "top_sellers",
-              "args": [
-                1
-              ],
-              "value": [
-                "Theta"
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "top_sellers",
-              "args": [
-                1
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              3
-            ],
-            "legacy": {
-              "function": "top_sellers",
-              "args": [
-                3
-              ],
-              "value": [
-                "Theta",
-                "Beta, Large",
-                "Delta"
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "top_sellers",
-              "args": [
-                3
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          },
-          {
-            "args": [
-              100
-            ],
-            "legacy": {
-              "function": "top_sellers",
-              "args": [
-                100
-              ],
-              "value": [
-                "Theta",
-                "Beta, Large",
-                "Delta",
-                "Alpha Kit",
-                "Eta",
-                "Gamma",
-                "Epsilon",
-                "Zeta"
-              ],
-              "ok": true
-            },
-            "migrated": {
-              "function": "top_sellers",
-              "args": [
-                100
-              ],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "total_revenue",
-        "verdict": "MISMATCH",
+        "verdict": "EQUIVALENT",
         "total": 1,
-        "matched": 0,
-        "failures": [
-          {
-            "args": [],
-            "legacy": {
-              "function": "total_revenue",
-              "args": [],
-              "value": 483.15,
-              "ok": true
-            },
-            "migrated": {
-              "function": "total_revenue",
-              "args": [],
-              "ok": false,
-              "error": "RuntimeError: File not found: data.csv"
-            }
-          }
-        ]
+        "matched": 1,
+        "failures": []
       }
     ],
     "status": "compared"

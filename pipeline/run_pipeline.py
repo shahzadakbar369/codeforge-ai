@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT))
 
 from baseline import compare  # noqa: E402
 from pipeline import llm  # noqa: E402
+from tools.sync_data_files import sync_data_files  # noqa: E402
 
 DEV_DIR = ROOT / "datasets" / "dev"
 BASE_DIR = ROOT / "results" / "baseline"
@@ -110,6 +111,8 @@ def repair_program(client, model, folder, max_tries, pause):
 
     out_dir = REPAIR_DIR / name
     out_dir.mkdir(parents=True, exist_ok=True)
+    sync_data_files(folder, base.parent)  # data files (e.g. data.csv) next to the generated code
+    sync_data_files(folder, out_dir)
 
     def both(path):
         grade, err = evaluate(grade_in, grade_out, path)
