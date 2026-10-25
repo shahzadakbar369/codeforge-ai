@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DEV_DIR = ROOT / "datasets" / "dev"
 OUT_DIR = ROOT / "results" / "baseline"
 CACHE_DIR = OUT_DIR / "cache"
-PAUSE_SECONDS = 20
+PAUSE_SECONDS = 40
 MAX_RETRIES = 3
 
 
@@ -66,9 +66,14 @@ def call_groq(client, model, prompt):
             r = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
-                max_completion_tokens=3000,
+                max_completion_tokens=5000,
+                reasoning_effort="low",
             )
-            return r.choices[0].message.content or "", r.usage.total_tokens, None
+            tokens = r.usage.total_tokens if r.usage else 0
+            choice = r.choices[0]
+            if choice.finish_reason == "length":
+                return None, tokens, "truncated: hit the token limit"
+            return choice.message.content or "", tokens, None
         except (RateLimitError, APIConnectionError) as e:
             wait = 30 * attempt
             print(f"  {type(e).__name__}: waiting {wait}s (attempt {attempt}/{MAX_RETRIES})")
@@ -92,16 +97,17 @@ def run_program(client, model, folder):
     cache_file = CACHE_DIR / f"{name}_{key}.json"
     row = {"program": name, "model": model, "status": None, "tokens": 0, "cached": False, "detail": ""}
 
-    if cache_file.exists():
+    from_cache = cache_file.exists()
+    if from_cache:
         cached = json.loads(cache_file.read_text(encoding="utf-8"))
         text, tokens = cached["text"], cached["tokens"]
         row["cached"] = True
     else:
         text, tokens, error = call_groq(client, model, prompt)
-        if text is None:
-            row.update(status="api_error", detail=error)
+        row["tokens"] = tokens
+        if text is None or not text.strip():
+            row.update(status="api_error", detail=error or "empty answer")
             return row
-        cache_file.write_text(json.dumps({"text": text, "tokens": tokens}), encoding="utf-8")
     row["tokens"] = tokens
 
     try:
@@ -109,6 +115,9 @@ def run_program(client, model, folder):
     except (json.JSONDecodeError, ValidationError, TypeError) as e:
         row.update(status="invalid_json", detail=str(e)[:200])
         return row
+
+    if not from_cache:  # only good answers are cached
+        cache_file.write_text(json.dumps({"text": text, "tokens": tokens}), encoding="utf-8")
 
     program_dir = OUT_DIR / name
     program_dir.mkdir(parents=True, exist_ok=True)
@@ -129,7 +138,7 @@ def run_program(client, model, folder):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="openai/gpt-oss-20b")
-    parser.add_argument("--only", help="run just one program folder, e.g. 00_smoke")
+    parser.add_argument("--only", help="run just one program folder, e.g. 04_payroll")
     args = parser.parse_args()
 
     api_key = os.getenv("GROQ_API_KEY")
@@ -160,6 +169,7 @@ def main():
     for r in rows:
         merged[r["program"]] = r
     gen_path.write_text(json.dumps(list(merged.values()), indent=2), encoding="utf-8")
+
     ok = sum(1 for r in rows if r["status"] == "generated")
     print(f"\n{ok} of {len(rows)} produced valid Python. Equivalence is not tested yet.")
 

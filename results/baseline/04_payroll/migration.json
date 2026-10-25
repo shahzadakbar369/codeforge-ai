@@ -1,0 +1,11 @@
+{
+  "explanation": "All PHP logic is converted to Python equivalents preserving behavior, rounding, and error handling. Functions and class names are kept identical. Exceptions map to ValueError to mirror PHP's InvalidArgumentException. The module contains no top\u2011level code, only definitions.",
+  "assumptions": [
+    "Python 3.8+ is used so f\u2011strings and type hints are available",
+    "Values passed to functions are of compatible types (e.g., numbers are int or float)",
+    "The rounding strategy of PHP round() with 2 decimal places matches Python's round() with two decimals"
+  ],
+  "warnings": [
+    "The original PHP code used InvalidArgumentException; in Python these are represented as ValueError for simplicity. If external code expects the exact exception type, adjustments may be needed."
+  ]
+}

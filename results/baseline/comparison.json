@@ -1,5 +1,11 @@
 [
   {
+    "program": "00_multi_test",
+    "counted": false,
+    "functions": [],
+    "status": "waiting_for_legacy_outputs"
+  },
+  {
     "program": "00_smoke",
     "counted": false,
     "functions": [
@@ -253,6 +259,196 @@
         "verdict": "EQUIVALENT",
         "total": 7,
         "matched": 7,
+        "failures": []
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "04_payroll",
+    "counted": true,
+    "functions": [
+      {
+        "function": "department_summary",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "employee_gross",
+        "verdict": "EQUIVALENT",
+        "total": 12,
+        "matched": 12,
+        "failures": []
+      },
+      {
+        "function": "employee_net",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "employee_payslip",
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
+      },
+      {
+        "function": "format_money",
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
+      },
+      {
+        "function": "highest_paid",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "income_tax",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "overtime_hours",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "payroll_total",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "payslip_line",
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
+      },
+      {
+        "function": "round_money",
+        "verdict": "MISMATCH",
+        "total": 1,
+        "matched": 0,
+        "failures": [
+          {
+            "args": [
+              2.675
+            ],
+            "legacy": {
+              "function": "round_money",
+              "args": [
+                2.675
+              ],
+              "value": 2.68,
+              "ok": true
+            },
+            "migrated": {
+              "function": "round_money",
+              "args": [
+                2.675
+              ],
+              "ok": true,
+              "value": 2.67
+            }
+          }
+        ]
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "05_inventory",
+    "counted": true,
+    "functions": [
+      {
+        "function": "add_stock",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "apply_discount",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "category_summary",
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
+      },
+      {
+        "function": "count_products",
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
+      },
+      {
+        "function": "find_products_by_name",
+        "verdict": "EQUIVALENT",
+        "total": 7,
+        "matched": 7,
+        "failures": []
+      },
+      {
+        "function": "get_product",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "inventory_value",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "low_stock",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "products_in_category",
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
+      },
+      {
+        "function": "remove_stock",
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
+      },
+      {
+        "function": "reset_inventory",
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
         "failures": []
       }
     ],
