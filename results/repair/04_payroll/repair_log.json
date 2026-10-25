@@ -1,0 +1,23 @@
+{
+  "program": "04_payroll",
+  "status": "repaired",
+  "attempts": [
+    {
+      "attempt": 1,
+      "tokens": 4165,
+      "feedback_equivalent": 11,
+      "grade_equivalent": 11,
+      "kept": true
+    }
+  ],
+  "feedback_set": "same as grading set (dev only)",
+  "before": {
+    "equivalent": 10,
+    "total": 11
+  },
+  "after": {
+    "equivalent": 11,
+    "total": 11
+  },
+  "still_failing": []
+}
