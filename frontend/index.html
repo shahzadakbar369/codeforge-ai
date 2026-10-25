@@ -18,7 +18,7 @@
             color: #f8fafc;
         }
 
-        
+
 header {
     background: #172033;
     padding: 20px 40px;
@@ -33,7 +33,7 @@ header {
             color: #2563eb;
         }
 
-       
+
 nav a {
     margin-left: 12px;
     text-decoration: none;
@@ -84,7 +84,7 @@ nav a:hover {
     border: 1px solid #475569;
     font-weight: 600;
 }
-       
+
 .workspace {
     background: #172033;
     color: #f8fafc;
@@ -94,7 +94,7 @@ nav a:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-        
+
 .upload {
     padding: 30px;
     text-align: center;
@@ -230,15 +230,42 @@ textarea:focus {
             nav a {
                 margin: 0 10px 0 0;
             }
-
             main {
                 padding: 20px;
             }
-
             .panels {
                 grid-template-columns: 1fr;
             }
         }
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    header {
+        padding: 16px;
+    }
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .panels {
+        grid-template-columns: 1fr;
+    }
+    .panel,
+    .workspace {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
+        max-width: 100%;
+    }
+}
     </style>
 </head>
 
@@ -247,13 +274,13 @@ textarea:focus {
     <header>
         <h2>⚡ CodeForge AI</h2>
         <nav>
-            <a href="#">Dashboard</a>
-            <a href="#migration">Migration</a>
-            <a href="#security">Security</a>
-        </nav>
+    <a href="#">Dashboard</a>
+    <a href="#migration">Migration</a>
+    <a href="#security">Security</a>
+    <a href="#results">Results</a>
+</nav>
     </header>
-
-    <main>
+       <main>
         <section class="welcome">
             <h1>Code Migration Workspace</h1>
             <p>Convert legacy PHP code into modern Python.</p>
@@ -319,13 +346,40 @@ placeholder="Your PHP code will appear here..." readonly></textarea>
             </div>
 
             <section id="security" class="notice">
-                <h3>Security Report</h3>           
+                <h3>Security Report</h3>
 <p id="securityReport">
     Security scan results will appear here when connected to the backend.
 </p>
 <button onclick="scanSecurity()">Scan Security</button>
-            </section>
+                      </section>
         </section>
+
+        <!-- Migration Results Section -->
+        <section class="workspace" id="results" style="margin-top: 25px;">
+            <h2>Migration Results</h2>
+
+            <p class="notice">
+                Migration results will appear here when project data is connected.
+            </p>
+
+            <div class="panels">
+                <div class="panel">
+                    <h3>Migration Status</h3>
+                    <p>Waiting for migration data.</p>
+                </div>
+
+                <div class="panel">
+                    <h3>Model &amp; Tokens</h3>
+                    <p>Information will appear when available.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Function Comparison</h3>
+                <p>Comparison data is not available yet.</p>
+            </div>
+        </section>
+
     </main>
 
     <script>
