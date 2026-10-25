@@ -1,0 +1,25 @@
+{
+  "program": "07_unsafe_input",
+  "status": "not_repaired",
+  "attempts": [
+    {
+      "attempt": 1,
+      "tokens": 5811,
+      "error": "answer cut off at the token limit"
+    }
+  ],
+  "feedback_set": "same as grading set (dev only)",
+  "before": {
+    "equivalent": 5,
+    "total": 8
+  },
+  "after": {
+    "equivalent": 5,
+    "total": 8
+  },
+  "still_failing": [
+    "count_words_shell",
+    "echo_message",
+    "greeting_html_safe"
+  ]
+}

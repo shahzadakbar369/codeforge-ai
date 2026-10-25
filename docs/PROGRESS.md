@@ -18,7 +18,7 @@ Dates come from the commit history where possible. Check any entry with:
 | Repository, branches, folder skeleton | Done | Shahzad | github.com/shahzadakbar369/codeforge-ai, commits 78e05b5 and 5b7e43b |
 | LLM access (Groq free tier) | Done | Shahzad | `tools/test_groq.py`, `tools/list_models.py` |
 | Dev dataset layout and smoke sample | Done | Shahzad | `datasets/dev/00_smoke`, commit 585839b |
-| Baseline scripts (single-pass migration and comparison) | Done. Run on dev programs 1 to 7: 59 of 72 functions equivalent (section 4) | Shahzad | `baseline/run_baseline.py`, `baseline/compare.py`, `results/baseline/comparison.json` |
+| Baseline scripts (single-pass migration and comparison) | Done. Run on dev programs 1 to 7: 68 of 72 functions equivalent (section 4) | Shahzad | `baseline/run_baseline.py`, `baseline/compare.py`, `results/baseline/comparison.json` |
 | Results export for the UI | Done | Shahzad | `tools/export_results.py`, `frontend/data/results.js`, commit 5d83498 |
 | PHP parser v0 | Started. Lists functions, parameters and calls; class methods are listed without their class | Shahzad | `tools/parse_php.py`, commit 89dbcee |
 | Repair loop (3 tries at most) | Started. Run on 04_payroll only | Shahzad | `pipeline/run_pipeline.py`, `results/repair/04_payroll/` |
@@ -49,10 +49,11 @@ No security result exists for migrated Python yet. The only security result so f
 | 2026-10-12 | Tahir | Added dev programs 1 to 3 (calculator, student grading, invoice), drafted with Claude, and recorded their legacy outputs in Docker: 47, 48 and 46 results. | Claude (drafting), Python 3.12.6, Docker 29.6.1, php:8.3-cli image | `datasets/dev/01_calculator`, `02_student_grading`, `03_invoice`, commit f570b2b |
 | 2026-10-12 | Ayesha | Improved frontend styling and created user-flow and wireframe documentation. | HTML/CSS, Markdown, VS Code, Git | `frontend/index.html`, `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commits `64bb8cd` and `598721c` |
 | 2026-10-12 | Shahzad | Ran the single-pass baseline on dev programs 1 to 3 with gpt-oss-20b and compared against Tahir's recorded PHP outputs: 32 of 32 functions matched on every input. Cost per program: 3,176, 2,374 and 3,063 tokens. These are simple pure functions, so the result shows one LLM call is enough for that kind of code. | Python 3.14.5, groq 1.7.0 | `results/baseline/comparison.json` |
-| 2026-10-25 | Shahzad | Changed the baseline so it sends every PHP file of a program folder (needed for 04_payroll, which has `helpers.php`), detects empty or cut-off model answers, and merges its rows into `generation.json` instead of overwriting them. Tested on a two-file sample (`00_multi_test`, not counted in results). | Python 3.14.5, groq 1.7.0 | `baseline/run_baseline.py`, commits 3eec977 and 8d4fae4 |
+| 2026-10-13 | Shahzad | Extended the baseline script to send every PHP file in a program's folder to the LLM and ask for one merged Python module. Single-file programs produce an identical prompt, so the earlier baseline results are unchanged (all served from cache). Tested on a two-file smoke program. | Python 3.14.5, groq 1.7.0 | `baseline/run_baseline.py`, `datasets/dev/00_multi_test` |
+| 2026-10-25 | Shahzad | Added handling for empty or cut-off model answers to the baseline script, so a truncated answer is reported as a failure instead of being parsed. Then ran it on 04_payroll and 05_inventory (2,917 and 2,892 tokens). 05: all 11 functions equivalent. 04: 10 of 11; `round_money(2.675)` returns 2.68 in PHP and 2.67 in the generated Python. This is the first real mismatch and is logged as it is, not fixed in the prompt. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b | `baseline/run_baseline.py`, `results/baseline/04_payroll/`, `results/baseline/05_inventory/`, commit 8d4fae4 |
 | 2026-10-25 | Shahzad | Wrote the results export: turns the baseline results into `frontend/data/results.js` (`window.CODEFORGE_RESULTS`) so the UI shows real numbers only. First push left the file out because `.gitignore` had a `data/` line that also matched `frontend/data/`; changed it to `/data/`. | Python 3.14.5 | `tools/export_results.py`, `frontend/data/results.js`, commit 5d83498 |
-| 2026-10-25 | Shahzad | Ran the baseline on programs 04_payroll and 05_inventory (2,917 and 2,892 tokens). 05: all 11 functions equivalent. 04: 10 of 11; `round_money(2.675)` returns 2.68 in PHP and 2.67 in the generated Python. This is the first real mismatch and is logged as it is, not fixed in the prompt. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b | `results/baseline/04_payroll/`, `results/baseline/05_inventory/`, `results/baseline/comparison.json`, commit 8d4fae4 |
-| 2026-10-25 | Shahzad | Ran the baseline on programs 06_csv_report and 07_unsafe_input (2,610 and 1,252 tokens). 06: 1 of 10 functions equivalent (only `row_revenue`, the one function that does not read the CSV file); the cause has not been investigated yet. 07: 5 of 8 equivalent; mismatches are `count_words_shell`, `echo_message` and `greeting_html_safe`. Total on dev programs 1 to 7: 59 of 72 functions. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b | `results/baseline/06_csv_report/`, `results/baseline/07_unsafe_input/`, commits 902c5cf, 1742ab2 |
+| 2026-10-25 | Shahzad | Ran the baseline on programs 06_csv_report and 07_unsafe_input (2,610 and 1,252 tokens). First comparison: 06 had 1 of 10 functions equivalent, 07 had 5 of 8 (59 of 72 in total). Every 06 failure was "File not found: data.csv": the generated code reads the CSV from its own folder, as the PHP did, but the file was not copied next to it. This is a harness problem, not a translation error. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b | `results/baseline/06_csv_report/`, `results/baseline/07_unsafe_input/`, commits 902c5cf, 1742ab2 |
+| 2026-10-25 | Shahzad | Wrote `tools/sync_data_files.py`, which copies a program's data files (here `data.csv`) next to its generated code, and the repair loop now calls it. After rerunning the comparison: 06 has 10 of 10 functions equivalent and the dev set is at 68 of 72. The 4 remaining are `04_payroll.round_money` and three in 07 (`count_words_shell`, `echo_message`, `greeting_html_safe`). `count_words_shell` ran `wc` on this Windows machine while the PHP ran on Linux in Docker, so that one is probably an environment difference (not confirmed). Drafted with Claude. | Python 3.14.5, Claude (drafting) | `tools/sync_data_files.py`, `results/baseline/comparison.json`, commit 0f47028 |
 | 2026-10-25 | Shahzad | Wrote PHP parser v0 and ran it on 04_payroll: it listed 19 functions and 15 calls between them. Limits: class methods are listed without their class and calls through `$this->` are not tracked. Drafted with Claude. | Python 3.14.5, Claude (drafting) | `tools/parse_php.py`, commit 89dbcee |
 | 2026-10-25 | Shahzad | Wrote the repair loop: for each program it compares the baseline Python with the real PHP outputs, shows the model the cases that differ, asks for a fix (3 tries at most), and keeps the best version, never a worse one. Baseline files are not changed. Run on 04_payroll: 10 of 11 functions before, 11 of 11 after. This used the same inputs for repair and grading, so it is a dev-set result only, not a held-out result. Drafted with Claude. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b, Claude (drafting) | `pipeline/run_pipeline.py`, `pipeline/llm.py`, `results/repair/04_payroll/`, `results/repair/summary.json` |
 | 2026-10-25 | Shahzad | Added a FastAPI backend skeleton that also serves the frontend. Checked: `/api/health` returns `{"ok":true}` and the UI loads at `127.0.0.1:8000`. Not tested yet: `/api/migrate`, `/api/parse`, `/api/results`. `/api/scan` is a stub that returns 501 until Tahir's security module exists. Drafted with Claude. | fastapi 0.162.0, uvicorn 0.54.0, Claude (drafting) | `backend/app.py`, commit 89dbcee |
@@ -67,6 +68,7 @@ No security result exists for migrated Python yet. The only security result so f
 | 2026-10-11 | Compare returned values, not printed text | PHP prints 100 where Python prints 100.0 |
 | 2026-10-11 | Planned: use `openai/gpt-oss-20b` for debugging and `openai/gpt-oss-120b` for reported runs | Protects the larger model's daily token budget (to be confirmed once measured) |
 | 2026-10-25 | The first baseline mismatch (`round_money`) is logged as it is; the prompt is not changed to fix it | The repair loop must be tested on a real failure |
+| 2026-10-25 | A "File not found" failure caused by the harness is fixed in the harness (data files copied next to the generated code), not by changing the prompt | The failure came from where the file was placed, not from the translation |
 | 2026-10-25 | Repair loop: 3 tries at most, keeps the best version, never overwrites the baseline results | Baseline and repair can be compared on the same programs |
 | 2026-10-25 | Planned: for held-out programs the repair loop uses separate inputs (`repair_inputs.json`, `repair_outputs.json`), never the grading inputs | The model must not see the answers it is graded on |
 | 2026-10-25 | Held-out set: at most 3 files per project, at least 4 projects; a standalone function extracted unchanged is allowed if its source is recorded. LGPL-2.1 files are acceptable for coursework with the license header kept, the source credited and a `datasets/heldout/README.md` | Avoids a set dominated by one project (6 of 10 files came from Smarty 2) |
@@ -80,7 +82,7 @@ Groq free-tier limits seen in the Groq console on 2026-10-11, identical for `ope
 - 8,000 tokens per minute
 - 200,000 tokens per day
 
-Baseline results on the dev set (single pass, `openai/gpt-oss-20b`, from `results/baseline/comparison.json`, 2026-10-25):
+Baseline results on the dev set (single pass, `openai/gpt-oss-20b`, from `results/baseline/comparison.json`, 2026-10-25, after the data-file fix):
 
 | Program | Functions | Equivalent | Tokens |
 |---|---|---|---|
@@ -89,17 +91,17 @@ Baseline results on the dev set (single pass, `openai/gpt-oss-20b`, from `result
 | 03_invoice | 8 | 8 | 3,063 |
 | 04_payroll | 11 | 10 | 2,917 |
 | 05_inventory | 11 | 11 | 2,892 |
-| 06_csv_report | 10 | 1 | 2,610 |
+| 06_csv_report | 10 | 10 | 2,610 |
 | 07_unsafe_input | 8 | 5 | 1,252 |
-| Total | 72 | 59 | |
+| Total | 72 | 68 | |
 
 The 00_smoke and 00_multi_test programs are not counted. After repair, 04_payroll reached 11 of 11 (repair used the same inputs as grading, dev set only).
 
 ## 5. Open items and blockers
 
-- Find out why 06_csv_report fails 9 of 10 functions (a missing `data.csv` when the generated code runs is a suspicion, not confirmed). Owner: Shahzad.
 - Review the repaired `round_money` by hand to confirm it fixes the rounding rule and does not special-case the test value. Owner: Shahzad.
-- Run the repair loop on the other programs once the 06 cause is known. Owner: Shahzad.
+- Run the repair loop on 07_unsafe_input (3 failing functions). Owner: Shahzad.
+- Run the generated Python in Docker (network off), like the PHP, so that results do not depend on this Windows machine (`count_words_shell`) and generated shell-calling code does not run on the host. Owner: Shahzad.
 - Re-run the 07 comparison on the committed `results/baseline/07_unsafe_input/migrated.py` (it shows 3 mismatches, Tahir's own run showed 2) and update `results/baseline_review_07.md`. Owner: Tahir.
 - Revise the held-out set (max 3 files per project, at least 4 projects) and add `datasets/heldout/README.md`. Owner: Tahir.
 - Build the input generator that produces `repair_inputs.json` and `repair_outputs.json` for held-out programs. Owner: Tahir.
@@ -112,7 +114,7 @@ Each member adds their own entries below, in the same format as the work log, wi
 
 ### Shahzad (lead)
 
-I wrote the baseline migration and comparison scripts, ran them on dev programs 1 to 7 (59 of 72 functions equivalent), exported the results for the UI, and started the PHP parser, the repair loop and the FastAPI backend. The repair loop fixed the one `round_money` mismatch in 04_payroll on the dev set. The mismatches in 06 and 07 are not analysed yet. Details are in the work log above.
+I wrote the baseline migration and comparison scripts, ran them on dev programs 1 to 7 (68 of 72 functions equivalent), exported the results for the UI, and started the PHP parser, the repair loop and the FastAPI backend. The repair loop fixed the one `round_money` mismatch in 04_payroll on the dev set. The three remaining mismatches in 07 are not repaired yet. Details are in the work log above.
 
 ### Tahir (security and testing)
 

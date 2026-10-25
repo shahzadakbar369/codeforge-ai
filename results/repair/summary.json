@@ -3,9 +3,9 @@
   "model": "openai/gpt-oss-20b",
   "max_tries": 3,
   "totals": {
-    "functions": 11,
-    "equivalent_before": 10,
-    "equivalent_after": 11
+    "functions": 19,
+    "equivalent_before": 15,
+    "equivalent_after": 16
   },
   "programs": [
     {
@@ -30,6 +30,31 @@
         "total": 11
       },
       "still_failing": []
+    },
+    {
+      "program": "07_unsafe_input",
+      "status": "not_repaired",
+      "attempts": [
+        {
+          "attempt": 1,
+          "tokens": 5811,
+          "error": "answer cut off at the token limit"
+        }
+      ],
+      "feedback_set": "same as grading set (dev only)",
+      "before": {
+        "equivalent": 5,
+        "total": 8
+      },
+      "after": {
+        "equivalent": 5,
+        "total": 8
+      },
+      "still_failing": [
+        "count_words_shell",
+        "echo_message",
+        "greeting_html_safe"
+      ]
     }
   ]
 }
