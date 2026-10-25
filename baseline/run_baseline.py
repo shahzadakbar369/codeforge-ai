@@ -41,6 +41,23 @@ PHP source:
 {php}
 """
 
+MULTI_NOTE = (
+    "The PHP source below has several files, each starting with a line "
+    "'// ===== FILE: name ====='. Put everything into ONE Python module: merge all files, "
+    "remove require and include statements, and keep every function and class name unchanged.\n\n"
+)
+
+
+def read_php(folder):
+    """Returns (text, is_multi). One file: the text exactly as before, so old cache entries stay valid."""
+    files = [folder / "legacy.php"] + sorted(
+        p for p in folder.glob("*.php") if p.name != "legacy.php"
+    )
+    if len(files) == 1:
+        return files[0].read_text(encoding="utf-8"), False
+    parts = [f"// ===== FILE: {p.name} =====\n{p.read_text(encoding='utf-8')}" for p in files]
+    return "\n\n".join(parts), True
+
 
 def call_groq(client, model, prompt):
     """Returns (text, tokens, error). Retries on rate limits and network errors."""
@@ -69,8 +86,8 @@ def parse_json(text):
 
 def run_program(client, model, folder):
     name = folder.name
-    php = (folder / "legacy.php").read_text(encoding="utf-8")
-    prompt = PROMPT.format(php=php)
+    php, multi = read_php(folder)
+    prompt = PROMPT.format(php=(MULTI_NOTE + php) if multi else php)
     key = hashlib.sha256((model + "\n" + prompt).encode("utf-8")).hexdigest()[:16]
     cache_file = CACHE_DIR / f"{name}_{key}.json"
     row = {"program": name, "model": model, "status": None, "tokens": 0, "cached": False, "detail": ""}
@@ -136,7 +153,13 @@ def main():
         if not row["cached"] and i < len(folders) - 1:
             time.sleep(PAUSE_SECONDS)
 
-    (OUT_DIR / "generation.json").write_text(json.dumps(rows, indent=2), encoding="utf-8")
+    gen_path = OUT_DIR / "generation.json"
+    merged = {}
+    if gen_path.exists():
+        merged = {r["program"]: r for r in json.loads(gen_path.read_text(encoding="utf-8"))}
+    for r in rows:
+        merged[r["program"]] = r
+    gen_path.write_text(json.dumps(list(merged.values()), indent=2), encoding="utf-8")
     ok = sum(1 for r in rows if r["status"] == "generated")
     print(f"\n{ok} of {len(rows)} produced valid Python. Equivalence is not tested yet.")
 

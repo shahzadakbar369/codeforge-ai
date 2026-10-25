@@ -17,6 +17,8 @@ def values_equal(a, b):
     booleans only equal booleans, containers are compared element by element."""
     if isinstance(a, bool) or isinstance(b, bool):
         return isinstance(a, bool) and isinstance(b, bool) and a == b
+    if isinstance(a, int) and isinstance(b, int):
+        return a == b
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
         return math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-9)
     if isinstance(a, list) and isinstance(b, list):

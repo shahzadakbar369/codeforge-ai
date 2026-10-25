@@ -1,0 +1,4 @@
+[
+  {"function": "total_with_tax", "args": [500]},
+  {"function": "total_with_tax", "args": [1500]}
+]
