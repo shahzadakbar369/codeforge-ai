@@ -1,0 +1,295 @@
+[
+  {
+    "function": "row_count",
+    "args": [],
+    "value": 8,
+    "ok": true
+  },
+  {
+    "function": "row_count",
+    "args": [
+      "missing.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: missing.csv"
+  },
+  {
+    "function": "row_count",
+    "args": [
+      "data.csv"
+    ],
+    "value": 8,
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      1
+    ],
+    "value": {
+      "id": 1,
+      "name": "Alpha Kit",
+      "region": "north",
+      "units": 10,
+      "price": 2.5
+    },
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      2
+    ],
+    "value": {
+      "id": 2,
+      "name": "Beta, Large",
+      "region": "south",
+      "units": 5,
+      "price": 19.99
+    },
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      5
+    ],
+    "value": {
+      "id": 5,
+      "name": "Epsilon",
+      "region": "south",
+      "units": 7,
+      "price": null
+    },
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      6
+    ],
+    "value": {
+      "id": 6,
+      "name": "Zeta",
+      "region": "west",
+      "units": -2,
+      "price": 4.0
+    },
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      99
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: No row with id 99"
+  },
+  {
+    "function": "total_revenue",
+    "args": [],
+    "value": 483.15,
+    "ok": true
+  },
+  {
+    "function": "revenue_by_region",
+    "args": [],
+    "value": {
+      "east": 337.2,
+      "north": 46.0,
+      "south": 99.95,
+      "west": 0.0
+    },
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "north"
+    ],
+    "value": [
+      "Alpha Kit",
+      "Gamma",
+      "Eta"
+    ],
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "south"
+    ],
+    "value": [
+      "Beta, Large",
+      "Epsilon"
+    ],
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "North"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "moon"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      1
+    ],
+    "value": [
+      "Theta"
+    ],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      3
+    ],
+    "value": [
+      "Theta",
+      "Beta, Large",
+      "Delta"
+    ],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      100
+    ],
+    "value": [
+      "Theta",
+      "Beta, Large",
+      "Delta",
+      "Alpha Kit",
+      "Eta",
+      "Gamma",
+      "Epsilon",
+      "Zeta"
+    ],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: n must be at least 1"
+  },
+  {
+    "function": "rows_missing_price",
+    "args": [],
+    "value": [
+      5
+    ],
+    "ok": true
+  },
+  {
+    "function": "average_units",
+    "args": [],
+    "value": 6.88,
+    "ok": true
+  },
+  {
+    "function": "average_units",
+    "args": [
+      "missing.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: missing.csv"
+  },
+  {
+    "function": "report_line",
+    "args": [
+      2
+    ],
+    "value": "#2 Beta, Large (south): 5 units, revenue 99.95",
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      3
+    ],
+    "value": "#3 Gamma (north): 0 units, revenue 0.00",
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      5
+    ],
+    "value": "#5 Epsilon (south): 7 units, revenue 0.00",
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      6
+    ],
+    "value": "#6 Zeta (west): -2 units, revenue 0.00",
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      42
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: No row with id 42"
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 1,
+        "name": "x",
+        "region": "r",
+        "units": 3,
+        "price": 1.1
+      }
+    ],
+    "value": 3.3,
+    "ok": true
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 1,
+        "name": "x",
+        "region": "r",
+        "units": 3,
+        "price": null
+      }
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 1,
+        "name": "x",
+        "region": "r",
+        "units": -1,
+        "price": 5
+      }
+    ],
+    "value": 0,
+    "ok": true
+  }
+]
