@@ -1,0 +1,12 @@
+{
+  "explanation": "The Python module reproduces each PHP function\u2019s behaviour. String concatenation and formatting use f-strings, regex patterns are identical, and shell interactions use subprocess with the same command strings. The escaping helper uses html.escape. All functions return the expected values without side effects like printing.",
+  "assumptions": [
+    "The input types are always strings or ints as in the original PHP functions.",
+    "Subprocess output encoding matches UTF-8, matching PHP\u2019s default.",
+    "The environment allows shell execution; no sandbox restrictions are applied.",
+    "PHP\u2019s exec returns an array of lines; this is emulated by splitting stdout on newlines."
+  ],
+  "warnings": [
+    "The echo_message and count_words_shell functions are intentionally vulnerable to command injection, mirroring the original PHP code."
+  ]
+}

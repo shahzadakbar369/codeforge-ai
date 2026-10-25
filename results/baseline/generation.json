@@ -54,5 +54,21 @@
     "tokens": 2892,
     "cached": false,
     "detail": ""
+  },
+  {
+    "program": "06_csv_report",
+    "model": "openai/gpt-oss-20b",
+    "status": "generated",
+    "tokens": 2610,
+    "cached": false,
+    "detail": ""
+  },
+  {
+    "program": "07_unsafe_input",
+    "model": "openai/gpt-oss-20b",
+    "status": "generated",
+    "tokens": 1252,
+    "cached": false,
+    "detail": ""
   }
 ]

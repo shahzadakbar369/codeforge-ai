@@ -3,7 +3,7 @@ window.CODEFORGE_RESULTS = {
   "summary": {
     "programs": 7,
     "functions_compared": 72,
-    "equivalent": 53
+    "equivalent": 59
   },
   "programs": [
     {
@@ -558,156 +558,739 @@ window.CODEFORGE_RESULTS = {
     {
       "name": "06_csv_report",
       "counted": true,
-      "model": null,
-      "tokens": null,
-      "generation_status": null,
+      "model": "openai/gpt-oss-20b",
+      "tokens": 2610,
+      "generation_status": "generated",
       "comparison_status": "compared",
       "legacy_php": "// ===== FILE: legacy.php =====\n<?php\n// Sales report program. Reads data.csv from the same folder as this file.\n\nfunction load_sales($file = \"data.csv\") {\n    $path = __DIR__ . \"/\" . $file;\n    if (!file_exists($path)) {\n        throw new RuntimeException(\"File not found: \" . $file);\n    }\n    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);\n    $header = str_getcsv(trim($lines[0]));\n    $rows = array();\n    for ($i = 1; $i < count($lines); $i++) {\n        $fields = str_getcsv(trim($lines[$i]));\n        if (count($fields) != count($header)) {\n            continue;\n        }\n        $row = array_combine($header, $fields);\n        $row[\"id\"] = (int)$row[\"id\"];\n        $row[\"units\"] = (int)$row[\"units\"];\n        $row[\"price\"] = $row[\"price\"] === \"\" ? null : (float)$row[\"price\"];\n        $rows[] = $row;\n    }\n    return $rows;\n}\n\nfunction row_count($file = \"data.csv\") {\n    return count(load_sales($file));\n}\n\nfunction find_by_id($id, $file = \"data.csv\") {\n    foreach (load_sales($file) as $row) {\n        if ($row[\"id\"] == $id) {\n            return $row;\n        }\n    }\n    throw new InvalidArgumentException(\"No row with id \" . $id);\n}\n\nfunction row_revenue($row) {\n    if ($row[\"price\"] === null || $row[\"units\"] < 0) {\n        return 0;\n    }\n    return round($row[\"units\"] * $row[\"price\"], 2);\n}\n\nfunction total_revenue($file = \"data.csv\") {\n    $sum = 0;\n    foreach (load_sales($file) as $row) {\n        $sum += row_revenue($row);\n    }\n    return round($sum, 2);\n}\n\nfunction revenue_by_region($file = \"data.csv\") {\n    $totals = array();\n    foreach (load_sales($file) as $row) {\n        $region = $row[\"region\"];\n        if (!isset($totals[$region])) {\n            $totals[$region] = 0;\n        }\n        $totals[$region] += row_revenue($row);\n    }\n    ksort($totals);\n    foreach ($totals as $k => $v) {\n        $totals[$k] = round($v, 2);\n    }\n    return $totals;\n}\n\nfunction names_in_region($region, $file = \"data.csv\") {\n    $names = array();\n    foreach (load_sales($file) as $row) {\n        if ($row[\"region\"] === $region) {\n            $names[] = $row[\"name\"];\n        }\n    }\n    return $names;\n}\n\nfunction top_sellers($n, $file = \"data.csv\") {\n    if ($n < 1) {\n        throw new InvalidArgumentException(\"n must be at least 1\");\n    }\n    $rows = load_sales($file);\n    usort($rows, function ($a, $b) {\n        $ra = row_revenue($a);\n        $rb = row_revenue($b);\n        if ($ra == $rb) {\n            return $a[\"id\"] - $b[\"id\"];\n        }\n        return $ra < $rb ? 1 : -1;\n    });\n    $names = array();\n    foreach (array_slice($rows, 0, $n) as $row) {\n        $names[] = $row[\"name\"];\n    }\n    return $names;\n}\n\nfunction rows_missing_price($file = \"data.csv\") {\n    $ids = array();\n    foreach (load_sales($file) as $row) {\n        if ($row[\"price\"] === null) {\n            $ids[] = $row[\"id\"];\n        }\n    }\n    return $ids;\n}\n\nfunction average_units($file = \"data.csv\") {\n    $rows = load_sales($file);\n    if (count($rows) == 0) {\n        return 0;\n    }\n    $sum = 0;\n    foreach ($rows as $row) {\n        $sum += $row[\"units\"];\n    }\n    return round($sum / count($rows), 2);\n}\n\nfunction report_line($id, $file = \"data.csv\") {\n    $row = find_by_id($id, $file);\n    return sprintf(\"#%d %s (%s): %d units, revenue %.2f\", $row[\"id\"], $row[\"name\"], $row[\"region\"], $row[\"units\"], row_revenue($row));\n}\n",
-      "migrated_python": "",
-      "explanation": "",
-      "assumptions": [],
-      "warnings": [],
+      "migrated_python": "import os\nimport csv\nfrom typing import List, Dict, Any, Optional\n\n# Helper to get file path\n\ndef _file_path(file: str = \"data.csv\") -> str:\n    return os.path.join(os.path.dirname(__file__), file)\n\n# Load sales data\n\ndef load_sales(file: str = \"data.csv\") -> List[Dict[str, Any]]:\n    path = _file_path(file)\n    if not os.path.isfile(path):\n        raise RuntimeError(f\"File not found: {file}\")\n    with open(path, newline='', encoding='utf-8') as f:\n        reader = csv.reader(f)\n        rows = list(reader)\n    if not rows:\n        return []\n    header = [h.strip() for h in rows[0]]\n    sales: List[Dict[str, Any]] = []\n    for line in rows[1:]:\n        if not line:\n            continue\n        if len(line) != len(header):\n            continue\n        record = dict(zip(header, [x.strip() for x in line]))\n        try:\n            record[\"id\"] = int(record[\"id\"])\n            record[\"units\"] = int(record[\"units\"])\n        except (ValueError, KeyError):\n            continue\n        price_str = record.get(\"price\", \"\")\n        record[\"price\"] = None if price_str == \"\" else float(price_str)\n        sales.append(record)\n    return sales\n\n# Row count\n\ndef row_count(file: str = \"data.csv\") -> int:\n    return len(load_sales(file))\n\n# Find by id\n\ndef find_by_id(id: int, file: str = \"data.csv\") -> Dict[str, Any]:\n    for row in load_sales(file):\n        if row.get(\"id\") == id:\n            return row\n    raise ValueError(f\"No row with id {id}\")\n\n# Row revenue\n\ndef row_revenue(row: Dict[str, Any]) -> float:\n    price = row.get(\"price\")\n    units = row.get(\"units\", 0)\n    if price is None or units < 0:\n        return 0.0\n    return round(units * price, 2)\n\n# Total revenue\n\ndef total_revenue(file: str = \"data.csv\") -> float:\n    total = 0.0\n    for row in load_sales(file):\n        total += row_revenue(row)\n    return round(total, 2)\n\n# Revenue by region\n\ndef revenue_by_region(file: str = \"data.csv\") -> Dict[str, float]:\n    totals: Dict[str, float] = {}\n    for row in load_sales(file):\n        region = row.get(\"region\", \"\")\n        rev = row_revenue(row)\n        totals[region] = totals.get(region, 0.0) + rev\n    # sort keys\n    sorted_totals = {k: round(v, 2) for k, v in sorted(totals.items())}\n    return sorted_totals\n\n# Names in region\n\ndef names_in_region(region: str, file: str = \"data.csv\") -> List[str]:\n    names: List[str] = []\n    for row in load_sales(file):\n        if row.get(\"region\") == region:\n            names.append(row.get(\"name\", \"\"))\n    return names\n\n# Top sellers\n\ndef top_sellers(n: int, file: str = \"data.csv\") -> List[str]:\n    if n < 1:\n        raise ValueError(\"n must be at least 1\")\n    rows = load_sales(file)\n    def sort_key(r: Dict[str, Any]):\n        rev = row_revenue(r)\n        return (-rev, r.get(\"id\", 0))\n    rows_sorted = sorted(rows, key=sort_key)\n    top_rows = rows_sorted[:n]\n    return [r.get(\"name\", \"\") for r in top_rows]\n\n# Rows missing price\n\ndef rows_missing_price(file: str = \"data.csv\") -> List[int]:\n    ids: List[int] = []\n    for row in load_sales(file):\n        if row.get(\"price\") is None:\n            ids.append(row.get(\"id\"))\n    return ids\n\n# Average units\n\ndef average_units(file: str = \"data.csv\") -> float:\n    rows = load_sales(file)\n    if not rows:\n        return 0.0\n    total_units = sum(row.get(\"units\", 0) for row in rows)\n    return round(total_units / len(rows), 2)\n\n# Report line\n\ndef report_line(id: int, file: str = \"data.csv\") -> str:\n    row = find_by_id(id, file)\n    return f\"#{row['id']} {row['name']} ({row['region']}): {row['units']} units, revenue {row_revenue(row):.2f}\"\n",
+      "explanation": "Converted each PHP function into a Python function preserving signatures, types, and behavior. Used the csv module for parsing. Handled file paths relative to the script directory. Implemented rounding with Python's round() to match PHP's round() semantics. Exceptions mapped to RuntimeError for file missing, ValueError for invalid arguments or missing IDs. All functions return values, no I/O at module level.",
+      "assumptions": [
+        "CSV uses comma as separator and UTF\u20118 encoding.",
+        "Empty or missing values are handled as None or empty strings. ",
+        "Price values are convertible to float; invalid conversions skip the row. ",
+        "Integer fields are convertible to int; invalid conversions skip the row. ",
+        "Row order after sorting top_sellers follows descending revenue, then ascending id.",
+        "The report_line function formats revenue with two decimal places.",
+        ""
+      ],
+      "warnings": [
+        "Functions raise ValueError for missing IDs or invalid arguments, mirroring PHP exceptions."
+      ],
       "functions": [
         {
           "function": "average_units",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 2,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [],
+              "legacy": {
+                "function": "average_units",
+                "args": [],
+                "value": 6.88,
+                "ok": true
+              },
+              "migrated": {
+                "function": "average_units",
+                "args": [],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "find_by_id",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 5,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [
+                1
+              ],
+              "legacy": {
+                "function": "find_by_id",
+                "args": [
+                  1
+                ],
+                "value": {
+                  "id": 1,
+                  "name": "Alpha Kit",
+                  "region": "north",
+                  "units": 10,
+                  "price": 2.5
+                },
+                "ok": true
+              },
+              "migrated": {
+                "function": "find_by_id",
+                "args": [
+                  1
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                2
+              ],
+              "legacy": {
+                "function": "find_by_id",
+                "args": [
+                  2
+                ],
+                "value": {
+                  "id": 2,
+                  "name": "Beta, Large",
+                  "region": "south",
+                  "units": 5,
+                  "price": 19.99
+                },
+                "ok": true
+              },
+              "migrated": {
+                "function": "find_by_id",
+                "args": [
+                  2
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                5
+              ],
+              "legacy": {
+                "function": "find_by_id",
+                "args": [
+                  5
+                ],
+                "value": {
+                  "id": 5,
+                  "name": "Epsilon",
+                  "region": "south",
+                  "units": 7,
+                  "price": null
+                },
+                "ok": true
+              },
+              "migrated": {
+                "function": "find_by_id",
+                "args": [
+                  5
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "names_in_region",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 4,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [
+                "north"
+              ],
+              "legacy": {
+                "function": "names_in_region",
+                "args": [
+                  "north"
+                ],
+                "value": [
+                  "Alpha Kit",
+                  "Gamma",
+                  "Eta"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "names_in_region",
+                "args": [
+                  "north"
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                "south"
+              ],
+              "legacy": {
+                "function": "names_in_region",
+                "args": [
+                  "south"
+                ],
+                "value": [
+                  "Beta, Large",
+                  "Epsilon"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "names_in_region",
+                "args": [
+                  "south"
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                "North"
+              ],
+              "legacy": {
+                "function": "names_in_region",
+                "args": [
+                  "North"
+                ],
+                "value": [],
+                "ok": true
+              },
+              "migrated": {
+                "function": "names_in_region",
+                "args": [
+                  "North"
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "report_line",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 5,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [
+                2
+              ],
+              "legacy": {
+                "function": "report_line",
+                "args": [
+                  2
+                ],
+                "value": "#2 Beta, Large (south): 5 units, revenue 99.95",
+                "ok": true
+              },
+              "migrated": {
+                "function": "report_line",
+                "args": [
+                  2
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                3
+              ],
+              "legacy": {
+                "function": "report_line",
+                "args": [
+                  3
+                ],
+                "value": "#3 Gamma (north): 0 units, revenue 0.00",
+                "ok": true
+              },
+              "migrated": {
+                "function": "report_line",
+                "args": [
+                  3
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                5
+              ],
+              "legacy": {
+                "function": "report_line",
+                "args": [
+                  5
+                ],
+                "value": "#5 Epsilon (south): 7 units, revenue 0.00",
+                "ok": true
+              },
+              "migrated": {
+                "function": "report_line",
+                "args": [
+                  5
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "revenue_by_region",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 1,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [],
+              "legacy": {
+                "function": "revenue_by_region",
+                "args": [],
+                "value": {
+                  "east": 337.2,
+                  "north": 46.0,
+                  "south": 99.95,
+                  "west": 0.0
+                },
+                "ok": true
+              },
+              "migrated": {
+                "function": "revenue_by_region",
+                "args": [],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "row_count",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 3,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [],
+              "legacy": {
+                "function": "row_count",
+                "args": [],
+                "value": 8,
+                "ok": true
+              },
+              "migrated": {
+                "function": "row_count",
+                "args": [],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                "data.csv"
+              ],
+              "legacy": {
+                "function": "row_count",
+                "args": [
+                  "data.csv"
+                ],
+                "value": 8,
+                "ok": true
+              },
+              "migrated": {
+                "function": "row_count",
+                "args": [
+                  "data.csv"
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "row_revenue",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 3,
+          "matched": 3,
+          "failures": []
         },
         {
           "function": "rows_missing_price",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 1,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [],
+              "legacy": {
+                "function": "rows_missing_price",
+                "args": [],
+                "value": [
+                  5
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "rows_missing_price",
+                "args": [],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "top_sellers",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 4,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [
+                1
+              ],
+              "legacy": {
+                "function": "top_sellers",
+                "args": [
+                  1
+                ],
+                "value": [
+                  "Theta"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "top_sellers",
+                "args": [
+                  1
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                3
+              ],
+              "legacy": {
+                "function": "top_sellers",
+                "args": [
+                  3
+                ],
+                "value": [
+                  "Theta",
+                  "Beta, Large",
+                  "Delta"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "top_sellers",
+                "args": [
+                  3
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            },
+            {
+              "args": [
+                100
+              ],
+              "legacy": {
+                "function": "top_sellers",
+                "args": [
+                  100
+                ],
+                "value": [
+                  "Theta",
+                  "Beta, Large",
+                  "Delta",
+                  "Alpha Kit",
+                  "Eta",
+                  "Gamma",
+                  "Epsilon",
+                  "Zeta"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "top_sellers",
+                "args": [
+                  100
+                ],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         },
         {
           "function": "total_revenue",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 1,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [],
+              "legacy": {
+                "function": "total_revenue",
+                "args": [],
+                "value": 483.15,
+                "ok": true
+              },
+              "migrated": {
+                "function": "total_revenue",
+                "args": [],
+                "ok": false,
+                "error": "RuntimeError: File not found: data.csv"
+              }
+            }
+          ]
         }
       ]
     },
     {
       "name": "07_unsafe_input",
       "counted": true,
-      "model": null,
-      "tokens": null,
-      "generation_status": null,
+      "model": "openai/gpt-oss-20b",
+      "tokens": 1252,
+      "generation_status": "generated",
       "comparison_status": "compared",
       "legacy_php": "// ===== FILE: legacy.php =====\n<?php\n// Unsafe input program. TWO deliberate vulnerabilities (the project's examples):\n//   1. user input is put into HTML without escaping (XSS)\n//   2. user input is glued into a shell command (command injection)\n\nfunction greeting_html($name) {\n    return \"<h1>Hello \" . $name . \"</h1>\";\n}\n\nfunction comment_html($author, $text) {\n    return \"<div class=\\\"comment\\\"><b>\" . $author . \"</b>: \" . $text . \"</div>\";\n}\n\nfunction search_results_html($query, $count) {\n    $html = \"<p>You searched for: \" . $query . \"</p>\";\n    if ($count == 0) {\n        $html .= \"<p>No results.</p>\";\n    } else {\n        $html .= \"<p>\" . $count . \" results found.</p>\";\n    }\n    return $html;\n}\n\n// SAFE version for comparison (escapes the input).\nfunction greeting_html_safe($name) {\n    return \"<h1>Hello \" . htmlspecialchars($name, ENT_QUOTES, \"UTF-8\") . \"</h1>\";\n}\n\n// VULNERABLE ON PURPOSE: input is glued into a shell command.\nfunction echo_message($message) {\n    $output = array();\n    exec(\"echo Message: \" . $message . \" 2>&1\", $output);\n    return $output;\n}\n\n// VULNERABLE ON PURPOSE: input is glued into a shell command.\nfunction count_words_shell($text) {\n    $result = shell_exec(\"echo \" . $text . \" | wc -w\");\n    return (int)trim($result);\n}\n\nfunction clean_filename($name) {\n    return preg_replace(\"/[^A-Za-z0-9._-]/\", \"_\", $name);\n}\n\nfunction is_valid_username($name) {\n    return preg_match(\"/^[a-z][a-z0-9_]{2,15}$/\", $name) === 1;\n}\n",
-      "migrated_python": "",
-      "explanation": "",
-      "assumptions": [],
-      "warnings": [],
+      "migrated_python": "import re\nimport html\nimport subprocess\n\ndef greeting_html(name: str) -> str:\n    return f\"<h1>Hello {name}</h1>\"\n\ndef comment_html(author: str, text: str) -> str:\n    return f\"<div class=\\\"comment\\\"><b>{author}</b>: {text}</div>\"\n\ndef search_results_html(query: str, count: int) -> str:\n    html_part = f\"<p>You searched for: {query}</p>\"\n    if count == 0:\n        html_part += \"<p>No results.</p>\"\n    else:\n        html_part += f\"<p>{count} results found.</p>\"\n    return html_part\n\n# SAFE version for comparison (escapes the input).\n\ndef greeting_html_safe(name: str) -> str:\n    escaped = html.escape(name, quote=True)\n    return f\"<h1>Hello {escaped}</h1>\"\n\n# VULNERABLE ON PURPOSE: input is glued into a shell command.\n\ndef echo_message(message: str) -> list:\n    # In PHP, exec returns an array of lines. We mimic that.\n    cmd = f\"echo Message: {message} 2>&1\"\n    completed = subprocess.run(cmd, shell=True, capture_output=True, text=True)\n    # split output into lines, strip trailing newlines\n    return completed.stdout.splitlines()\n\n# VULNERABLE ON PURPOSE: input is glued into a shell command.\n\ndef count_words_shell(text: str) -> int:\n    cmd = f\"echo {text} | wc -w\"\n    result = subprocess.check_output(cmd, shell=True, text=True)\n    return int(result.strip())\n\ndef clean_filename(name: str) -> str:\n    return re.sub(r\"[^A-Za-z0-9._-]\", \"_\", name)\n\ndef is_valid_username(name: str) -> bool:\n    return re.match(r\"^[a-z][a-z0-9_]{2,15}$\", name) is not None\n",
+      "explanation": "The Python module reproduces each PHP function\u2019s behaviour. String concatenation and formatting use f-strings, regex patterns are identical, and shell interactions use subprocess with the same command strings. The escaping helper uses html.escape. All functions return the expected values without side effects like printing.",
+      "assumptions": [
+        "The input types are always strings or ints as in the original PHP functions.",
+        "Subprocess output encoding matches UTF-8, matching PHP\u2019s default.",
+        "The environment allows shell execution; no sandbox restrictions are applied.",
+        "PHP\u2019s exec returns an array of lines; this is emulated by splitting stdout on newlines."
+      ],
+      "warnings": [
+        "The echo_message and count_words_shell functions are intentionally vulnerable to command injection, mirroring the original PHP code."
+      ],
       "functions": [
         {
           "function": "clean_filename",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 3,
+          "matched": 3,
+          "failures": []
         },
         {
           "function": "comment_html",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 2,
+          "matched": 2,
+          "failures": []
         },
         {
           "function": "count_words_shell",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 3,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [
+                "one two three"
+              ],
+              "legacy": {
+                "function": "count_words_shell",
+                "args": [
+                  "one two three"
+                ],
+                "value": 3,
+                "ok": true
+              },
+              "migrated": {
+                "function": "count_words_shell",
+                "args": [
+                  "one two three"
+                ],
+                "ok": false,
+                "error": "CalledProcessError: Command 'echo one two three | wc -w' returned non-zero exit status 255."
+              }
+            },
+            {
+              "args": [
+                ""
+              ],
+              "legacy": {
+                "function": "count_words_shell",
+                "args": [
+                  ""
+                ],
+                "value": 0,
+                "ok": true
+              },
+              "migrated": {
+                "function": "count_words_shell",
+                "args": [
+                  ""
+                ],
+                "ok": false,
+                "error": "CalledProcessError: Command 'echo  | wc -w' returned non-zero exit status 255."
+              }
+            },
+            {
+              "args": [
+                "hello; echo extra words here"
+              ],
+              "legacy": {
+                "function": "count_words_shell",
+                "args": [
+                  "hello; echo extra words here"
+                ],
+                "value": 0,
+                "ok": true
+              },
+              "migrated": {
+                "function": "count_words_shell",
+                "args": [
+                  "hello; echo extra words here"
+                ],
+                "ok": false,
+                "error": "CalledProcessError: Command 'echo hello; echo extra words here | wc -w' returned non-zero exit status 255."
+              }
+            }
+          ]
         },
         {
           "function": "echo_message",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 7,
+          "matched": 0,
+          "failures": [
+            {
+              "args": [
+                "hello"
+              ],
+              "legacy": {
+                "function": "echo_message",
+                "args": [
+                  "hello"
+                ],
+                "value": [
+                  "Message: hello"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "echo_message",
+                "args": [
+                  "hello"
+                ],
+                "ok": true,
+                "value": [
+                  "Message: hello "
+                ]
+              }
+            },
+            {
+              "args": [
+                ""
+              ],
+              "legacy": {
+                "function": "echo_message",
+                "args": [
+                  ""
+                ],
+                "value": [
+                  "Message:"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "echo_message",
+                "args": [
+                  ""
+                ],
+                "ok": true,
+                "value": [
+                  "Message:  "
+                ]
+              }
+            },
+            {
+              "args": [
+                "one two three"
+              ],
+              "legacy": {
+                "function": "echo_message",
+                "args": [
+                  "one two three"
+                ],
+                "value": [
+                  "Message: one two three"
+                ],
+                "ok": true
+              },
+              "migrated": {
+                "function": "echo_message",
+                "args": [
+                  "one two three"
+                ],
+                "ok": true,
+                "value": [
+                  "Message: one two three "
+                ]
+              }
+            }
+          ]
         },
         {
           "function": "greeting_html",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 5,
+          "matched": 5,
+          "failures": []
         },
         {
           "function": "greeting_html_safe",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "MISMATCH",
+          "total": 2,
+          "matched": 1,
+          "failures": [
+            {
+              "args": [
+                "O'Brien \"Bob\""
+              ],
+              "legacy": {
+                "function": "greeting_html_safe",
+                "args": [
+                  "O'Brien \"Bob\""
+                ],
+                "value": "<h1>Hello O&#039;Brien &quot;Bob&quot;</h1>",
+                "ok": true
+              },
+              "migrated": {
+                "function": "greeting_html_safe",
+                "args": [
+                  "O'Brien \"Bob\""
+                ],
+                "ok": true,
+                "value": "<h1>Hello O&#x27;Brien &quot;Bob&quot;</h1>"
+              }
+            }
+          ]
         },
         {
           "function": "is_valid_username",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 5,
+          "matched": 5,
+          "failures": []
         },
         {
           "function": "search_results_html",
-          "verdict": "FAILED_NO_CODE",
-          "total": null,
-          "matched": null,
-          "failures": null
+          "verdict": "EQUIVALENT",
+          "total": 3,
+          "matched": 3,
+          "failures": []
         }
       ]
     }

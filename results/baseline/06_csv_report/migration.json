@@ -1,0 +1,15 @@
+{
+  "explanation": "Converted each PHP function into a Python function preserving signatures, types, and behavior. Used the csv module for parsing. Handled file paths relative to the script directory. Implemented rounding with Python's round() to match PHP's round() semantics. Exceptions mapped to RuntimeError for file missing, ValueError for invalid arguments or missing IDs. All functions return values, no I/O at module level.",
+  "assumptions": [
+    "CSV uses comma as separator and UTF\u20118 encoding.",
+    "Empty or missing values are handled as None or empty strings. ",
+    "Price values are convertible to float; invalid conversions skip the row. ",
+    "Integer fields are convertible to int; invalid conversions skip the row. ",
+    "Row order after sorting top_sellers follows descending revenue, then ascending id.",
+    "The report_line function formats revenue with two decimal places.",
+    ""
+  ],
+  "warnings": [
+    "Functions raise ValueError for missing IDs or invalid arguments, mirroring PHP exceptions."
+  ]
+}
