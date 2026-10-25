@@ -1,0 +1,9 @@
+{
+  "explanation": "The module defines two functions, `tax_rate_for` and `total_with_tax`, mirroring the original PHP behavior. `tax_rate_for` simply returns 0.1 when the input exceeds 1000, otherwise 0.05. `total_with_tax` computes the sum of the amount and the tax amount, then rounds the result to two decimal places using half\u2011up rounding, which is the default in PHP. The `decimal` module is used to guarantee the same rounding semantics as PHP. All functions return values and contain no side effects or top\u2011level execution code.",
+  "assumptions": [
+    "The input `amount` is numeric (int or float); passing non\u2011numeric values will raise a TypeError, consistent with PHP\u2019s loose typing but not explicitly handled."
+  ],
+  "warnings": [
+    "The returned value from `total_with_tax` is always a float; if PHP would return an integer (e.g., when the result is exactly 1050), Python returns 1050.0. This difference in representation does not affect mathematical correctness."
+  ]
+}

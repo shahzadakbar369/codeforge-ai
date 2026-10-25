@@ -1,33 +1,9 @@
 [
   {
-    "program": "00_smoke",
+    "program": "00_multi_test",
     "model": "openai/gpt-oss-20b",
     "status": "generated",
-    "tokens": 1098,
-    "cached": true,
-    "detail": ""
-  },
-  {
-    "program": "01_calculator",
-    "model": "openai/gpt-oss-20b",
-    "status": "generated",
-    "tokens": 3176,
-    "cached": false,
-    "detail": ""
-  },
-  {
-    "program": "02_student_grading",
-    "model": "openai/gpt-oss-20b",
-    "status": "generated",
-    "tokens": 2374,
-    "cached": false,
-    "detail": ""
-  },
-  {
-    "program": "03_invoice",
-    "model": "openai/gpt-oss-20b",
-    "status": "generated",
-    "tokens": 3063,
+    "tokens": 1602,
     "cached": false,
     "detail": ""
   }
