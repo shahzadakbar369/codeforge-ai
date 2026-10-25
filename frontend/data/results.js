@@ -1,8 +1,8 @@
 window.CODEFORGE_RESULTS = {
   "generated_on": "2026-10-25",
   "summary": {
-    "programs": 5,
-    "functions_compared": 54,
+    "programs": 7,
+    "functions_compared": 72,
     "equivalent": 53
   },
   "programs": [
@@ -552,6 +552,162 @@ window.CODEFORGE_RESULTS = {
           "total": 2,
           "matched": 2,
           "failures": []
+        }
+      ]
+    },
+    {
+      "name": "06_csv_report",
+      "counted": true,
+      "model": null,
+      "tokens": null,
+      "generation_status": null,
+      "comparison_status": "compared",
+      "legacy_php": "// ===== FILE: legacy.php =====\n<?php\n// Sales report program. Reads data.csv from the same folder as this file.\n\nfunction load_sales($file = \"data.csv\") {\n    $path = __DIR__ . \"/\" . $file;\n    if (!file_exists($path)) {\n        throw new RuntimeException(\"File not found: \" . $file);\n    }\n    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);\n    $header = str_getcsv(trim($lines[0]));\n    $rows = array();\n    for ($i = 1; $i < count($lines); $i++) {\n        $fields = str_getcsv(trim($lines[$i]));\n        if (count($fields) != count($header)) {\n            continue;\n        }\n        $row = array_combine($header, $fields);\n        $row[\"id\"] = (int)$row[\"id\"];\n        $row[\"units\"] = (int)$row[\"units\"];\n        $row[\"price\"] = $row[\"price\"] === \"\" ? null : (float)$row[\"price\"];\n        $rows[] = $row;\n    }\n    return $rows;\n}\n\nfunction row_count($file = \"data.csv\") {\n    return count(load_sales($file));\n}\n\nfunction find_by_id($id, $file = \"data.csv\") {\n    foreach (load_sales($file) as $row) {\n        if ($row[\"id\"] == $id) {\n            return $row;\n        }\n    }\n    throw new InvalidArgumentException(\"No row with id \" . $id);\n}\n\nfunction row_revenue($row) {\n    if ($row[\"price\"] === null || $row[\"units\"] < 0) {\n        return 0;\n    }\n    return round($row[\"units\"] * $row[\"price\"], 2);\n}\n\nfunction total_revenue($file = \"data.csv\") {\n    $sum = 0;\n    foreach (load_sales($file) as $row) {\n        $sum += row_revenue($row);\n    }\n    return round($sum, 2);\n}\n\nfunction revenue_by_region($file = \"data.csv\") {\n    $totals = array();\n    foreach (load_sales($file) as $row) {\n        $region = $row[\"region\"];\n        if (!isset($totals[$region])) {\n            $totals[$region] = 0;\n        }\n        $totals[$region] += row_revenue($row);\n    }\n    ksort($totals);\n    foreach ($totals as $k => $v) {\n        $totals[$k] = round($v, 2);\n    }\n    return $totals;\n}\n\nfunction names_in_region($region, $file = \"data.csv\") {\n    $names = array();\n    foreach (load_sales($file) as $row) {\n        if ($row[\"region\"] === $region) {\n            $names[] = $row[\"name\"];\n        }\n    }\n    return $names;\n}\n\nfunction top_sellers($n, $file = \"data.csv\") {\n    if ($n < 1) {\n        throw new InvalidArgumentException(\"n must be at least 1\");\n    }\n    $rows = load_sales($file);\n    usort($rows, function ($a, $b) {\n        $ra = row_revenue($a);\n        $rb = row_revenue($b);\n        if ($ra == $rb) {\n            return $a[\"id\"] - $b[\"id\"];\n        }\n        return $ra < $rb ? 1 : -1;\n    });\n    $names = array();\n    foreach (array_slice($rows, 0, $n) as $row) {\n        $names[] = $row[\"name\"];\n    }\n    return $names;\n}\n\nfunction rows_missing_price($file = \"data.csv\") {\n    $ids = array();\n    foreach (load_sales($file) as $row) {\n        if ($row[\"price\"] === null) {\n            $ids[] = $row[\"id\"];\n        }\n    }\n    return $ids;\n}\n\nfunction average_units($file = \"data.csv\") {\n    $rows = load_sales($file);\n    if (count($rows) == 0) {\n        return 0;\n    }\n    $sum = 0;\n    foreach ($rows as $row) {\n        $sum += $row[\"units\"];\n    }\n    return round($sum / count($rows), 2);\n}\n\nfunction report_line($id, $file = \"data.csv\") {\n    $row = find_by_id($id, $file);\n    return sprintf(\"#%d %s (%s): %d units, revenue %.2f\", $row[\"id\"], $row[\"name\"], $row[\"region\"], $row[\"units\"], row_revenue($row));\n}\n",
+      "migrated_python": "",
+      "explanation": "",
+      "assumptions": [],
+      "warnings": [],
+      "functions": [
+        {
+          "function": "average_units",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "find_by_id",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "names_in_region",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "report_line",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "revenue_by_region",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "row_count",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "row_revenue",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "rows_missing_price",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "top_sellers",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "total_revenue",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        }
+      ]
+    },
+    {
+      "name": "07_unsafe_input",
+      "counted": true,
+      "model": null,
+      "tokens": null,
+      "generation_status": null,
+      "comparison_status": "compared",
+      "legacy_php": "// ===== FILE: legacy.php =====\n<?php\n// Unsafe input program. TWO deliberate vulnerabilities (the project's examples):\n//   1. user input is put into HTML without escaping (XSS)\n//   2. user input is glued into a shell command (command injection)\n\nfunction greeting_html($name) {\n    return \"<h1>Hello \" . $name . \"</h1>\";\n}\n\nfunction comment_html($author, $text) {\n    return \"<div class=\\\"comment\\\"><b>\" . $author . \"</b>: \" . $text . \"</div>\";\n}\n\nfunction search_results_html($query, $count) {\n    $html = \"<p>You searched for: \" . $query . \"</p>\";\n    if ($count == 0) {\n        $html .= \"<p>No results.</p>\";\n    } else {\n        $html .= \"<p>\" . $count . \" results found.</p>\";\n    }\n    return $html;\n}\n\n// SAFE version for comparison (escapes the input).\nfunction greeting_html_safe($name) {\n    return \"<h1>Hello \" . htmlspecialchars($name, ENT_QUOTES, \"UTF-8\") . \"</h1>\";\n}\n\n// VULNERABLE ON PURPOSE: input is glued into a shell command.\nfunction echo_message($message) {\n    $output = array();\n    exec(\"echo Message: \" . $message . \" 2>&1\", $output);\n    return $output;\n}\n\n// VULNERABLE ON PURPOSE: input is glued into a shell command.\nfunction count_words_shell($text) {\n    $result = shell_exec(\"echo \" . $text . \" | wc -w\");\n    return (int)trim($result);\n}\n\nfunction clean_filename($name) {\n    return preg_replace(\"/[^A-Za-z0-9._-]/\", \"_\", $name);\n}\n\nfunction is_valid_username($name) {\n    return preg_match(\"/^[a-z][a-z0-9_]{2,15}$/\", $name) === 1;\n}\n",
+      "migrated_python": "",
+      "explanation": "",
+      "assumptions": [],
+      "warnings": [],
+      "functions": [
+        {
+          "function": "clean_filename",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "comment_html",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "count_words_shell",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "echo_message",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "greeting_html",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "greeting_html_safe",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "is_valid_username",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
+        },
+        {
+          "function": "search_results_html",
+          "verdict": "FAILED_NO_CODE",
+          "total": null,
+          "matched": null,
+          "failures": null
         }
       ]
     }

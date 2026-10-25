@@ -453,5 +453,91 @@
       }
     ],
     "status": "compared"
+  },
+  {
+    "program": "06_csv_report",
+    "counted": true,
+    "functions": [
+      {
+        "function": "average_units",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "find_by_id",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "names_in_region",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "report_line",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "revenue_by_region",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "row_count",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "row_revenue",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "rows_missing_price",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "top_sellers",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "total_revenue",
+        "verdict": "FAILED_NO_CODE"
+      }
+    ],
+    "status": "compared"
+  },
+  {
+    "program": "07_unsafe_input",
+    "counted": true,
+    "functions": [
+      {
+        "function": "clean_filename",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "comment_html",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "count_words_shell",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "echo_message",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "greeting_html",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "greeting_html_safe",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "is_valid_username",
+        "verdict": "FAILED_NO_CODE"
+      },
+      {
+        "function": "search_results_html",
+        "verdict": "FAILED_NO_CODE"
+      }
+    ],
+    "status": "compared"
   }
 ]
