@@ -1,0 +1,24 @@
+{
+  "program": "05_inventory",
+  "file": "legacy.php",
+  "vulnerabilities": [
+    {
+      "id": "05-sqli-1",
+      "type": "sql_injection",
+      "function": "find_products_by_name",
+      "line": 64,
+      "description": "User input $name is glued into a SQL string with a dot and passed to query(). Every other query in this program uses prepare() with placeholders.",
+      "sink_line": 65
+    }
+  ],
+  "safe_functions": [
+    "get_product",
+    "products_in_category",
+    "add_stock",
+    "remove_stock",
+    "low_stock",
+    "inventory_value",
+    "apply_discount",
+    "category_summary"
+  ]
+}

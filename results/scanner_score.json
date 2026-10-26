@@ -1,0 +1,66 @@
+{
+  "total": {
+    "planted": 6,
+    "found": 6,
+    "missed": 0,
+    "false_alarms": 1
+  },
+  "programs": {
+    "00_multi_test": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "00_smoke": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "01_calculator": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "02_student_grading": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "03_invoice": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "04_payroll": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "05_inventory": {
+      "planted": 1,
+      "found": 1,
+      "missed": [],
+      "false_alarms": []
+    },
+    "06_csv_report": {
+      "planted": 0,
+      "found": 0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "07_unsafe_input": {
+      "planted": 5,
+      "found": 5,
+      "missed": [],
+      "false_alarms": [
+        "line 19 (codeforge-php-html-returned-unescaped)"
+      ]
+    }
+  }
+}
