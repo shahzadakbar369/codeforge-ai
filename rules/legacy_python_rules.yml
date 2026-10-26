@@ -1,0 +1,61 @@
+rules:
+  - id: codeforge-py-sqli-string-built
+    languages: [python]
+    severity: ERROR
+    message: "SQL text is built with a variable (concatenation, f-string, % or .format) and passed to execute(). Use placeholders."
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: '"$S" + $X'
+              - pattern: '"$S" + $X + "..."'
+              - pattern: '"$S" % $X'
+          - metavariable-regex:
+              metavariable: $S
+              regex: (?is).*\b(select|insert|update|delete)\b.*
+          - metavariable-regex:
+              metavariable: $X
+              regex: ^[A-Za-z_][A-Za-z0-9_\.\[\]'"]*$
+      - patterns:
+          - pattern-either:
+              - pattern: 'f"...{$X}..."'
+              - pattern: "f'...{$X}...'"
+          - pattern-regex: (?is)f("[^"\n]*\b(select|insert|update|delete)\b[^"\n]*"|'[^'\n]*\b(select|insert|update|delete)\b[^'\n]*')
+    pattern-sinks:
+      - pattern-either:
+          - pattern: $C.execute(...)
+          - pattern: $C.executemany(...)
+          - pattern: $C.executescript(...)
+  - id: codeforge-py-shell-call-with-variable
+    languages: [python]
+    severity: ERROR
+    message: "Shell command built with a variable. Avoid the shell or quote every part with shlex.quote()."
+    patterns:
+      - pattern-either:
+          - pattern: os.system($X)
+          - pattern: os.popen($X)
+          - pattern: subprocess.$F($X, ..., shell=True, ...)
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^(?!["'][^"']*["']$).+
+      - pattern-not: subprocess.$F("...", ..., shell=True, ...)
+      - pattern-not: os.system("...")
+      - pattern-not: os.popen("...")
+  - id: codeforge-py-html-returned-unescaped
+    languages: [python]
+    severity: WARNING
+    message: "HTML text is built with a variable and returned without html.escape()."
+    patterns:
+      - pattern-either:
+          - pattern: return "$S" + $X + "..."
+          - pattern: return "$S" + $X
+          - pattern: $V = "$S" + $X + "..."
+          - pattern: $V += "$S" + $X + "..."
+          - pattern: return f"...{$X}..."
+          - pattern: return f'...{$X}...'
+          - pattern: $V = f"...{$X}..."
+          - pattern: $V += f"...{$X}..."
+      - pattern-regex: <[a-zA-Z/]
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^[A-Za-z_][A-Za-z0-9_\.\[\]'"]*$
