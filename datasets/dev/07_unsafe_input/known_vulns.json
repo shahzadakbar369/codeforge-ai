@@ -1,0 +1,12 @@
+{
+  "program": "07_unsafe_input",
+  "file": "legacy.php",
+  "vulnerabilities": [
+    {"id": "07-xss-1", "type": "xss", "function": "greeting_html", "line": 7, "description": "User input $name is put into returned HTML without escaping."},
+    {"id": "07-xss-2", "type": "xss", "function": "comment_html", "line": 11, "description": "User input $author and $text are put into returned HTML without escaping."},
+    {"id": "07-xss-3", "type": "xss", "function": "search_results_html", "line": 15, "description": "User input $query is put into returned HTML without escaping."},
+    {"id": "07-cmdi-1", "type": "command_injection", "function": "echo_message", "line": 32, "description": "User input $message is glued into a shell command passed to exec()."},
+    {"id": "07-cmdi-2", "type": "command_injection", "function": "count_words_shell", "line": 38, "description": "User input $text is glued into a shell command passed to shell_exec()."}
+  ],
+  "safe_functions": ["greeting_html_safe", "clean_filename", "is_valid_username"]
+}

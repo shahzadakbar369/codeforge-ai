@@ -1,0 +1,144 @@
+{
+  "05_inventory": {
+    "before_php_custom_rules": {
+      "total": 1,
+      "sql_injection": 1
+    },
+    "after_python_custom_rules": {
+      "total": 1,
+      "sql_injection": 1
+    },
+    "after_bandit": {
+      "total": 1,
+      "MEDIUM": 1
+    },
+    "details": {
+      "php": [
+        {
+          "line": 65,
+          "rule": "codeforge-php-sqli-string-built",
+          "type": "sql_injection"
+        }
+      ],
+      "python": [
+        {
+          "line": 65,
+          "rule": "codeforge-py-sqli-string-built",
+          "type": "sql_injection"
+        }
+      ],
+      "bandit": [
+        {
+          "line": 64,
+          "rule": "B608",
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  },
+  "07_unsafe_input": {
+    "before_php_custom_rules": {
+      "total": 6,
+      "xss": 4,
+      "command_injection": 2
+    },
+    "after_python_custom_rules": {
+      "total": 7,
+      "xss": 5,
+      "command_injection": 2
+    },
+    "after_bandit": {
+      "total": 3,
+      "LOW": 1,
+      "HIGH": 2
+    },
+    "details": {
+      "php": [
+        {
+          "line": 7,
+          "rule": "codeforge-php-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 11,
+          "rule": "codeforge-php-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 15,
+          "rule": "codeforge-php-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 19,
+          "rule": "codeforge-php-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 32,
+          "rule": "codeforge-php-shell-call-with-variable",
+          "type": "command_injection"
+        },
+        {
+          "line": 38,
+          "rule": "codeforge-php-shell-call-with-variable",
+          "type": "command_injection"
+        }
+      ],
+      "python": [
+        {
+          "line": 6,
+          "rule": "codeforge-py-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 9,
+          "rule": "codeforge-py-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 12,
+          "rule": "codeforge-py-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 16,
+          "rule": "codeforge-py-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 23,
+          "rule": "codeforge-py-html-returned-unescaped",
+          "type": "xss"
+        },
+        {
+          "line": 30,
+          "rule": "codeforge-py-shell-call-with-variable",
+          "type": "command_injection"
+        },
+        {
+          "line": 38,
+          "rule": "codeforge-py-shell-call-with-variable",
+          "type": "command_injection"
+        }
+      ],
+      "bandit": [
+        {
+          "line": 3,
+          "rule": "B404",
+          "severity": "LOW"
+        },
+        {
+          "line": 30,
+          "rule": "B602",
+          "severity": "HIGH"
+        },
+        {
+          "line": 38,
+          "rule": "B602",
+          "severity": "HIGH"
+        }
+      ]
+    }
+  }
+}

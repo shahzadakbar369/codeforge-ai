@@ -1,0 +1,75 @@
+rules:
+  - id: codeforge-php-sqli-string-built
+    languages: [php]
+    severity: ERROR
+    message: "SQL text is built with string concatenation and a variable, then passed to a query call. Use prepare() with placeholders."
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: '"$S" . $X'
+              - pattern: '"$S" . $X . "..."'
+          - metavariable-regex:
+              metavariable: $S
+              regex: (?is).*\b(select|insert|update|delete)\b.*
+          - metavariable-regex:
+              metavariable: $X
+              regex: ^\$[A-Za-z_]
+    pattern-sinks:
+      - pattern-either:
+          - pattern: $DB->query(...)
+          - pattern: $DB->exec(...)
+          - pattern: $F()->query(...)
+          - pattern: mysqli_query($C, ...)
+          - pattern: mysql_query(...)
+  - id: codeforge-php-shell-call-with-variable
+    languages: [php]
+    severity: ERROR
+    message: "Shell call built with a variable. Escape every part with escapeshellarg() or avoid the shell."
+    patterns:
+      - pattern-either:
+          - pattern: $F("..." . $X, ...)
+          - pattern: $F("..." . $X . "...", ...)
+          - pattern: $F($X, ...)
+      - metavariable-regex:
+          metavariable: $F
+          regex: ^(system|exec|shell_exec|passthru|popen|proc_open)$
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^\$[A-Za-z_]
+      - pattern-not: $F("..." . escapeshellarg(...), ...)
+      - pattern-not: $F(escapeshellarg(...), ...)
+  - id: codeforge-php-echo-unescaped-variable
+    languages: [php]
+    severity: WARNING
+    message: "A variable is echoed or printed without htmlspecialchars()."
+    patterns:
+      - pattern-either:
+          - pattern: echo $X;
+          - pattern: echo "..." . $X . "...";
+          - pattern: echo "..." . $X;
+          - pattern: print $X;
+          - pattern: print "..." . $X . "...";
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^\$[A-Za-z_]
+      - pattern-not: echo htmlspecialchars(...);
+      - pattern-not: echo htmlentities(...);
+      - pattern-not: echo "..." . htmlspecialchars(...) . "...";
+  - id: codeforge-php-html-returned-unescaped
+    languages: [php]
+    severity: WARNING
+    message: "HTML text is built with a variable and returned or stored without htmlspecialchars(). (Extra rule: planted XSS in 07 returns HTML instead of echoing it.)"
+    patterns:
+      - pattern-either:
+          - pattern: return "$S" . $X . "...";
+          - pattern: return "$S" . $X;
+          - pattern: $V = "$S" . $X . "...";
+          - pattern: $V .= "$S" . $X . "...";
+      - metavariable-regex:
+          metavariable: $S
+          regex: (?s).*<[a-zA-Z/].*
+      - metavariable-regex:
+          metavariable: $X
+          regex: ^\$[A-Za-z_]
+      - pattern-not: return "..." . htmlspecialchars(...) . "...";
