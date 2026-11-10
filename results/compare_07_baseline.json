@@ -1,0 +1,376 @@
+{
+  "migrated": "results/baseline/07_unsafe_input/migrated.py",
+  "outputs": "datasets/dev/07_unsafe_input/outputs.json",
+  "total": 30,
+  "matched": 28,
+  "mismatched": 2,
+  "rows": [
+    {
+      "function": "greeting_html",
+      "args": [
+        "Sara"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello Sara</h1>",
+      "legacy_value": "<h1>Hello Sara</h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html",
+      "args": [
+        ""
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello </h1>",
+      "legacy_value": "<h1>Hello </h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html",
+      "args": [
+        "<script>alert(1)</script>"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello <script>alert(1)</script></h1>",
+      "legacy_value": "<h1>Hello <script>alert(1)</script></h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html",
+      "args": [
+        "<img src=x onerror=alert(1)>"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello <img src=x onerror=alert(1)></h1>",
+      "legacy_value": "<h1>Hello <img src=x onerror=alert(1)></h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html",
+      "args": [
+        "Tom & Jerry"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello Tom & Jerry</h1>",
+      "legacy_value": "<h1>Hello Tom & Jerry</h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html_safe",
+      "args": [
+        "<script>alert(1)</script>"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello &lt;script&gt;alert(1)&lt;/script&gt;</h1>",
+      "legacy_value": "<h1>Hello &lt;script&gt;alert(1)&lt;/script&gt;</h1>",
+      "match": true
+    },
+    {
+      "function": "greeting_html_safe",
+      "args": [
+        "O'Brien \"Bob\""
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<h1>Hello O&#x27;Brien &quot;Bob&quot;</h1>",
+      "legacy_value": "<h1>Hello O&#039;Brien &quot;Bob&quot;</h1>",
+      "match": false
+    },
+    {
+      "function": "comment_html",
+      "args": [
+        "amy",
+        "nice post"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<div class=\"comment\"><b>amy</b>: nice post</div>",
+      "legacy_value": "<div class=\"comment\"><b>amy</b>: nice post</div>",
+      "match": true
+    },
+    {
+      "function": "comment_html",
+      "args": [
+        "<b>x</b>",
+        "<a href=\"http://evil.test\">click</a>"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<div class=\"comment\"><b><b>x</b></b>: <a href=\"http://evil.test\">click</a></div>",
+      "legacy_value": "<div class=\"comment\"><b><b>x</b></b>: <a href=\"http://evil.test\">click</a></div>",
+      "match": true
+    },
+    {
+      "function": "search_results_html",
+      "args": [
+        "php",
+        3
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<p>You searched for: php</p><p>3 results found.</p>",
+      "legacy_value": "<p>You searched for: php</p><p>3 results found.</p>",
+      "match": true
+    },
+    {
+      "function": "search_results_html",
+      "args": [
+        "php",
+        0
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<p>You searched for: php</p><p>No results.</p>",
+      "legacy_value": "<p>You searched for: php</p><p>No results.</p>",
+      "match": true
+    },
+    {
+      "function": "search_results_html",
+      "args": [
+        "\"><script>x()</script>",
+        1
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "<p>You searched for: \"><script>x()</script></p><p>1 results found.</p>",
+      "legacy_value": "<p>You searched for: \"><script>x()</script></p><p>1 results found.</p>",
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "hello"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message: hello"
+      ],
+      "legacy_value": [
+        "Message: hello"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        ""
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message:"
+      ],
+      "legacy_value": [
+        "Message:"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "one two three"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message: one two three"
+      ],
+      "legacy_value": [
+        "Message: one two three"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "hi; echo INJECTED"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message: hi",
+        "INJECTED"
+      ],
+      "legacy_value": [
+        "Message: hi",
+        "INJECTED"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "hi && echo SECOND"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message: hi",
+        "SECOND"
+      ],
+      "legacy_value": [
+        "Message: hi",
+        "SECOND"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "$(echo SUBSTITUTED)"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "Message: SUBSTITUTED"
+      ],
+      "legacy_value": [
+        "Message: SUBSTITUTED"
+      ],
+      "match": true
+    },
+    {
+      "function": "echo_message",
+      "args": [
+        "a | tr a-z A-Z"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": [
+        "MESSAGE: A"
+      ],
+      "legacy_value": [
+        "MESSAGE: A"
+      ],
+      "match": true
+    },
+    {
+      "function": "count_words_shell",
+      "args": [
+        "one two three"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": 3,
+      "legacy_value": 3,
+      "match": true
+    },
+    {
+      "function": "count_words_shell",
+      "args": [
+        ""
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": 0,
+      "legacy_value": 0,
+      "match": true
+    },
+    {
+      "function": "count_words_shell",
+      "args": [
+        "hello; echo extra words here"
+      ],
+      "legacy_ok": true,
+      "python_ok": false,
+      "python_error": "ValueError: invalid literal for int() with base 10: 'hello\\n3'",
+      "legacy_value": 0,
+      "match": false
+    },
+    {
+      "function": "clean_filename",
+      "args": [
+        "report.pdf"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "report.pdf",
+      "legacy_value": "report.pdf",
+      "match": true
+    },
+    {
+      "function": "clean_filename",
+      "args": [
+        "../../etc/passwd"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": ".._.._etc_passwd",
+      "legacy_value": ".._.._etc_passwd",
+      "match": true
+    },
+    {
+      "function": "clean_filename",
+      "args": [
+        "my file (1).txt"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": "my_file__1_.txt",
+      "legacy_value": "my_file__1_.txt",
+      "match": true
+    },
+    {
+      "function": "is_valid_username",
+      "args": [
+        "tahir_01"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": true,
+      "legacy_value": true,
+      "match": true
+    },
+    {
+      "function": "is_valid_username",
+      "args": [
+        "ab"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": false,
+      "legacy_value": false,
+      "match": true
+    },
+    {
+      "function": "is_valid_username",
+      "args": [
+        "1abc"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": false,
+      "legacy_value": false,
+      "match": true
+    },
+    {
+      "function": "is_valid_username",
+      "args": [
+        "Abc"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": false,
+      "legacy_value": false,
+      "match": true
+    },
+    {
+      "function": "is_valid_username",
+      "args": [
+        "a_very_long_username_here"
+      ],
+      "legacy_ok": true,
+      "python_ok": true,
+      "python_value": false,
+      "legacy_value": false,
+      "match": true
+    }
+  ]
+}
