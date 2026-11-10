@@ -1,0 +1,223 @@
+[
+  {
+    "function": "line_total",
+    "args": [
+      10,
+      2,
+      0
+    ],
+    "value": 20.0,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      5,
+      3,
+      10
+    ],
+    "value": 13.5,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      0,
+      5,
+      5
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "line_total",
+    "args": [
+      -4,
+      2,
+      0
+    ],
+    "value": -8.0,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 10,
+          "qty": 2
+        },
+        {
+          "price": 5,
+          "qty": 3,
+          "discount": 10
+        }
+      ]
+    ],
+    "value": 33.5,
+    "ok": true
+  },
+  {
+    "function": "invoice_subtotal",
+    "args": [
+      [
+        {
+          "price": 0,
+          "qty": 0
+        },
+        {
+          "price": -5,
+          "qty": -3
+        }
+      ]
+    ],
+    "value": 15.0,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      5001
+    ],
+    "value": 750.15,
+    "ok": true
+  },
+  {
+    "function": "tax_for_amount",
+    "args": [
+      10000
+    ],
+    "value": 1500.0,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      25
+    ],
+    "value": 33.0,
+    "ok": true
+  },
+  {
+    "function": "shipping_cost",
+    "args": [
+      -1
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Weight must be positive"
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      200,
+      0
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      200,
+      15
+    ],
+    "value": 3.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      200,
+      30
+    ],
+    "value": 3.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      200,
+      60
+    ],
+    "value": 6.0,
+    "ok": true
+  },
+  {
+    "function": "late_fee",
+    "args": [
+      200,
+      400
+    ],
+    "value": 42.0,
+    "ok": true
+  },
+  {
+    "function": "format_invoice_number",
+    "args": [
+      1
+    ],
+    "value": "INV-00001",
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [
+        {
+          "price": 10,
+          "qty": 2
+        },
+        {
+          "price": 5,
+          "qty": 3,
+          "discount": 10
+        }
+      ],
+      2
+    ],
+    "value": 47.68,
+    "ok": true
+  },
+  {
+    "function": "invoice_total",
+    "args": [
+      [],
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Weight must be positive"
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      99.99,
+      3
+    ],
+    "value": [
+      33.33,
+      33.33,
+      33.33
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      100,
+      1
+    ],
+    "value": [
+      100.0
+    ],
+    "ok": true
+  },
+  {
+    "function": "split_payment",
+    "args": [
+      100,
+      0
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Need at least one installment"
+  }
+]

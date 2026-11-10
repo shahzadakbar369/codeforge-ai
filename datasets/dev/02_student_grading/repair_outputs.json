@@ -1,0 +1,278 @@
+[
+  {
+    "function": "calculate_average",
+    "args": [
+      [
+        100,
+        90,
+        80
+      ]
+    ],
+    "value": 90.0,
+    "ok": true
+  },
+  {
+    "function": "letter_grade",
+    "args": [
+      [
+        90
+      ]
+    ],
+    "value": "A",
+    "ok": true
+  },
+  {
+    "function": "letter_grade",
+    "args": [
+      [
+        80
+      ]
+    ],
+    "value": "A",
+    "ok": true
+  },
+  {
+    "function": "letter_grade",
+    "args": [
+      [
+        70
+      ]
+    ],
+    "value": "A",
+    "ok": true
+  },
+  {
+    "function": "letter_grade",
+    "args": [
+      [
+        60
+      ]
+    ],
+    "value": "A",
+    "ok": true
+  },
+  {
+    "function": "letter_grade",
+    "args": [
+      [
+        59
+      ]
+    ],
+    "value": "A",
+    "ok": true
+  },
+  {
+    "function": "grade_points",
+    "args": [
+      "B"
+    ],
+    "value": 3.0,
+    "ok": true
+  },
+  {
+    "function": "grade_points",
+    "args": [
+      "D"
+    ],
+    "value": 1.0,
+    "ok": true
+  },
+  {
+    "function": "grade_points",
+    "args": [
+      "X"
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "weighted_grade",
+    "args": [
+      [
+        90,
+        80
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "value": 85.0,
+    "ok": true
+  },
+  {
+    "function": "weighted_grade",
+    "args": [
+      [
+        90
+      ],
+      [
+        0
+      ]
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Total weight is zero"
+  },
+  {
+    "function": "weighted_grade",
+    "args": [
+      [
+        90,
+        80
+      ],
+      [
+        0.3,
+        0.7
+      ]
+    ],
+    "value": 83.0,
+    "ok": true
+  },
+  {
+    "function": "weighted_grade",
+    "args": [
+      [
+        90,
+        80
+      ],
+      [
+        1,
+        -1
+      ]
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Total weight is zero"
+  },
+  {
+    "function": "count_passing",
+    "args": [
+      [
+        70,
+        80,
+        90
+      ],
+      80
+    ],
+    "value": 2,
+    "ok": true
+  },
+  {
+    "function": "count_passing",
+    "args": [
+      [
+        50,
+        60,
+        70
+      ],
+      100
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "grade_distribution",
+    "args": [
+      [
+        95,
+        85,
+        75,
+        65,
+        55
+      ]
+    ],
+    "value": {
+      "A": 1,
+      "B": 1,
+      "C": 1,
+      "D": 1,
+      "F": 1
+    },
+    "ok": true
+  },
+  {
+    "function": "highest_score",
+    "args": [
+      [
+        10,
+        20,
+        30,
+        40,
+        50
+      ]
+    ],
+    "value": 50,
+    "ok": true
+  },
+  {
+    "function": "rank_scores",
+    "args": [
+      [
+        10,
+        20,
+        30,
+        20,
+        10
+      ]
+    ],
+    "value": [
+      30,
+      20,
+      20,
+      10,
+      10
+    ],
+    "ok": true
+  },
+  {
+    "function": "curve_scores",
+    "args": [
+      [
+        95,
+        97
+      ],
+      [
+        10
+      ]
+    ],
+    "ok": false,
+    "error": "TypeError: Unsupported operand types: int + array"
+  },
+  {
+    "function": "curve_scores",
+    "args": [
+      [
+        50,
+        60
+      ],
+      [
+        50
+      ]
+    ],
+    "ok": false,
+    "error": "TypeError: Unsupported operand types: int + array"
+  },
+  {
+    "function": "is_honor_roll",
+    "args": [
+      [
+        95,
+        90,
+        92
+      ]
+    ],
+    "value": true,
+    "ok": true
+  },
+  {
+    "function": "is_honor_roll",
+    "args": [
+      [
+        90,
+        80,
+        79
+      ]
+    ],
+    "value": false,
+    "ok": true
+  }
+]

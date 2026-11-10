@@ -1,0 +1,202 @@
+[
+  {
+    "function": "add",
+    "args": [
+      5,
+      3
+    ],
+    "value": 8,
+    "ok": true
+  },
+  {
+    "function": "add",
+    "args": [
+      -2,
+      2
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "add",
+    "args": [
+      0,
+      0
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "subtract",
+    "args": [
+      -5,
+      -5
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "subtract",
+    "args": [
+      0,
+      0
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "multiply",
+    "args": [
+      4,
+      5
+    ],
+    "value": 20,
+    "ok": true
+  },
+  {
+    "function": "multiply",
+    "args": [
+      -3,
+      3
+    ],
+    "value": -9,
+    "ok": true
+  },
+  {
+    "function": "multiply",
+    "args": [
+      0,
+      10
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "divide",
+    "args": [
+      5,
+      1
+    ],
+    "value": 5,
+    "ok": true
+  },
+  {
+    "function": "divide",
+    "args": [
+      0,
+      1
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "modulo",
+    "args": [
+      -10,
+      3
+    ],
+    "value": -1,
+    "ok": true
+  },
+  {
+    "function": "modulo",
+    "args": [
+      10,
+      -3
+    ],
+    "value": 1,
+    "ok": true
+  },
+  {
+    "function": "power",
+    "args": [
+      2,
+      3
+    ],
+    "value": 8,
+    "ok": true
+  },
+  {
+    "function": "power",
+    "args": [
+      -2,
+      2
+    ],
+    "value": 4,
+    "ok": true
+  },
+  {
+    "function": "power",
+    "args": [
+      5,
+      0
+    ],
+    "value": 1,
+    "ok": true
+  },
+  {
+    "function": "percent_of",
+    "args": [
+      50,
+      200
+    ],
+    "value": 100,
+    "ok": true
+  },
+  {
+    "function": "percent_of",
+    "args": [
+      0,
+      100
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "percent_of",
+    "args": [
+      200,
+      50
+    ],
+    "value": 100,
+    "ok": true
+  },
+  {
+    "function": "average",
+    "args": [
+      [
+        5
+      ]
+    ],
+    "value": 5,
+    "ok": true
+  },
+  {
+    "function": "clamp",
+    "args": [
+      5,
+      1,
+      10
+    ],
+    "value": 5,
+    "ok": true
+  },
+  {
+    "function": "clamp",
+    "args": [
+      -5,
+      0,
+      10
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "is_even",
+    "args": [
+      5
+    ],
+    "value": false,
+    "ok": true
+  }
+]

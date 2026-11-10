@@ -1,0 +1,407 @@
+[
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "Alice",
+        "rate": 20,
+        "hours": 35
+      }
+    ],
+    "value": {
+      "name": "Alice",
+      "rate": 20,
+      "hours": 35,
+      "is_manager": false
+    },
+    "ok": true
+  },
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "Bob",
+        "rate": 0,
+        "hours": 0
+      }
+    ],
+    "value": {
+      "name": "Bob",
+      "rate": 0,
+      "hours": 0,
+      "is_manager": false
+    },
+    "ok": true
+  },
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "   ",
+        "rate": 15,
+        "hours": 40
+      }
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Name is required"
+  },
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "Charlie",
+        "rate": 25,
+        "hours": -5
+      }
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Hours cannot be negative"
+  },
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "Dana",
+        "rate": -10,
+        "hours": 30
+      }
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Rate cannot be negative"
+  },
+  {
+    "function": "employee_from_array",
+    "args": [
+      {
+        "name": "Eve",
+        "rate": 30,
+        "hours": 45,
+        "manager": true
+      }
+    ],
+    "value": {
+      "name": "Eve",
+      "rate": 30,
+      "hours": 45,
+      "is_manager": true
+    },
+    "ok": true
+  },
+  {
+    "function": "employee_gross",
+    "args": [
+      "Frank",
+      15,
+      40
+    ],
+    "value": 600.0,
+    "ok": true
+  },
+  {
+    "function": "employee_gross",
+    "args": [
+      "Grace",
+      20,
+      60
+    ],
+    "value": 1400.0,
+    "ok": true
+  },
+  {
+    "function": "employee_gross",
+    "args": [
+      "Heidi",
+      10,
+      0
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "employee_gross",
+    "args": [
+      "Ivan",
+      25,
+      45,
+      true
+    ],
+    "value": 1287.5,
+    "ok": true
+  },
+  {
+    "function": "employee_net",
+    "args": [
+      "Judy",
+      18,
+      30
+    ],
+    "value": 540.0,
+    "ok": true
+  },
+  {
+    "function": "employee_net",
+    "args": [
+      "Mallory",
+      22,
+      55,
+      true
+    ],
+    "value": 1416.7,
+    "ok": true
+  },
+  {
+    "function": "employee_net",
+    "args": [
+      "Niaj",
+      0,
+      0
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "employee_payslip",
+    "args": [
+      "Olivia",
+      19,
+      40
+    ],
+    "value": {
+      "name": "Olivia",
+      "regular": 760.0,
+      "overtime": 0.0,
+      "bonus": 0,
+      "gross": 760.0,
+      "tax": 0,
+      "net": 760.0
+    },
+    "ok": true
+  },
+  {
+    "function": "employee_payslip",
+    "args": [
+      "Peggy",
+      21,
+      70,
+      true
+    ],
+    "value": {
+      "name": "Peggy",
+      "regular": 840.0,
+      "overtime": 1050.0,
+      "bonus": 84.0,
+      "gross": 1974.0,
+      "tax": 97.4,
+      "net": 1876.6
+    },
+    "ok": true
+  },
+  {
+    "function": "payslip_line",
+    "args": [
+      "Quentin",
+      23,
+      38
+    ],
+    "value": "Quentin: $874.00",
+    "ok": true
+  },
+  {
+    "function": "payslip_line",
+    "args": [
+      "Rupert",
+      17,
+      50,
+      true
+    ],
+    "value": "Rupert: $1,002.70",
+    "ok": true
+  },
+  {
+    "function": "payroll_total",
+    "args": [
+      [
+        {
+          "name": "Sam",
+          "rate": 20,
+          "hours": 40
+        },
+        {
+          "name": "Trudy",
+          "rate": 15,
+          "hours": 30
+        }
+      ]
+    ],
+    "value": 1250.0,
+    "ok": true
+  },
+  {
+    "function": "payroll_total",
+    "args": [
+      [
+        {
+          "name": "Uma",
+          "rate": 25,
+          "hours": 60,
+          "manager": true
+        }
+      ]
+    ],
+    "value": 1765.0,
+    "ok": true
+  },
+  {
+    "function": "payroll_total",
+    "args": [
+      [
+        {
+          "name": "Victor",
+          "rate": 10,
+          "hours": 0
+        }
+      ]
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "highest_paid",
+    "args": [
+      [
+        {
+          "name": "Wendy",
+          "rate": 30,
+          "hours": 40
+        },
+        {
+          "name": "Xander",
+          "rate": 25,
+          "hours": 60
+        },
+        {
+          "name": "Yolanda",
+          "rate": 15,
+          "hours": 20
+        }
+      ]
+    ],
+    "value": "Xander",
+    "ok": true
+  },
+  {
+    "function": "highest_paid",
+    "args": [
+      [
+        {
+          "name": "Zack",
+          "rate": 100,
+          "hours": 10
+        },
+        {
+          "name": "Ava",
+          "rate": 50,
+          "hours": 20
+        }
+      ]
+    ],
+    "value": "Zack",
+    "ok": true
+  },
+  {
+    "function": "highest_paid",
+    "args": [
+      [
+        {
+          "name": "Bob",
+          "rate": 0,
+          "hours": 0
+        }
+      ]
+    ],
+    "value": "Bob",
+    "ok": true
+  },
+  {
+    "function": "highest_paid",
+    "args": [
+      [
+        {
+          "name": "Cleo",
+          "rate": 0,
+          "hours": 0
+        },
+        {
+          "name": "Duke",
+          "rate": 0,
+          "hours": 0
+        }
+      ]
+    ],
+    "value": "Cleo",
+    "ok": true
+  },
+  {
+    "function": "department_summary",
+    "args": [
+      [
+        {
+          "name": "Ellen",
+          "rate": 18,
+          "hours": 40
+        },
+        {
+          "name": "Frank",
+          "rate": 22,
+          "hours": 30
+        }
+      ]
+    ],
+    "value": {
+      "count": 2,
+      "total_gross": 1380.0,
+      "total_net": 1380.0,
+      "average_net": 690.0
+    },
+    "ok": true
+  },
+  {
+    "function": "department_summary",
+    "args": [
+      [
+        {
+          "name": "George",
+          "rate": 25,
+          "hours": 60,
+          "manager": true
+        }
+      ]
+    ],
+    "value": {
+      "count": 1,
+      "total_gross": 1850.0,
+      "total_net": 1765.0,
+      "average_net": 1765.0
+    },
+    "ok": true
+  },
+  {
+    "function": "department_summary",
+    "args": [
+      [
+        {
+          "name": "Hank",
+          "rate": 0,
+          "hours": 0
+        }
+      ]
+    ],
+    "value": {
+      "count": 1,
+      "total_gross": 0.0,
+      "total_net": 0.0,
+      "average_net": 0.0
+    },
+    "ok": true
+  }
+]
