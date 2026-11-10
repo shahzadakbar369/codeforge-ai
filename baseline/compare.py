@@ -74,8 +74,9 @@ def run_migrated(migrated_path, inputs_path):
     if use_docker():
         cmd, cwd, timeout = docker_command(migrated_path, inputs_path), None, DOCKER_TIMEOUT_SECONDS
     else:
-        cmd = [sys.executable, str(HARNESS), str(migrated_path), str(inputs_path)]
-        cwd, timeout = str(Path(migrated_path).resolve().parent), TIMEOUT_SECONDS
+        mp, ip = Path(migrated_path).resolve(), Path(inputs_path).resolve()
+        cmd = [sys.executable, str(HARNESS), str(mp), str(ip)]
+        cwd, timeout = str(mp.parent), TIMEOUT_SECONDS
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=cwd)
     except subprocess.TimeoutExpired:

@@ -1,6 +1,12 @@
 """Repair loop. For each dev program: take the baseline Python, compare it with the real
 PHP outputs, and if some functions differ, show the LLM the differing cases and ask for a
-fix (at most --max-tries rounds). The best version is kept, never a worse one.
+fix (at most --max-tries rounds). A repaired version is kept only if it helps and does no harm.
+
+A candidate is NOT kept when:
+  - it does not improve the feedback set,
+  - it breaks a function that was equivalent before (regression), or
+  - it contains input values from the failing cases that are not in the PHP source
+    (a sign of a hard-coded fix). Use --allow-flagged to override after checking by hand.
 
 Results go to results/repair/<program>/ and results/repair/summary.json.
 The baseline in results/baseline/ is never changed, so baseline and repair can be compared.
@@ -9,15 +15,17 @@ IMPORTANT for the held-out set: the repair loop shows the model the expected out
 inputs it is given. For held-out programs, put DIFFERENT inputs in repair_inputs.json and
 repair_outputs.json (Tahir's input generator). The loop then repairs on those and is graded on
 inputs.json / outputs.json, which the model never sees. On dev programs without those files
-the same inputs are used for both, which is fine for dev only.
+the same inputs are used for both, which is fine for dev only and must be reported as such.
 
 Usage:
     python pipeline/run_pipeline.py                  # all dev programs that have baseline code
     python pipeline/run_pipeline.py --only 04_payroll
+    python pipeline/run_pipeline.py --docker         # run generated code in Docker (Linux), like the PHP
 """
 import argparse
 import ast
 import json
+import os
 import sys
 import time
 from datetime import date
@@ -69,8 +77,34 @@ def evaluate(inputs_path, outputs_path, migrated_path):
     return per, None
 
 
+def equivalent_set(per):
+    return {f for f, b in per.items() if b["matched"] == b["total"]}
+
+
 def count_equiv(per):
-    return sum(1 for b in per.values() if b["matched"] == b["total"])
+    return len(equivalent_set(per))
+
+
+def failing_values(per):
+    """Input values from the failing cases, used to spot hard-coded fixes."""
+    found = []
+
+    def walk(x):
+        if isinstance(x, (list, tuple)):
+            for i in x:
+                walk(i)
+        elif isinstance(x, dict):
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, float) or (isinstance(x, int) and not isinstance(x, bool) and abs(x) > 9):
+            found.append(repr(x))
+        elif isinstance(x, str) and len(x) > 2:
+            found.append(x)
+
+    for b in per.values():
+        for f in b["failures"]:
+            walk(f["args"])
+    return found
 
 
 def _show(r):
@@ -91,7 +125,7 @@ def failure_text(per):
     return "\n".join(lines)[:4000]
 
 
-def repair_program(client, model, folder, max_tries, pause):
+def repair_program(client, model, folder, max_tries, pause, allow_flagged=False):
     name = folder.name
     row = {"program": name, "status": None, "attempts": []}
     base = BASE_DIR / name / "migrated.py"
@@ -140,7 +174,7 @@ def repair_program(client, model, folder, max_tries, pause):
         try:
             new_code = llm.parse_json(text)["generated_code"]
             ast.parse(new_code)
-        except (ValueError, SyntaxError) as e:
+        except (ValueError, SyntaxError, KeyError) as e:
             entry["error"] = f"unusable answer: {str(e)[:150]}"
             continue
         path = out_dir / f"attempt{attempt}.py"
@@ -149,7 +183,16 @@ def repair_program(client, model, folder, max_tries, pause):
         cand["code"] = new_code
         entry["feedback_equivalent"] = count_equiv(cand["fb"])
         entry["grade_equivalent"] = count_equiv(cand["grade"])
-        entry["kept"] = entry["feedback_equivalent"] > count_equiv(best["fb"])
+        entry["hardcode_warning"] = [v for v in failing_values(best["fb"]) if v in new_code and v not in php]
+        entry["regressed"] = sorted(equivalent_set(best["grade"]) - equivalent_set(cand["grade"]))
+        improved = entry["feedback_equivalent"] > count_equiv(best["fb"])
+        if not improved:
+            entry["rejected_reason"] = "no improvement"
+        elif entry["regressed"]:
+            entry["rejected_reason"] = "broke functions that were equivalent: " + ", ".join(entry["regressed"])
+        elif entry["hardcode_warning"] and not allow_flagged:
+            entry["rejected_reason"] = "possible hard-coding of input values"
+        entry["kept"] = "rejected_reason" not in entry
         if entry["kept"]:
             best = cand
 
@@ -175,7 +218,12 @@ def main():
     ap.add_argument("--only", help="one program folder, e.g. 04_payroll")
     ap.add_argument("--max-tries", type=int, default=3)
     ap.add_argument("--pause", type=int, default=20, help="seconds between model calls (free-tier rate limit)")
+    ap.add_argument("--docker", action="store_true", help="run generated code in Docker (python:3.12-slim)")
+    ap.add_argument("--allow-flagged", action="store_true",
+                    help="keep a repair even if it contains input values from the failing cases (check it by hand first)")
     args = ap.parse_args()
+    if args.docker:
+        os.environ["CODEFORGE_DOCKER"] = "1"
 
     try:
         client = llm.get_client()
@@ -192,10 +240,15 @@ def main():
     rows = []
     for i, folder in enumerate(folders):
         print(f"{folder.name} ...")
-        row = repair_program(client, args.model, folder, args.max_tries, args.pause)
+        row = repair_program(client, args.model, folder, args.max_tries, args.pause, args.allow_flagged)
         b, a = row.get("before"), row.get("after")
         extra = f" {b['equivalent']}/{b['total']} -> {a['equivalent']}/{a['total']}" if b and a else ""
-        print(f"  {row['status']}{extra}")
+        print(f"  {row['status']}{extra} (feedback set: {row.get('feedback_set', 'n/a')})")
+        for at in row["attempts"]:
+            if at.get("hardcode_warning"):
+                print(f"  WARNING attempt {at['attempt']}: new code contains input values from the failing cases: {at['hardcode_warning']}")
+            if at.get("rejected_reason"):
+                print(f"  attempt {at['attempt']} not kept: {at['rejected_reason']}")
         rows.append(row)
         if row["attempts"] and i < len(folders) - 1:
             time.sleep(args.pause)
