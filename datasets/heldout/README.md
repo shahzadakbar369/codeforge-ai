@@ -19,5 +19,6 @@ These files are used for coursework and evaluation only. The license terms of ea
 ## Running the files
 
 - Files 1 and 2 begin with a check for the constant `BASEPATH`; define it before loading them.
-- File 6 needs `PEAR.php` on the include path.
-- File 2 is the only non-deterministic file (`random_element()`); compare it with a fixed seed or leave that function out.
+- File 2 also begins with the `BASEPATH` check. Its function `convert_accented_characters()` loads a framework config file and was not run.
+- File 6 (PEAR Numbers_Roman): **run with stub PEAR.php**. It needs `PEAR.php` on the include path, and the real PEAR package was not installed, so a small stub was used for the checks.
+- All 10 files are deterministic: each was run 3 times with identical output.
