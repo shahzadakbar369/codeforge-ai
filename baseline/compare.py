@@ -1,6 +1,7 @@
 import argparse
 import json
 import math
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -10,11 +11,20 @@ DEV_DIR = ROOT / "datasets" / "dev"
 OUT_DIR = ROOT / "results" / "baseline"
 HARNESS = ROOT / "baseline" / "run_migrated.py"
 TIMEOUT_SECONDS = 30
+DOCKER_TIMEOUT_SECONDS = 90
+PY_IMAGE = "python:3.12-slim"
+
+
+def use_docker():
+    """Docker mode runs the generated Python in a Linux container, like the PHP was.
+    Switch it on with the --docker flag or by setting CODEFORGE_DOCKER=1."""
+    return os.environ.get("CODEFORGE_DOCKER") == "1"
 
 
 def values_equal(a, b):
     """Comparison rules: numbers are compared as numbers (100 equals 100.0),
-    booleans only equal booleans, containers are compared element by element."""
+    integers are compared exactly, booleans only equal booleans,
+    containers are compared element by element."""
     if isinstance(a, bool) or isinstance(b, bool):
         return isinstance(a, bool) and isinstance(b, bool) and a == b
     if isinstance(a, int) and isinstance(b, int):
@@ -35,18 +45,43 @@ def selftest():
     assert not values_equal(105.3, 105.31)
     assert values_equal([1, 2.0], [1.0, 2])
     assert not values_equal("a", "b")
+    assert not values_equal(2432902008176640000, 2432902008176640001)
     print("selftest passed")
 
 
+def docker_command(migrated_path, inputs_path):
+    migrated_path = Path(migrated_path).resolve()
+    return [
+        "docker", "run", "--rm",
+        "--network", "none",            # generated code gets no network access
+        "--read-only",
+        "--cap-drop", "ALL",
+        "--security-opt", "no-new-privileges",
+        "--memory", "256m", "--cpus", "1", "--pids-limit", "64",
+        "--tmpfs", "/tmp:rw,size=16m",
+        "-e", "PYTHONDONTWRITEBYTECODE=1",
+        "-w", "/work",
+        "-v", f"{migrated_path.parent}:/work:ro",
+        "-v", f"{Path(inputs_path).resolve()}:/inputs/inputs.json:ro",
+        "-v", f"{HARNESS.resolve()}:/harness/run_migrated.py:ro",
+        PY_IMAGE, "python", "/harness/run_migrated.py",
+        f"/work/{migrated_path.name}", "/inputs/inputs.json",
+    ]
+
+
 def run_migrated(migrated_path, inputs_path):
-    """Returns (results, error). Runs the generated code in a separate process with a timeout."""
+    """Returns (results, error). Runs the generated code in a separate process (or container) with a timeout."""
+    if use_docker():
+        cmd, cwd, timeout = docker_command(migrated_path, inputs_path), None, DOCKER_TIMEOUT_SECONDS
+    else:
+        cmd = [sys.executable, str(HARNESS), str(migrated_path), str(inputs_path)]
+        cwd, timeout = str(Path(migrated_path).resolve().parent), TIMEOUT_SECONDS
     try:
-        p = subprocess.run(
-            [sys.executable, str(HARNESS), str(migrated_path), str(inputs_path)],
-            capture_output=True, text=True, timeout=TIMEOUT_SECONDS,
-        )
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=cwd)
     except subprocess.TimeoutExpired:
         return None, "timeout"
+    except FileNotFoundError as e:
+        return None, f"cannot start {cmd[0]}: {e}"
     try:
         return json.loads(p.stdout), None
     except json.JSONDecodeError:
@@ -107,15 +142,20 @@ def compare_program(folder):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--selftest", action="store_true")
+    parser.add_argument("--docker", action="store_true",
+                        help="run the generated Python in a Linux container (needs Docker and the python:3.12-slim image)")
     args = parser.parse_args()
     if args.selftest:
         selftest()
         return
+    if args.docker:
+        os.environ["CODEFORGE_DOCKER"] = "1"
+    print("Running generated code in Docker (python:3.12-slim)" if use_docker() else "Running generated code on this machine")
 
     folders = sorted(p for p in DEV_DIR.iterdir() if p.is_dir() and (p / "inputs.json").exists())
     results = [compare_program(f) for f in folders]
 
-    attempted = equivalent = 0
+    attempted = equivalent = not_run = 0
     for r in results:
         if r["status"] != "compared":
             print(f"{r['program']}: {r['status']}")
@@ -124,13 +164,17 @@ def main():
             tag = "" if r["counted"] else " (smoke, not counted)"
             print(f"{r['program']}.{fn['function']}: {fn['verdict']}{tag}")
             if r["counted"]:
-                attempted += 1
-                equivalent += fn["verdict"] == "EQUIVALENT"
+                if fn["verdict"] == "FAILED_NO_CODE":
+                    not_run += 1
+                else:
+                    attempted += 1
+                    equivalent += fn["verdict"] == "EQUIVALENT"
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "comparison.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
     if attempted:
-        print(f"\nBehavioral equivalence (baseline, dev set): {equivalent} of {attempted} functions")
+        print(f"\nBehavioral equivalence (baseline, dev set): {equivalent} of {attempted} functions attempted"
+              f" ({not_run} not run yet)")
     else:
         print("\nNo counted functions compared yet.")
 
