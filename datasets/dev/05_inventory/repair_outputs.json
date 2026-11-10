@@ -1,0 +1,146 @@
+[
+  {
+    "function": "get_product",
+    "args": [
+      999
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Product not found: 999"
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "NonExistent"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "find_products_by_name",
+    "args": [
+      "' OR 1=1 --"
+    ],
+    "value": [
+      "Widget",
+      "Gadget",
+      "Gizmo",
+      "Doohickey",
+      "Thingamajig",
+      "Widget Pro"
+    ],
+    "ok": true
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      "nonexistent"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      2,
+      5
+    ],
+    "value": 20,
+    "ok": true
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      3,
+      -1
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Quantity must be positive"
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      2,
+      5
+    ],
+    "value": 15,
+    "ok": true
+  },
+  {
+    "function": "low_stock",
+    "args": [
+      5
+    ],
+    "value": [
+      "Gizmo",
+      "Thingamajig"
+    ],
+    "ok": true
+  },
+  {
+    "function": "inventory_value",
+    "args": [
+      "nonexistent"
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "tools",
+      10
+    ],
+    "value": 3,
+    "ok": true
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "tools",
+      110
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Percent must be between 0 and 100"
+  },
+  {
+    "function": "apply_discount",
+    "args": [
+      "tools",
+      -5
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: Percent must be between 0 and 100"
+  },
+  {
+    "function": "get_db",
+    "args": [],
+    "value": {},
+    "ok": true
+  },
+  {
+    "function": "products_in_category",
+    "args": [
+      ""
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "add_stock",
+    "args": [
+      1,
+      1
+    ],
+    "value": 101,
+    "ok": true
+  },
+  {
+    "function": "remove_stock",
+    "args": [
+      1,
+      1
+    ],
+    "value": 100,
+    "ok": true
+  }
+]

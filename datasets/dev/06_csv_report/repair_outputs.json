@@ -1,0 +1,307 @@
+[
+  {
+    "function": "load_sales",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "load_sales",
+    "args": [
+      "data.csv"
+    ],
+    "value": [
+      {
+        "id": 1,
+        "name": "Alpha Kit",
+        "region": "north",
+        "units": 10,
+        "price": 2.5
+      },
+      {
+        "id": 2,
+        "name": "Beta, Large",
+        "region": "south",
+        "units": 5,
+        "price": 19.99
+      },
+      {
+        "id": 3,
+        "name": "Gamma",
+        "region": "north",
+        "units": 0,
+        "price": 7.25
+      },
+      {
+        "id": 4,
+        "name": "Delta",
+        "region": "east",
+        "units": 12,
+        "price": 3.1
+      },
+      {
+        "id": 5,
+        "name": "Epsilon",
+        "region": "south",
+        "units": 7,
+        "price": null
+      },
+      {
+        "id": 6,
+        "name": "Zeta",
+        "region": "west",
+        "units": -2,
+        "price": 4.0
+      },
+      {
+        "id": 7,
+        "name": "Eta",
+        "region": "north",
+        "units": 20,
+        "price": 1.05
+      },
+      {
+        "id": 8,
+        "name": "Theta",
+        "region": "east",
+        "units": 3,
+        "price": 100.0
+      }
+    ],
+    "ok": true
+  },
+  {
+    "function": "row_count",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      1,
+      "data.csv"
+    ],
+    "value": {
+      "id": 1,
+      "name": "Alpha Kit",
+      "region": "north",
+      "units": 10,
+      "price": 2.5
+    },
+    "ok": true
+  },
+  {
+    "function": "find_by_id",
+    "args": [
+      9999,
+      "data.csv"
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: No row with id 9999"
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "region": "North",
+        "units": 5,
+        "price": 10.0
+      }
+    ],
+    "value": 50.0,
+    "ok": true
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 2,
+        "name": "Bob",
+        "region": "East",
+        "units": -3,
+        "price": 7.5
+      }
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 3,
+        "name": "Carol",
+        "region": "West",
+        "units": 4,
+        "price": null
+      }
+    ],
+    "value": 0,
+    "ok": true
+  },
+  {
+    "function": "total_revenue",
+    "args": [
+      "data.csv"
+    ],
+    "value": 483.15,
+    "ok": true
+  },
+  {
+    "function": "total_revenue",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "revenue_by_region",
+    "args": [
+      "data.csv"
+    ],
+    "value": {
+      "east": 337.2,
+      "north": 46.0,
+      "south": 99.95,
+      "west": 0.0
+    },
+    "ok": true
+  },
+  {
+    "function": "revenue_by_region",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "North",
+      "data.csv"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "South",
+      "data.csv"
+    ],
+    "value": [],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      2,
+      "data.csv"
+    ],
+    "value": [
+      "Theta",
+      "Beta, Large"
+    ],
+    "ok": true
+  },
+  {
+    "function": "top_sellers",
+    "args": [
+      0,
+      "data.csv"
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: n must be at least 1"
+  },
+  {
+    "function": "rows_missing_price",
+    "args": [
+      "data.csv"
+    ],
+    "value": [
+      5
+    ],
+    "ok": true
+  },
+  {
+    "function": "rows_missing_price",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "average_units",
+    "args": [
+      "data.csv"
+    ],
+    "value": 6.88,
+    "ok": true
+  },
+  {
+    "function": "average_units",
+    "args": [
+      "nonexistent.csv"
+    ],
+    "ok": false,
+    "error": "RuntimeException: File not found: nonexistent.csv"
+  },
+  {
+    "function": "report_line",
+    "args": [
+      1,
+      "data.csv"
+    ],
+    "value": "#1 Alpha Kit (north): 10 units, revenue 25.00",
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      9999,
+      "data.csv"
+    ],
+    "ok": false,
+    "error": "InvalidArgumentException: No row with id 9999"
+  },
+  {
+    "function": "row_revenue",
+    "args": [
+      {
+        "id": 4,
+        "name": "Dave",
+        "region": "East",
+        "units": 0,
+        "price": 5.0
+      }
+    ],
+    "value": 0.0,
+    "ok": true
+  },
+  {
+    "function": "report_line",
+    "args": [
+      1
+    ],
+    "value": "#1 Alpha Kit (north): 10 units, revenue 25.00",
+    "ok": true
+  },
+  {
+    "function": "names_in_region",
+    "args": [
+      "East"
+    ],
+    "value": [],
+    "ok": true
+  }
+]

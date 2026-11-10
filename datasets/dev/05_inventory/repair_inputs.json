@@ -1,0 +1,18 @@
+[
+  {"function": "get_product", "args": [999]},
+  {"function": "find_products_by_name", "args": ["NonExistent"]},
+  {"function": "find_products_by_name", "args": ["' OR 1=1 --"]},
+  {"function": "products_in_category", "args": ["nonexistent"]},
+  {"function": "add_stock", "args": [2, 5]},
+  {"function": "add_stock", "args": [3, -1]},
+  {"function": "remove_stock", "args": [2, 5]},
+  {"function": "low_stock", "args": [5]},
+  {"function": "inventory_value", "args": ["nonexistent"]},
+  {"function": "apply_discount", "args": ["tools", 10]},
+  {"function": "apply_discount", "args": ["tools", 110]},
+  {"function": "apply_discount", "args": ["tools", -5]},
+  {"function": "get_db", "args": []},
+  {"function": "products_in_category", "args": [""]},
+  {"function": "add_stock", "args": [1, 1]},
+  {"function": "remove_stock", "args": [1, 1]}
+]

@@ -1,0 +1,227 @@
+[
+  {
+    "function": "greeting_html",
+    "args": [
+      "Alice"
+    ],
+    "value": "<h1>Hello Alice</h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html_safe",
+    "args": [
+      "Bob"
+    ],
+    "value": "<h1>Hello Bob</h1>",
+    "ok": true
+  },
+  {
+    "function": "greeting_html_safe",
+    "args": [
+      "<b>Bold</b>"
+    ],
+    "value": "<h1>Hello &lt;b&gt;Bold&lt;/b&gt;</h1>",
+    "ok": true
+  },
+  {
+    "function": "comment_html",
+    "args": [
+      "Eve",
+      "Hello world!"
+    ],
+    "value": "<div class=\"comment\"><b>Eve</b>: Hello world!</div>",
+    "ok": true
+  },
+  {
+    "function": "comment_html",
+    "args": [
+      "Mallory",
+      "<img src=x onerror=alert(1)>"
+    ],
+    "value": "<div class=\"comment\"><b>Mallory</b>: <img src=x onerror=alert(1)></div>",
+    "ok": true
+  },
+  {
+    "function": "comment_html",
+    "args": [
+      "",
+      "No author"
+    ],
+    "value": "<div class=\"comment\"><b></b>: No author</div>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "test",
+      "0"
+    ],
+    "value": "<p>You searched for: test</p><p>No results.</p>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "foo",
+      "5"
+    ],
+    "value": "<p>You searched for: foo</p><p>5 results found.</p>",
+    "ok": true
+  },
+  {
+    "function": "search_results_html",
+    "args": [
+      "",
+      "10"
+    ],
+    "value": "<p>You searched for: </p><p>10 results found.</p>",
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "Hello"
+    ],
+    "value": [
+      "Message: Hello"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "; ls"
+    ],
+    "value": [
+      "Message:",
+      "bin",
+      "boot",
+      "dev",
+      "etc",
+      "harness",
+      "home",
+      "lib",
+      "lib64",
+      "media",
+      "mnt",
+      "opt",
+      "proc",
+      "root",
+      "run",
+      "sbin",
+      "srv",
+      "sys",
+      "tmp",
+      "usr",
+      "var",
+      "work"
+    ],
+    "ok": true
+  },
+  {
+    "function": "echo_message",
+    "args": [
+      "$(cat /etc/passwd)"
+    ],
+    "value": [
+      "Message: root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin _apt:x:42:65534::/nonexistent:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin"
+    ],
+    "ok": true
+  },
+  {
+    "function": "count_words_shell",
+    "args": [
+      "$(echo dangerous)"
+    ],
+    "value": 1,
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "valid_file.txt"
+    ],
+    "value": "valid_file.txt",
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "inva|lid*name?.txt"
+    ],
+    "value": "inva_lid_name_.txt",
+    "ok": true
+  },
+  {
+    "function": "clean_filename",
+    "args": [
+      "../etc/passwd"
+    ],
+    "value": ".._etc_passwd",
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "alice"
+    ],
+    "value": true,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "A1bob"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "a_b_1"
+    ],
+    "value": true,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "longusername_exceeding"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "user!name"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "user123456789012345"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "a"
+    ],
+    "value": false,
+    "ok": true
+  },
+  {
+    "function": "is_valid_username",
+    "args": [
+      "abc"
+    ],
+    "value": true,
+    "ok": true
+  }
+]
