@@ -1,0 +1,59 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "prompt_template": "You are helping build a test set for a security scanner. Write ONE small legacy-style PHP program for {theme}.\n\nRequirements:\n- 60 to 120 lines of plain procedural PHP in the style of old (about 2010) code: no framework, no Composer.\n- 8 to 12 functions. For the database use PHP's standard API (PDO or mysqli, whichever you would naturally use).\n- The program must contain these deliberate vulnerabilities, written the way a careless developer would write them: {plan}.\n- Meaning of the types: sql_injection = SQL text built by joining a value into a string that is then run; command_injection = a value joined into a command run with exec, shell_exec, system, passthru or similar; xss = a value put into HTML that is printed or returned without htmlspecialchars.\n- Add {safe_n} SAFE functions that do a similar job correctly (prepared statements, escapeshellarg, htmlspecialchars). Everything else in the program must also be written safely.\n- Unsafe values may arrive as function parameters or from $_GET and $_POST, whichever is natural.\n- Use normal comments only. Do not point out the vulnerabilities in comments.\n- At the END of every line where an unsafe value finally reaches the dangerous place (the line with the database call, the shell call, or the line that prints or returns the HTML), add the tag /*PLANTED:type*/ with type sql_injection, command_injection or xss. One tag per line, no tag on safe code, no other tags.\n\nAnswer with ONLY a JSON object: {{\"code\": \"<the complete PHP file as one string>\", \"safe_functions\": [\"names of the safe functions\"]}}",
+  "programs": [
+    {
+      "program": "01_library_lending",
+      "theme": "a small library book-lending system (members, books, loans)",
+      "attempts": 1,
+      "tokens": 6925,
+      "requested": {
+        "sql_injection": 2,
+        "xss": 1
+      },
+      "tagged": {
+        "sql_injection": 2,
+        "command_injection": 1,
+        "xss": 1
+      },
+      "lines": 105,
+      "lint": "No syntax errors detected in /work/legacy.php"
+    },
+    {
+      "program": "02_support_desk",
+      "theme": "a customer support ticket desk with a helper that archives logs using shell tools",
+      "attempts": 1,
+      "tokens": 10374,
+      "requested": {
+        "command_injection": 2,
+        "xss": 1,
+        "sql_injection": 1
+      },
+      "tagged": {
+        "sql_injection": 1,
+        "command_injection": 1,
+        "xss": 1
+      },
+      "lines": 118,
+      "lint": "No syntax errors detected in /work/legacy.php"
+    },
+    {
+      "program": "03_photo_gallery",
+      "theme": "a photo gallery with captions, comments and an image-resize helper that calls command-line tools",
+      "attempts": 4,
+      "tokens": 3984,
+      "requested": {
+        "command_injection": 1,
+        "xss": 2,
+        "sql_injection": 1
+      },
+      "tagged": {
+        "sql_injection": 1,
+        "command_injection": 1,
+        "xss": 2
+      },
+      "lines": 82,
+      "lint": "No syntax errors detected in /work/legacy.php"
+    }
+  ]
+}

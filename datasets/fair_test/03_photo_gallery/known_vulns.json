@@ -1,0 +1,63 @@
+{
+  "program": "03_photo_gallery",
+  "file": "legacy.php",
+  "reviewed_by_hand": true,
+  "vulnerabilities": [
+    {
+      "id": "03-cmdi-2",
+      "type": "command_injection",
+      "function": "safe_resize_image",
+      "line": 8,
+      "sink_line": 8,
+      "description": "The function is named safe and escapes src and dest, but width and height are put into the shell command without escaping; the model did not tag it.",
+      "origin": "added_in_review"
+    },
+    {
+      "id": "03-cmdi-1",
+      "type": "command_injection",
+      "function": "resize_image",
+      "line": 22,
+      "sink_line": 22,
+      "description": "Tagged by the model as command_injection on line 22 (function resize_image).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "03-sqli-1",
+      "type": "sql_injection",
+      "function": "add_comment",
+      "line": 26,
+      "sink_line": 27,
+      "description": "Tagged by the model as sql_injection on line 27 (function add_comment). line = where the SQL text is built, sink_line = where it is run.",
+      "origin": "model_tag"
+    },
+    {
+      "id": "03-xss-1",
+      "type": "xss",
+      "function": "display_image",
+      "line": 43,
+      "sink_line": 43,
+      "description": "Tagged by the model as xss on line 43 (function display_image).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "03-xss-2",
+      "type": "xss",
+      "function": "display_comments",
+      "line": 54,
+      "sink_line": 54,
+      "description": "Tagged by the model as xss on line 54 (function display_comments).",
+      "origin": "model_tag"
+    }
+  ],
+  "safe_functions": [
+    "safe_add_comment",
+    "safe_display_comment"
+  ],
+  "gray_lines": [
+    {
+      "line": 62,
+      "note": "INSERT built with addslashes() on path and caption. Weak escaping (wrong for SQLite quotes), so arguable; not counted as planted and not counted as a false alarm."
+    }
+  ],
+  "not_safe_note": "safe_resize_image was removed from safe_functions: width and height are not escaped (see line 8)."
+}
