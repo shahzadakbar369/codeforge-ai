@@ -1,9 +1,9 @@
 window.CODEFORGE_RESULTS = {
-  "generated_on": "2026-10-25",
+  "generated_on": "2026-11-15",
   "summary": {
     "programs": 7,
     "functions_compared": 72,
-    "equivalent": 68
+    "equivalent": 69
   },
   "programs": [
     {
@@ -688,50 +688,8 @@ window.CODEFORGE_RESULTS = {
           "function": "count_words_shell",
           "verdict": "MISMATCH",
           "total": 3,
-          "matched": 0,
+          "matched": 2,
           "failures": [
-            {
-              "args": [
-                "one two three"
-              ],
-              "legacy": {
-                "function": "count_words_shell",
-                "args": [
-                  "one two three"
-                ],
-                "value": 3,
-                "ok": true
-              },
-              "migrated": {
-                "function": "count_words_shell",
-                "args": [
-                  "one two three"
-                ],
-                "ok": false,
-                "error": "CalledProcessError: Command 'echo one two three | wc -w' returned non-zero exit status 255."
-              }
-            },
-            {
-              "args": [
-                ""
-              ],
-              "legacy": {
-                "function": "count_words_shell",
-                "args": [
-                  ""
-                ],
-                "value": 0,
-                "ok": true
-              },
-              "migrated": {
-                "function": "count_words_shell",
-                "args": [
-                  ""
-                ],
-                "ok": false,
-                "error": "CalledProcessError: Command 'echo  | wc -w' returned non-zero exit status 255."
-              }
-            },
             {
               "args": [
                 "hello; echo extra words here"
@@ -750,93 +708,17 @@ window.CODEFORGE_RESULTS = {
                   "hello; echo extra words here"
                 ],
                 "ok": false,
-                "error": "CalledProcessError: Command 'echo hello; echo extra words here | wc -w' returned non-zero exit status 255."
+                "error": "ValueError: invalid literal for int() with base 10: 'hello\\n3'"
               }
             }
           ]
         },
         {
           "function": "echo_message",
-          "verdict": "MISMATCH",
+          "verdict": "EQUIVALENT",
           "total": 7,
-          "matched": 0,
-          "failures": [
-            {
-              "args": [
-                "hello"
-              ],
-              "legacy": {
-                "function": "echo_message",
-                "args": [
-                  "hello"
-                ],
-                "value": [
-                  "Message: hello"
-                ],
-                "ok": true
-              },
-              "migrated": {
-                "function": "echo_message",
-                "args": [
-                  "hello"
-                ],
-                "ok": true,
-                "value": [
-                  "Message: hello "
-                ]
-              }
-            },
-            {
-              "args": [
-                ""
-              ],
-              "legacy": {
-                "function": "echo_message",
-                "args": [
-                  ""
-                ],
-                "value": [
-                  "Message:"
-                ],
-                "ok": true
-              },
-              "migrated": {
-                "function": "echo_message",
-                "args": [
-                  ""
-                ],
-                "ok": true,
-                "value": [
-                  "Message:  "
-                ]
-              }
-            },
-            {
-              "args": [
-                "one two three"
-              ],
-              "legacy": {
-                "function": "echo_message",
-                "args": [
-                  "one two three"
-                ],
-                "value": [
-                  "Message: one two three"
-                ],
-                "ok": true
-              },
-              "migrated": {
-                "function": "echo_message",
-                "args": [
-                  "one two three"
-                ],
-                "ok": true,
-                "value": [
-                  "Message: one two three "
-                ]
-              }
-            }
-          ]
+          "matched": 7,
+          "failures": []
         },
         {
           "function": "greeting_html",

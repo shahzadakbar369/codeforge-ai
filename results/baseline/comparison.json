@@ -11,8 +11,10 @@
     "functions": [
       {
         "function": "calculate_invoice",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -23,68 +25,94 @@
     "functions": [
       {
         "function": "add",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "average",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "celsius_to_fahrenheit",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "clamp",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "divide",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "factorial",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "is_even",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "modulo",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "multiply",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "percent_of",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "power",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "round_to",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "subtract",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -95,58 +123,80 @@
     "functions": [
       {
         "function": "calculate_average",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "count_passing",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "curve_scores",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "gpa",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "grade_distribution",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "grade_points",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "highest_score",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "is_honor_roll",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "letter_grade",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 9,
+        "matched": 9,
+        "failures": []
       },
       {
         "function": "rank_scores",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "weighted_grade",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -157,43 +207,59 @@
     "functions": [
       {
         "function": "format_invoice_number",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "invoice_subtotal",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "invoice_total",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "late_fee",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 6,
+        "matched": 6,
+        "failures": []
       },
       {
         "function": "line_total",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 6,
+        "matched": 6,
+        "failures": []
       },
       {
         "function": "shipping_cost",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 9,
+        "matched": 9,
+        "failures": []
       },
       {
         "function": "split_payment",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "tax_for_amount",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 7,
+        "matched": 7,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -204,58 +270,102 @@
     "functions": [
       {
         "function": "department_summary",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "employee_gross",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 12,
+        "matched": 12,
+        "failures": []
       },
       {
         "function": "employee_net",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "employee_payslip",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       },
       {
         "function": "format_money",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "highest_paid",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "income_tax",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "overtime_hours",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "payroll_total",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "payslip_line",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       },
       {
         "function": "round_money",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "MISMATCH",
+        "total": 1,
+        "matched": 0,
+        "failures": [
+          {
+            "args": [
+              2.675
+            ],
+            "legacy": {
+              "function": "round_money",
+              "args": [
+                2.675
+              ],
+              "value": 2.68,
+              "ok": true
+            },
+            "migrated": {
+              "function": "round_money",
+              "args": [
+                2.675
+              ],
+              "ok": true,
+              "value": 2.67
+            }
+          }
+        ]
       }
     ],
     "status": "compared"
@@ -266,58 +376,80 @@
     "functions": [
       {
         "function": "add_stock",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "apply_discount",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "category_summary",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "count_products",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "find_products_by_name",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 7,
+        "matched": 7,
+        "failures": []
       },
       {
         "function": "get_product",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "inventory_value",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "low_stock",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "products_in_category",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "remove_stock",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "reset_inventory",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -328,53 +460,73 @@
     "functions": [
       {
         "function": "average_units",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       },
       {
         "function": "find_by_id",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "names_in_region",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "report_line",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "revenue_by_region",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "row_count",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "row_revenue",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "rows_missing_price",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
       },
       {
         "function": "top_sellers",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 4,
+        "matched": 4,
+        "failures": []
       },
       {
         "function": "total_revenue",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 1,
+        "matched": 1,
+        "failures": []
       }
     ],
     "status": "compared"
@@ -385,43 +537,103 @@
     "functions": [
       {
         "function": "clean_filename",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       },
       {
         "function": "comment_html",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 2,
+        "matched": 2,
+        "failures": []
       },
       {
         "function": "count_words_shell",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "MISMATCH",
+        "total": 3,
+        "matched": 2,
+        "failures": [
+          {
+            "args": [
+              "hello; echo extra words here"
+            ],
+            "legacy": {
+              "function": "count_words_shell",
+              "args": [
+                "hello; echo extra words here"
+              ],
+              "value": 0,
+              "ok": true
+            },
+            "migrated": {
+              "function": "count_words_shell",
+              "args": [
+                "hello; echo extra words here"
+              ],
+              "ok": false,
+              "error": "ValueError: invalid literal for int() with base 10: 'hello\\n3'"
+            }
+          }
+        ]
       },
       {
         "function": "echo_message",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 7,
+        "matched": 7,
+        "failures": []
       },
       {
         "function": "greeting_html",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "greeting_html_safe",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "MISMATCH",
+        "total": 2,
+        "matched": 1,
+        "failures": [
+          {
+            "args": [
+              "O'Brien \"Bob\""
+            ],
+            "legacy": {
+              "function": "greeting_html_safe",
+              "args": [
+                "O'Brien \"Bob\""
+              ],
+              "value": "<h1>Hello O&#039;Brien &quot;Bob&quot;</h1>",
+              "ok": true
+            },
+            "migrated": {
+              "function": "greeting_html_safe",
+              "args": [
+                "O'Brien \"Bob\""
+              ],
+              "ok": true,
+              "value": "<h1>Hello O&#x27;Brien &quot;Bob&quot;</h1>"
+            }
+          }
+        ]
       },
       {
         "function": "is_valid_username",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 5,
+        "matched": 5,
+        "failures": []
       },
       {
         "function": "search_results_html",
-        "verdict": "ERROR",
-        "detail": "harness failed: e docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        "verdict": "EQUIVALENT",
+        "total": 3,
+        "matched": 3,
+        "failures": []
       }
     ],
     "status": "compared"

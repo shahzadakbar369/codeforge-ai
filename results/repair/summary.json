@@ -1,11 +1,11 @@
 {
-  "generated_on": "2026-10-25",
+  "generated_on": "2026-11-15",
   "model": "openai/gpt-oss-20b",
   "max_tries": 3,
   "totals": {
     "functions": 19,
-    "equivalent_before": 15,
-    "equivalent_after": 16
+    "equivalent_before": 16,
+    "equivalent_after": 17
   },
   "programs": [
     {
@@ -37,22 +37,45 @@
       "attempts": [
         {
           "attempt": 1,
-          "tokens": 5811,
-          "error": "answer cut off at the token limit"
+          "tokens": 2774,
+          "feedback_equivalent": 7,
+          "grade_equivalent": 6,
+          "hardcode_warning": [],
+          "regressed": [],
+          "kept": true
+        },
+        {
+          "attempt": 2,
+          "tokens": 2603,
+          "feedback_equivalent": 7,
+          "grade_equivalent": 6,
+          "hardcode_warning": [],
+          "regressed": [],
+          "rejected_reason": "no improvement",
+          "kept": false
+        },
+        {
+          "attempt": 3,
+          "tokens": 2935,
+          "feedback_equivalent": 7,
+          "grade_equivalent": 6,
+          "hardcode_warning": [],
+          "regressed": [],
+          "rejected_reason": "no improvement",
+          "kept": false
         }
       ],
-      "feedback_set": "same as grading set (dev only)",
+      "feedback_set": "separate repair inputs",
       "before": {
-        "equivalent": 5,
+        "equivalent": 6,
         "total": 8
       },
       "after": {
-        "equivalent": 5,
+        "equivalent": 6,
         "total": 8
       },
       "still_failing": [
         "count_words_shell",
-        "echo_message",
         "greeting_html_safe"
       ]
     }

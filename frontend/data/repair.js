@@ -1,0 +1,60 @@
+window.CODEFORGE_REPAIR = {
+  "generated_on": "2026-10-25",
+  "model": "openai/gpt-oss-20b",
+  "max_tries": 3,
+  "totals": {
+    "functions": 19,
+    "equivalent_before": 15,
+    "equivalent_after": 16
+  },
+  "programs": [
+    {
+      "program": "04_payroll",
+      "status": "repaired",
+      "attempts": [
+        {
+          "attempt": 1,
+          "tokens": 4165,
+          "feedback_equivalent": 11,
+          "grade_equivalent": 11,
+          "kept": true
+        }
+      ],
+      "feedback_set": "same as grading set (dev only)",
+      "before": {
+        "equivalent": 10,
+        "total": 11
+      },
+      "after": {
+        "equivalent": 11,
+        "total": 11
+      },
+      "still_failing": []
+    },
+    {
+      "program": "07_unsafe_input",
+      "status": "not_repaired",
+      "attempts": [
+        {
+          "attempt": 1,
+          "tokens": 5811,
+          "error": "answer cut off at the token limit"
+        }
+      ],
+      "feedback_set": "same as grading set (dev only)",
+      "before": {
+        "equivalent": 5,
+        "total": 8
+      },
+      "after": {
+        "equivalent": 5,
+        "total": 8
+      },
+      "still_failing": [
+        "count_words_shell",
+        "echo_message",
+        "greeting_html_safe"
+      ]
+    }
+  ]
+};
