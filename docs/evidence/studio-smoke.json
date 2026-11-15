@@ -1,0 +1,393 @@
+{
+  "job_id": "8a72821cee44408cbb9e79236227efc1",
+  "status": "completed",
+  "message": "Project ready. Review verification and security findings.",
+  "verification": {
+    "status": "EQUIVALENT",
+    "cases": [
+      {
+        "function": "demo_total",
+        "args": [
+          0.0,
+          0
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.0,
+          5
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          10.0,
+          0
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          -5.0,
+          3
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": -15
+        },
+        "actual": {
+          "ok": true,
+          "value": -15.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          5.0,
+          -3
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": -15
+        },
+        "actual": {
+          "ok": true,
+          "value": -15.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          -2.5,
+          -4
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 10
+        },
+        "actual": {
+          "ok": true,
+          "value": 10.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          999999.99,
+          1
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 999999.99
+        },
+        "actual": {
+          "ok": true,
+          "value": 999999.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.01,
+          999999
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 9999.99
+        },
+        "actual": {
+          "ok": true,
+          "value": 9999.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          12345.67,
+          123
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 1518517.41
+        },
+        "actual": {
+          "ok": true,
+          "value": 1518517.41
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.9999,
+          1000
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 999.9
+        },
+        "actual": {
+          "ok": true,
+          "value": 999.9
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.3333,
+          3
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          1.2345,
+          100
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 123.45
+        },
+        "actual": {
+          "ok": true,
+          "value": 123.45
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.1,
+          10
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          10.1,
+          10
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 101
+        },
+        "actual": {
+          "ok": true,
+          "value": 101.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          10.1,
+          -10
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": -101
+        },
+        "actual": {
+          "ok": true,
+          "value": -101.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          -10.1,
+          -10
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 101
+        },
+        "actual": {
+          "ok": true,
+          "value": 101.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          2147483647.99,
+          1
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 2147483647.99
+        },
+        "actual": {
+          "ok": true,
+          "value": 2147483647.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          0.0001,
+          2147483647
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 214748.36
+        },
+        "actual": {
+          "ok": true,
+          "value": 214748.36
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          3.14159,
+          7
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 21.99
+        },
+        "actual": {
+          "ok": true,
+          "value": 21.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          -3.14159,
+          7
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": -21.99
+        },
+        "actual": {
+          "ok": true,
+          "value": -21.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          3.14159,
+          -7
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": -21.99
+        },
+        "actual": {
+          "ok": true,
+          "value": -21.99
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "demo_total",
+        "args": [
+          3.14159,
+          0
+        ],
+        "file": "demo.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      }
+    ],
+    "history": [
+      {
+        "attempt": 0,
+        "mismatches": 0
+      }
+    ],
+    "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+  },
+  "tokens": 2895,
+  "scope": "One live demo function; not a dataset benchmark."
+}

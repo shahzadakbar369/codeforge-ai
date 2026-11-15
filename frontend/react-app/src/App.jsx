@@ -1,127 +1,41 @@
-
-import { useRef, useState } from "react";
-import "./App.css";
-
-function App() {
-  const fileInputRef = useRef(null);
-  const [phpCode, setPhpCode] = useState("");
-  const [pythonCode, setPythonCode] = useState("");
-  const [fileStatus, setFileStatus] = useState("No file selected.");
-  const [securityReport, setSecurityReport] = useState(
-    "Security scan is not connected yet."
-  );
-
-  function showFile() {
-    const file = fileInputRef.current?.files?.[0];
-
-    if (!file) {
-      setFileStatus("Please select a PHP file.");
-      return;
-    }
-
-    setFileStatus(`Selected: ${file.name}`);
-
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      setPhpCode(String(event.target?.result ?? ""));
-    };
-
-    reader.onerror = () => {
-      setFileStatus("Could not read this file.");
-    };
-
-    reader.readAsText(file);
-  }
-
-  function convertCode() {
-    setPythonCode("");
-    setSecurityReport(
-      "Real conversion is not connected yet. No Python code was generated."
-    );
-  }
-
-  function scanSecurity() {
-    setSecurityReport(
-      "Security scanning is not connected yet. No real scan has been performed."
-    );
-  }
-
-  return (
-    <div className="app">
-      <header className="header">
-        <div className="logo">⚡ CodeForge AI</div>
-
-        <nav className="nav">
-          <a href="#dashboard">Dashboard</a>
-          <a href="#migration">Migration</a>
-          <a href="#security">Security</a>
-        </nav>
-      </header>
-
-      <main className="main" id="dashboard">
-        <h1>Code Migration Workspace</h1>
-        <p className="subtitle">
-          Convert legacy PHP code into modern Python
-        </p>
-
-        <div className="steps">
-          <span>1. Upload Code</span>
-          <span>2. Convert</span>
-          <span>3. Security Scan</span>
-          <span>4. Compare Results</span>
-        </div>
-
-        <section className="upload-section">
-          <label htmlFor="phpFile">
-            Choose your legacy PHP file
-          </label>
-
-          <input
-            ref={fileInputRef}
-            id="phpFile"
-            type="file"
-            accept=".php"
-            onChange={showFile}
-          />
-
-          <p className="file-status">{fileStatus}</p>
-        </section>
-
-        <section className="workspace" id="migration">
-          <div className="panel">
-            <h2>Legacy PHP</h2>
-            <textarea
-              value={phpCode}
-              onChange={(event) => setPhpCode(event.target.value)}
-              placeholder="Select a PHP file to view its code..."
-              spellCheck={false}
-            />
-          </div>
-
-          <div className="panel">
-            <h2>Generated Python</h2>
-            <textarea
-              value={pythonCode}
-              onChange={(event) => setPythonCode(event.target.value)}
-              placeholder="Python output will appear here after backend integration..."
-              spellCheck={false}
-            />
-          </div>
-        </section>
-
-        <div className="actions">
-          <button onClick={convertCode}>Convert Code</button>
-        </div>
-
-        <section className="security-section" id="security">
-          <h2>Security Report</h2>
-          <p>{securityReport}</p>
-          <button onClick={scanSecurity}>Scan Security</button>
-        </section>
-      </main>
-    </div>
-  );
+import { useEffect, useRef, useState } from 'react';
+import './App.css';
+const sample = `<?php\nfunction calculate_total(float $price, int $quantity): float {\n    return round($price * $quantity, 2);\n}\n`;
+const agents = [['⌘', 'Parser agent', 'Map the code. Understand the connections.'], ['◇', 'Security agent', 'Surface OWASP-class security risks.'], ['⇄', 'Migration agent', 'Translate your logic into typed Python.'], ['✓', 'Test agent', 'Compare behavior. Repair. Repeat.']];
+async function api(path, options) { const r = await fetch(path, options); const data = await r.json(); if (!r.ok) throw new Error(data.detail || 'Request failed'); return data; }
+export default function App() {
+  const [mode, setMode] = useState('code'), [code, setCode] = useState(''), [files, setFiles] = useState([]), [repo, setRepo] = useState('');
+  const [job, setJob] = useState(null), [error, setError] = useState(''), [starting, setStarting] = useState(false), [tab, setTab] = useState('output');
+  const [theme, setTheme] = useState(() => {
+    try { return localStorage.getItem('codeforge-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+    catch { return 'light'; }
+  });
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try { localStorage.setItem('codeforge-theme', theme); } catch { /* Theme still works when storage is unavailable. */ }
+  }, [theme]);
+  const fileRef = useRef(), folderRef = useRef();
+  const busy = starting || ['running', 'queued'].includes(job?.status), report = job?.report;
+  useEffect(() => { if (!job?.job_id || !['queued','running'].includes(job.status)) return; let alive = true; const timer = setInterval(async () => { try { const next = await api(`/api/jobs/${job.job_id}`); if (alive) { setJob(next); setError(''); } } catch(e) { if (alive) setError(e.message); } }, 1500); return () => { alive = false; clearInterval(timer); }; }, [job?.job_id, job?.status]);
+  useEffect(() => { const id = new URLSearchParams(window.location.search).get('job'); if (id) api(`/api/jobs/${id}`).then(setJob).catch(e => setError(e.message)); }, []);
+  async function choose(selected) { try { const list = [...selected]; if (list.some(f => f.size > 10000000)) throw new Error('Each file must be under 10 MB.'); setFiles(list); setError(''); } catch(e) { setError(e.message); } }
+  async function start() { setStarting(true); setError(''); setJob(null); try { let body;
+    if (mode === 'code') body = {files:[{name:'legacy.php',content:code}]};
+    else if (mode === 'github') body = {repository:repo};
+    else if (files.length === 1 && files[0].name.toLowerCase().endsWith('.zip')) { const bytes = new Uint8Array(await files[0].arrayBuffer()); let binary = ''; for (const byte of bytes) binary += String.fromCharCode(byte); body = {archive:btoa(binary)}; }
+    else body = {files:await Promise.all(files.filter(f=>f.name.toLowerCase().endsWith('.php')).map(async f=>({name:f.webkitRelativePath || f.name,content:await f.text()})))};
+    const created = await api('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); setJob({...created,status:'queued',stage:0,message:'Preparing your workspace'}); window.history.replaceState(null, '', `?job=${created.job_id}`);
+  } catch(e) { setError(e.message); } finally { setStarting(false); } }
+  const valid = mode === 'code' ? code.trim() : mode === 'github' ? repo.trim() : files.length;
+  return <div className="shell">
+    <aside><a className="brand" href="#"><span className="brand-icon">⌘</span> codeforge<span className="ai">AI</span></a><div className="workspace-label">YOUR WORKSPACE</div><a className="nav-item selected" href="#workspace">▦ <span>Migration studio</span><span className="nav-count">01</span></a><a className="nav-item" href="#agents">◈ <span>Agent pipeline</span></a><a className="nav-item" href="#results">≡ <span>Migration report</span></a><div className="side-note"><span className="green-dot"/> FOUR AGENTS. ONE WORKFLOW.<p>A fresh start for<br/>your legacy code.</p><small>PHP → Python / FastAPI</small></div><div className="profile"><span>CF</span><div>Local workspace<small>CodeForge AI</small></div></div></aside>
+    <div className="content"><header><div>Workspace <span>/</span> <b>Migration studio</b></div><div className="header-actions"><button className="theme-toggle" type="button" aria-label="Dark mode" aria-pressed={theme === 'dark'} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{theme === 'dark' ? <><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></> : <path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z"/>}</svg><span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span></button><a href="/docs" target="_blank" rel="noreferrer">API documentation ↗</a></div></header>
+      <main id="workspace"><div className="eyebrow"><span/> BUILT FOR WHAT COMES NEXT</div><div className="hero"><div><h1>Legacy code.<br/><span>New possibilities.</span></h1><p>Bring your PHP. Leave with modern Python.<br/>A focused workspace, powered by four specialized agents.</p></div><div className="language-orbit"><span>PHP</span><i>⟶</i><span>Py<span className="orbit-spark">✦</span></span><small>RETHINK. REBUILD. RUN.</small></div></div>
+      <div className="studio-grid"><section className="input-card"><div className="section-heading"><div><span className="step-number">01</span><h2>Bring your code</h2></div><span className="muted">Your next chapter starts here</span></div><div className="input-tabs" role="tablist">{[['code','⌨','Paste code'],['files','↥','Upload project'],['github','⑂','GitHub repo']].map(([id,icon,label])=><button role="tab" aria-selected={mode===id} key={id} disabled={busy} onClick={()=>setMode(id)} className={mode===id?'active':''}>{icon} {label}</button>)}</div>
+      {mode === 'code' ? <><div className="editor-bar"><span><span className="file-icon">P</span> legacy.php</span><button disabled={busy} onClick={()=>setCode(sample)}>Try an example ↗</button></div><div className="code-editor"><div className="line-numbers">{Array.from({length:Math.max(9,code.split('\n').length)},(_,i)=><div key={i}>{i+1}</div>)}</div><textarea aria-label="PHP source code" value={code} disabled={busy} onChange={e=>setCode(e.target.value)} placeholder={'<?php\n\n// Paste your PHP code here.\n// We’ll take it from here.'} spellCheck="false"/></div></> : mode === 'files' ? <div className="upload-zone" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault(); if(!busy)choose(e.dataTransfer.files);}}><div className="upload-icon">↥</div><h3>A little upload. A big upgrade.</h3><p>Drop PHP files or a ZIP here, or choose your project.</p><div><button disabled={busy} onClick={()=>fileRef.current.click()}>Choose files</button><button disabled={busy} onClick={()=>folderRef.current.click()}>Choose folder</button></div><small>{files.length ? `${files.length} files selected · ${files.slice(0,3).map(f=>f.name).join(', ')}` : 'PHP files · folders · ZIP archives up to 10 MB'}</small><input hidden type="file" multiple accept=".php,.zip" ref={fileRef} onChange={e=>choose(e.target.files)}/><input hidden type="file" webkitdirectory="" ref={folderRef} onChange={e=>choose(e.target.files)}/></div> : <div className="repo-zone"><div className="upload-icon">⑂</div><h3>A new direction for your repository.</h3><p>Import PHP source from a public GitHub repository.</p><label htmlFor="repo">Repository URL</label><input id="repo" value={repo} onChange={e=>setRepo(e.target.value)} placeholder="https://github.com/owner/project"/><small>Default branch · public repositories · PHP sources only</small></div>}
+      <div className="input-footer"><span>◈ Translation sends source to Groq</span><span>PHP → Python 3</span></div><div className="run-row"><div><b>Ready when you are.</b><small>Up to 100 PHP files · 45k source characters</small></div><button className="primary" disabled={busy || !valid} onClick={start}>{busy ? 'Agents at work…' : 'Start migration'} <span>→</span></button></div></section>
+      <section className="agents-card" id="agents"><div className="section-heading"><div><span className="step-number">02</span><h2>Your migration team</h2></div><span className="live-badge">4 AGENTS</span></div><p className="agents-intro">Specialists at every step.<br/>One connected workflow.</p><div className="agent-list">{agents.map(([icon,name,desc],i)=><div key={name} className={`agent ${busy && job?.stage===i?'working':''}`}><span className="agent-icon">{job?.stage>i?'✓':icon}</span><div><h3>{name}</h3><p>{desc}</p></div><span className="agent-state">{job?.stage>i?(i===3 && report?.verification?.status && report.verification.status!=='EQUIVALENT'?report.verification.status:'DONE'):busy&&job?.stage===i?'RUNNING':String(i+1).padStart(2,'0')}</span></div>)}</div><div className="team-footer"><span className="green-dot"/>{job?.message || 'A clear path from source to modern stack.'}</div></section></div>
+      {error && <div className="error" role="alert">{error}</div>}{job?.status==='failed' && <div className="error" role="alert">Migration stopped: {job.message}</div>}
+      <section className="results-card" id="results"><div className="section-heading"><div><span className="step-number">03</span><h2>The next version of your code</h2></div>{job?.status==='completed' && <a className="download" href={`/api/jobs/${job.job_id}/download`}>↓ Download project</a>}</div>{!report ? <div className="empty-result"><span>⌁</span><div><h3>Good things are taking shape.</h3><p>{busy ? job?.message || 'Preparing migration…' : 'Your Python code, dependency graph, security review, and test results will appear here.'}</p></div><span className="outline-pill">{busy?'IN PROGRESS':'AWAITING YOUR CODE'}</span></div> : <><div className="report-tabs">{['output','graph','security','tests'].map(t=><button className={tab===t?'active':''} key={t} onClick={()=>setTab(t)}>{t}</button>)}</div>{tab==='output' && <><div className="comparison"><div><h3>PHP source</h3><pre>{Object.entries(report.sources).map(([name,src])=>`// ${name}\n${src}`).join('\n\n')}</pre></div><div><h3>Python · migrated.py</h3><pre>{report.generated_code || 'No code generated.'}</pre></div></div><p className="report-note"><b>Model notes (unverified)</b><br/>{report.explanation}</p></>}{tab==='graph' && <><p className="report-note">{report.graph?.engine} · {report.graph?.functions.length || 0} functions / methods</p><div className="table-wrap"><table><thead><tr><th>Source</th><th>Caller → dependency / call</th><th>Kind</th></tr></thead><tbody>{report.graph?.edges.map((e,i)=><tr key={i}><td>{e.file}:{e.line}</td><td>{e.from} → {e.to}</td><td>{e.kind}</td></tr>)}</tbody></table></div>{!report.graph?.edges.length && <p className="report-note">No calls or includes found.</p>}</>}{tab==='security' && <><p className="report-note">{report.security?.scope}</p>{report.security?.findings.map((f,i)=><div className="finding" key={i}><b>{f.severity} · {f.category}</b><p>{f.message}</p><small>{f.file}:{f.line}</small></div>)}{!report.security?.findings.length && <p className="report-note">No potential issues found by the configured rules.</p>}</>}{tab==='tests' && <><p className="report-note"><b>{report.verification?.status || 'UNTESTED'}</b> · {report.verification?.reason}</p><div className="table-wrap"><table><thead><tr><th>Function</th><th>Source</th><th>Verdict</th></tr></thead><tbody>{report.graph?.functions.map((f,i)=><tr key={i}><td>{f.class?`${f.class}::`:''}{f.name}</td><td>{f.file}</td><td><span className="verdict">{f.verdict}</span></td></tr>)}</tbody></table></div><details><summary>Characterization cases and repair history</summary><pre>{JSON.stringify(report.verification,null,2)}</pre></details></>}<details className="limits"><summary>Scope & limitations</summary>{report.limits.map(l=><p key={l}>{l}</p>)}</details></>}</section><footer><span>Made for moving forward.</span><span>CodeForge AI <span className="footer-star">✦</span> PHP to possibility.</span></footer></main>
+    </div></div>;
 }
-
-export default App;

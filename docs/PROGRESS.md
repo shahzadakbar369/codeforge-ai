@@ -1,6 +1,25 @@
 # CodeForge AI: Progress Log
 
-Last updated: 2026-11-15 by Shahzad Akbar
+Last updated: 2026-11-16. The dated update below supersedes older snapshot entries where explicitly stated.
+
+## Latest update: 2026-11-16
+
+Team ownership for review and presentation: Shahzad - orchestration, AST parsing and backend; Tahir - security/test generation; Ayesha - React UI and CI/demo. New integration work was AI-assisted in this working session; these assignments do not establish historical line-by-line authorship. All three share model integration/prompt design; no model training or fine-tuning is implemented.
+
+| Date | Responsibility | Work and actual state | Evidence |
+|---|---|---|---|
+| 2026-11-16 | Shahzad / orchestration and backend | Disk-backed background jobs; bounded PHP file/folder/ZIP/public GitHub ingestion; status/report/download endpoints; tree-sitter AST functions/methods/calls/includes. Structural graph only, no complete dynamic dependency resolution. | backend/jobs.py, backend/app.py, backend/agents.py |
+| 2026-11-16 | Tahir / security and test review | Web pipeline uses heuristic source sink rules; Docker characterization records real PHP returns, repeats PHP once, compares Python and allows at most two repair attempts. This web scanner is separate from earlier Semgrep/Bandit research. | backend/agents.py |
+| 2026-11-16 | Ayesha / UI and demo review | React migration studio, input modes, polling, report reload URLs, comparison, verdicts, findings, downloads and persistent dark-mode toggle. | frontend/react-app/src/App.jsx, App.css |
+| 2026-11-16 | Shared verification | Five backend integration checks passed; React production build passed. Live Groq + Docker demo: one function, 22 cases all EQUIVALENT, no repair required. Docker engine 29.9.2 reachable. This is demo evidence, not baseline or held-out evaluation. | backend/test_workflow.py; docs/evidence/studio-smoke.json; tools/smoke_studio.py |
+| 2026-11-16 | Ayesha / CI demo | GitHub Actions workflow configured for backend checks, React build and build artifact. Not executed remotely yet; no automatic deployment configured. | .github/workflows/ci.yml |
+| 2026-11-16 | Shared handoff | Restart, setup, Git publishing, roles, ready-to-send messages and concise PDF guide prepared. Changes remain local and uncommitted until the team publishes them. | docs/DEMO_AND_VIVA.md; output/pdf/CodeForge_AI_Guide.pdf |
+| 2026-11-16 | Integration review | Fetched PR #17 at 560cafc to a separate review ref. Three additions, no progress-log edit in that PR, no overlapping local edited paths. Scanner output needs a live-job adapter. Not merged or executed. | docs/PR_17_REVIEW.md; origin/review-pr-17 |
+| 2026-11-16 | Deployment planning | Checked Vercel FastAPI/container docs; documented React frontend plus persistent Docker-capable worker requirements. No cloud deployment created. | docs/DEPLOYMENT.md |
+
+Tools used for current integration: React 19, Vite 8.3.4, FastAPI/Python, Groq inference, tree-sitter 0.26.1 and tree-sitter-php 0.25.1; Docker php:8.3-cli and python:3.12-slim. The live smoke result used 2,895 reported tokens. Cases used for potential repair are also used for its reported result. Classes/namespaces/frameworks/external dependencies remain limitations; no new fair or held-out benchmark was run. Baseline scripts/results were not changed. Earlier snapshot statements about stub web buttons and /api/scan are superseded by this update. Other older open research tasks are not silently marked complete.
+
+---
 
 This file records what the team has actually done, who did it, which tools they used, and where the evidence is. Every entry must point to something that exists (a commit, a file in the repo, a screenshot). Numbers appear here only if they came from a real run.
 

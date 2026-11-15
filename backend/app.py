@@ -13,7 +13,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from fastapi import FastAPI, HTTPException  # noqa: E402
+from fastapi import FastAPI, HTTPException, Request  # noqa: E402
+from fastapi.responses import FileResponse
+from backend import jobs
+from backend.agents import security_agent
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
@@ -83,8 +86,50 @@ def migrate(body: PhpIn):
 
 @app.post("/api/scan")
 def scan(body: PhpIn):
-    raise HTTPException(501, "Security scan is not connected yet (security module is Tahir's task).")
+    return security_agent({body.filename: body.php})
+
+
+@app.post('/api/jobs')
+async def create_job(request: Request):
+    payload = bytearray()
+    async for chunk in request.stream():
+        payload.extend(chunk)
+        if len(payload) > 15_000_000:
+            raise HTTPException(413, 'Upload exceeds 15 MB')
+    try:
+        body = json.loads(payload)
+        if not isinstance(body, dict):
+            raise ValueError('Expected a JSON object')
+        from starlette.concurrency import run_in_threadpool
+        sources = await run_in_threadpool(jobs.ingest, body)
+        return jobs.create(sources)
+    except Exception as exc:
+        raise HTTPException(400, f'Could not load source: {exc}')
+
+
+@app.get('/api/jobs/{job_id}')
+def job_status(job_id: str):
+    try:
+        return jobs.read(job_id)
+    except FileNotFoundError:
+        raise HTTPException(404, 'Job not found')
+
+
+@app.get('/api/jobs/{job_id}/report')
+def job_report(job_id: str):
+    status = job_status(job_id)
+    if 'report' not in status:
+        raise HTTPException(409, 'Report is not ready')
+    return status['report']
+
+
+@app.get('/api/jobs/{job_id}/download')
+def job_download(job_id: str):
+    if job_status(job_id)['status'] != 'completed':
+        raise HTTPException(409, 'Project is not ready')
+    return FileResponse(jobs.STORE / job_id / 'project.zip', filename='codeforge-project.zip')
 
 
 # Must be last: serves frontend/index.html and frontend/data/results.js
-app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")
+DIST = ROOT / 'frontend' / 'react-app' / 'dist'
+app.mount("/", StaticFiles(directory=DIST if DIST.exists() else ROOT / 'frontend', html=True), name="frontend")
