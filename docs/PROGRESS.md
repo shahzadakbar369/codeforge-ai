@@ -132,8 +132,9 @@ I built the legacy PHP runner (golden master) and recorded the real outputs of t
 
 ### Ayesha (UI/UX and documentation)
 
-Created user flow and wireframes.
-I worked on the CodeForge AI UI prototype by improving the styling of the frontend. I also created the user flow and wireframe documentation to explain the application’s workflow and planned interface. The AI conversion and security scanning features still require backend integration.
+I improved the CodeForge AI frontend UI and implemented the migration results dashboard, including summary cards, program details, function-by-function comparison, and legacy PHP/Python code comparison. I added Explanation, Assumptions and Warnings sections, created the How It Works section, and added clearly labeled MOCK security findings for demonstration only. I also created the user flow and wireframe documentation.
+
+Evidence: `frontend/index.html`, `frontend/data/results.js`, `docs/USER-FLOW.md`, `docs/WIREFRAME.md`.
 
 ## 7. How to add an entry
 

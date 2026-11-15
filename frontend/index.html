@@ -4,269 +4,626 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeForge AI</title>
+    <meta name="description" content="CodeForge AI helps migrate legacy PHP code into modern Python and review code equivalence results.">
+  <style>  
+/* ===== CodeForge AI | Dark Professional Dashboard ===== */
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #111827;
-            color: #f8fafc;
-        }
-
-
-header {
-    background: #172033;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #334155;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+:root {
+    --bg: #0b1120;
+    --surface: #111c30;
+    --surface-light: #17243a;
+    --border: #263650;
+    --text: #e5edf8;
+    --muted: #9aacc5;
+    --primary: #38bdf8;
+    --primary-hover: #0ea5e9;
+    --accent: #818cf8;
+    --success: #34d399;
+    --radius: 14px;
 }
 
-        header h2 {
-            color: #2563eb;
-        }
+* {
+    box-sizing: border-box;
+}
 
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 18px 6%;
+    background: #0e1728;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h2 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 23px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
 nav a {
-    margin-left: 12px;
+    color: var(--muted);
     text-decoration: none;
-    color: #cbd5e1;
-    padding: 8px 12px;
-    border-radius: 6px;
-    display: inline-block;
-    transition: 0.3s;
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-weight: 600;
+    transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 
 nav a:hover {
-    color: #38bdf8;
-    background: #0f172a;
+    color: var(--primary);
+    background: #172a43;
+}
+nav a:active {
+    color: var(--primary);
+    background: #172a43;
+}
+nav a:focus-visible {
+    color: var(--primary);
+    background: #172a43;
+}
+main {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding-bottom: 50px;
 }
 
+.welcome {
+    padding: 42px 0 25px;
+}
 
-        main {
-            padding: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
+.welcome h1 {
+    margin: 0 0 8px;
+    color: #f1f5f9;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.25;
+    letter-spacing: -1px;
+}
 
-        .welcome {
-            margin-bottom: 30px;
-        }
+.welcome p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+}
 
-        .welcome h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .welcome p {
-            color: #64748b;
-        }
-
-       .steps {
-    display: flex;
-    gap: 12px;
-    margin: 25px 0;
-    flex-wrap: wrap;
+.steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
 }
 
 .step {
-    background: #1e293b;
-    color: #ffffff;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #475569;
-    font-weight: 600;
+    padding: 15px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: #d5e4f7;
+    font-weight: 650;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.step:hover {
+    border-color: var(--primary);
 }
 
 .workspace {
-    background: #172033;
-    color: #f8fafc;
-    padding: 24px;
-    border-radius: 14px;
-    border: 1px solid #334155;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    margin-bottom: 25px;
+    padding: 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    scroll-margin-top: 100px;
 }
 
-
-.upload {
-    padding: 30px;
-    text-align: center;
-    background: #0f172a;
-    color: #f8fafc;
-    border: 2px dashed #38bdf8;
-    border-radius: 12px;
-    margin: 20px 0;
-    transition: 0.3s;
+.workspace > h2 {
+    margin: 0 0 8px;
+    color: #f1f5f9;
+    font-size: 23px;
+    letter-spacing: -0.4px;
 }
 
-.upload:hover {
-    border-color: #818cf8;
-    background: #111c32;
-}
-
-button {
-    background: linear-gradient(135deg, #0284c7, #6366f1);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 8px 4px;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(56, 189, 248, 0.25);
-}
-       .panels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .panel {
-    background: linear-gradient(145deg, #1e293b, #172033);
-    color: #e2e8f0;
-    padding: 22px;
-    margin: 20px 0;
-    border: 1px solid #334155;
-    border-radius: 14px;
-    min-height: 180px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-}
-
-.panel:hover {
-    border-color: #38bdf8;
-    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.12);
-}
-
-.panel h3 {
+h3 {
     margin-top: 0;
-    color: #7dd3fc;
+    color: #e2edfc;
+    font-size: 17px;
 }
 
-        .panel h3 {
-    color: #7dd3fc;
-    margin-bottom: 18px;
-}
-
-        .panel p {
-            color: #cbd5e1;
-            line-height: 1.8;
-        }
-
-        .notice {
-    margin-top: 20px;
-    padding: 15px;
-    background: #172033;
-    color: #cbd5e1;
-    font-size: 14px;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    line-height: 1.7;
-}
-
-#fileList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    text-align: left;
+p {
     overflow-wrap: anywhere;
 }
 
-#fileList button {
-    width: 100%;
-    text-align: left;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #e2e8f0;
+.notice {
+    color: var(--muted);
 }
 
-#fileList button:hover {
-    background: #334155;
-    border-color: #38bdf8;
+.upload {
+    margin: 20px 0;
+    padding: 24px;
+    background: #0d192b;
+    border: 1.5px dashed #315071;
+    border-radius: 12px;
 }
 
+.upload > p:first-child {
+    margin-top: 0;
+    color: #dce9fa;
+    font-weight: 650;
+}
 
+label {
+    display: block;
+    margin: 14px 0 7px;
+    color: #cbd8e9;
+    font-weight: 600;
+}
 
-textarea {
+input[type="file"] {
+    display: block;
     width: 100%;
-    min-height: 220px;
-    padding: 15px;
-    background: #0f172a;
-    color: #e2e8f0;
-    border: 1px solid #475569;
-    border-radius: 10px;
-    font-family: Consolas, monospace;
+    max-width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background: #111c30;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+}
+
+button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 6px 8px 0;
+    padding: 11px 17px;
+    background: linear-gradient(135deg, #0284c7, #4f46e5);
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 9px;
     font-size: 14px;
-    resize: vertical;
+    font-weight: 650;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-textarea:focus {
-    outline: none;
-    border-color: #38bdf8;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+button:hover {
+    filter: brightness(1.13);
+    transform: translateY(-1px);
 }
 
-        @media (max-width: 700px) {
-            header {
-                padding: 20px;
-                flex-wrap: wrap;
-                gap: 15px;
-            }
+button:focus-visible,
+nav a:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+}
 
-            nav a {
-                margin: 0 10px 0 0;
-            }
-            main {
-                padding: 20px;
-            }
-            .panels {
-                grid-template-columns: 1fr;
-            }
-        }
-/* Responsive layout for smaller screens */
-@media (max-width: 768px) {
-    header {
-        padding: 16px;
+.panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 20px 0;
+    align-items: stretch;
+}
+
+.panel {
+    min-width: 0;
+    padding: 21px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.panel h3 {
+    margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+    .panels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
+}
+
+@media (max-width: 500px) {
     .panels {
         grid-template-columns: 1fr;
     }
-    .panel,
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 210px;
+    padding: 15px;
+    resize: vertical;
+    border: 1px solid #30425e;
+    border-radius: 10px;
+    outline: none;
+    background: #0a1220;
+    color: #d7e7fa;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+textarea::placeholder {
+    color: #7487a3;
+}
+
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+#security {
+    margin-top: 24px;
+    padding: 22px;
+    background: #101f32;
+    border: 1px solid #d97706;
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+}
+
+#security h3 {
+    margin-bottom: 10px;
+    color: #fbbf24;
+    font-size: 17px;
+}
+
+#results {
+    scroll-margin-top: 100px;
+}
+#results > h2 {
+    color: #38bdf8;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+#results > .panels > .panel p {
+    margin-bottom: 0;
+    color: var(--primary);
+    font-size: 28px;
+    font-weight: 750;
+}
+
+#results > .panel {
+    margin-top: 18px;
+}
+
+#programList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+#programList > .panel {
+    margin: 0;
+    padding: 19px;
+    background: #132139;
+    border: 1px solid #2b3c57;
+    border-radius: 12px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+}
+
+#programList > .panel:hover {
+    border-color: var(--primary);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.10);
+    transform: translateY(-3px);
+}
+
+#programList > .panel h3 {
+    color: #38bdf8;
+    font-size: 18px;
+    margin-bottom: 14px;
+    overflow-wrap: anywhere;
+}
+
+#programList > .panel p {
+    margin: 8px 0;
+    color: #a9bad1;
+    font-size: 14px;
+}
+
+#programDetails {
+    margin-top: 20px;
+    background: #101e32;
+    border-color: #315071;
+}
+
+#programDetails p {
+    padding: 10px 12px;
+    margin: 8px 0;
+    background: #0c1728;
+    border: 1px solid #293a53;
+    border-radius: 8px;
+    color: #cfddf0;
+}
+
+@media (max-width: 760px) {
+    header {
+        padding: 15px 4%;
+    }
+
+    nav {
+        gap: 3px;
+    }
+
+    nav a {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    main {
+        width: 94%;
+    }
+
+    .welcome {
+        padding-top: 30px;
+    }
+
+    .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panels {
+        grid-template-columns: 1fr;
+    }
+
     .workspace {
-        width: 100%;
-        box-sizing: border-box;
+        padding: 18px;
     }
 
-    textarea {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    button {
-        max-width: 100%;
+    .upload {
+        padding: 16px;
     }
 }
-    </style>
+
+@media (max-width: 420px) {
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    nav {
+        width: 100%;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    #programList {
+        grid-template-columns: 1fr;
+    }
+}
+#totalPrograms,
+#totalFunctions,
+#equivalentFunctions,
+#mismatchedFunctions {
+    font-size: 32px;
+    font-weight: 800;
+    margin-top: 10px;
+    color: #38bdf8;
+}
+
+#equivalentFunctions {
+    color: #22c55e;
+}
+
+#mismatchedFunctions {
+    color: #f87171;
+}
+/* Summary card colors */
+#results .panels .panel:nth-child(1) {
+    border-top: 4px solid #38bdf8;
+}
+
+#results .panels .panel:nth-child(2) {
+    border-top: 4px solid #a78bfa;
+}
+
+#results .panels .panel:nth-child(3) {
+    border-top: 4px solid #22c55e;
+}
+
+#results .panels .panel:nth-child(4) {
+    border-top: 4px solid #f87171;
+}
+#functionComparison table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#functionComparison th,
+#functionComparison td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+#functionComparison th {
+    background-color: #1e293b;
+    color: #38bdf8;
+    font-weight: 700;
+}
+
+#functionComparison tr:hover {
+    background-color: #1e293b;
+}
+#codeComparison h4 {
+    margin-top: 22px;
+    padding-bottom: 8px;
+    color: #38bdf8;
+    border-bottom: 1px solid #334155;
+}
+
+#codeComparison ul {
+    padding-left: 22px;
+    color: #cbd5e1;
+}
+
+#codeComparison li {
+    margin-bottom: 8px;
+}
+
+#codeComparison pre {
+    padding: 16px;
+    overflow-x: auto;
+    background: #080f1c;
+    border: 1px solid #263650;
+    border-radius: 10px;
+    color: #d7e7fa;
+    font-family: Consolas, monospace;
+    line-height: 1.7;
+}
+#functionComparison {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#functionComparison table {
+    min-width: 650px;
+}
+
+#codeComparison pre {
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+#programDetails h3 {
+    color: #38bdf8;
+    margin-bottom: 15px;
+}
+
+#programDetails h4 {
+    color: #a78bfa;
+    margin-top: 24px;
+}
+
+#programDetails details {
+    margin-top: 12px;
+    padding: 12px;
+    background: #0c1728;
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+#programDetails summary {
+    color: #38bdf8;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#programDetails pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+button:active {
+    transform: scale(0.97);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(40%);
+    transform: none;
+}
+
+button:disabled:hover {
+    transform: none;
+    filter: grayscale(40%);
+}
+.notice {
+    padding: 12px 16px;
+    margin: 15px 0;
+    background: #10243a;
+    border-left: 4px solid #38bdf8;
+    border-radius: 8px;
+    color: #bfdbfe;
+    font-size: 14px;
+}
+
+#security p {
+    line-height: 1.8;
+    color: #cbd5e1;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+#results h3 {
+    color: #38bdf8;
+    margin-bottom: 12px;
+}
+.site-footer {
+    margin-top: 50px;
+    padding: 22px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.site-footer p {
+    margin: 4px 0;
+}
+</style>
 </head>
 
 <body>
@@ -278,6 +635,7 @@ textarea:focus {
     <a href="#migration">Migration</a>
     <a href="#security">Security</a>
     <a href="#results">Results</a>
+    <a href="#how-it-works">How It Works</a>
 </nav>
     </header>
        <main>
@@ -285,13 +643,37 @@ textarea:focus {
             <h1>Code Migration Workspace</h1>
             <p>Convert legacy PHP code into modern Python.</p>
         </section>
+        <section id="how-it-works" class="panel" aria-labelledby="howItWorksHeading">
+    <h2 id="howItWorksHeading">How CodeForge AI Works</h2>
+    <p>CodeForge AI helps users migrate legacy PHP code into modern Python.</p>
 
-        <section class="steps">
-            <div class="step">1. Upload Code</div>
-            <div class="step">2. Convert</div>
-            <div class="step">3. Security Scan</div>
-            <div class="step">4. Compare Results</div>
-        </section>
+   <div class="steps" role="list">
+        <div class="step" role="listitem">
+            <h3>1. Upload PHP File</h3>
+            <p>Select your PHP files and view the original code.</p>
+        </div>
+
+        <div class="step">
+            <h3>2. AI Code Migration</h3>
+            <p>Generate modern Python code from legacy PHP code.</p>
+        </div>
+
+        <div class="step">
+            <h3>3. Equivalence Testing</h3>
+            <p>Compare PHP and Python outputs using the same test inputs.</p>
+        </div>
+
+        <div class="step">
+            <h3>4. Security Analysis</h3>
+            <p>Review security scan results when the security backend is available.</p>
+        </div>
+
+        <div class="step">
+            <h3>5. Review Results</h3>
+            <p>Review migrated code, comparison results, warnings and failures.</p>
+        </div>
+    </div>
+</section>
 
         <section class="workspace" id="migration">
             <h2>Start a New Migration</h2>
@@ -299,30 +681,35 @@ textarea:focus {
             <div class="upload">
                 <p>Choose your legacy PHP files or folder</p>
                 <br>
+<label for="phpFile">Choose PHP files:</label>
 <input
     type="file"
     id="phpFile"
     accept=".php"
     multiple
+    aria-label="Select PHP files to migrate"
     onchange="showFiles()"
 >
 
-<label for="phpFolder">Or choose a folder:</label>
+<label for="phpFolder">Or choose a folder containing PHP files:</label>
 <input
     type="file"
     id="phpFolder"
     accept=".php"
     webkitdirectory
     multiple
+    aria-label="Select a folder containing PHP files"
     onchange="showFiles()"
 >
 
                 <br><br>
-<button onclick="showFiles()">Select File</button>
+<button onclick="showFiles()">Choose PHP Files</button>
 
-<p id="fileStatus" class="notice">No file selected.</p>
+<p id="fileStatus" class="notice" aria-live="polite">
+    No PHP files selected yet.
+</p>
 
-<div id="fileList" class="notice">
+<div id="fileList" class="notice" aria-live="polite">
     Selected PHP files will appear here.
 </div>
 
@@ -330,120 +717,523 @@ textarea:focus {
 
             <div class="panels">
                 <div class="panel">
-                    <h3>Legacy PHP</h3>
-                   <textarea id="phpCode" rows="10" style="width:100%; margin-top:10px;"
+                   <h3 id="phpCodeHeading">Legacy PHP</h3>
+<textarea id="phpCode" aria-labelledby="phpCodeHeading" rows="10" style="width:100%; margin-top:10px;"
 placeholder="Your PHP code will appear here..." readonly></textarea>
-                </div>
-
+</div>
                 <div class="panel">
-                    <h3>Generated Python</h3>
-                   <textarea id="pythonCode" rows="10"
+                    <h3 id="pythonCodeHeading">Generated Python</h3>
+<textarea id="pythonCode" aria-labelledby="pythonCodeHeading" rows="10"
                    style="width:100%; margin-top:10px;"
     placeholder="Converted Python code will appear here..."></textarea>
-<button onclick="convertCode()">Convert to Python</button>
+<button type="button" aria-label="Convert the selected PHP code into Python" onclick="convertCode()">
+    Convert to Python
+</button>
 
                 </div>
             </div>
 
-            <section id="security" class="notice">
-                <h3>Security Report</h3>
-<p id="securityReport">
-    Security scan results will appear here when connected to the backend.
+<section class="workspace" id="equivalence">
+    <h2>Equivalence Testing</h2>
+    <p class="notice">
+        Enter test inputs and expected PHP outputs in JSON format.
+    </p>
+
+    <div class="panels">
+        <div class="panel">
+            <h3>Test Inputs (JSON)</h3>
+            <textarea id="testInputs"
+                placeholder='[{"function":"add","args":[2,3]}]'></textarea>
+        </div>
+
+        <div class="panel">
+            <h3>Expected PHP Outputs (JSON)</h3>
+            <textarea id="expectedOutputs"
+                placeholder='[{"function":"add","args":[2,3],"value":5,"ok":true}]'></textarea>
+        </div>
+    </div>
+
+   <button type="button"
+        id="runEquivalenceBtn"
+        onclick="validateEquivalenceInputs()">
+    Run Equivalence Test
+</button>
+
+    <p id="equivalenceResult" class="notice">
+        Testing results will appear here.
+    </p>
+</section>
+
+           <section id="security" class="notice" aria-labelledby="securityHeading">
+    <h2 id="securityHeading">Security Report</h2>
+
+    <p style="color: #fbbf24; font-weight: bold;">
+        MOCK DATA – DEMO ONLY
+    </p>
+
+    <p>
+        These are sample security findings for demonstration.
+        No real security scan has been performed.
+    </p>
+
+    <div class="panel">
+        <h3>Sample Finding 1</h3>
+        <p><strong>Issue:</strong> Input Validation Review</p>
+        <p><strong>Severity:</strong> Medium</p>
+        <p><strong>Status:</strong> Mock Example</p>
+    </div>
+
+    <div class="panel">
+        <h3>Sample Finding 2</h3>
+        <p><strong>Issue:</strong> SQL Query Review</p>
+        <p><strong>Severity:</strong> Low</p>
+        <p><strong>Status:</strong> Mock Example</p>
+    </div>
+</section>
+        </section>
+<!-- Migration Results Section -->
+<section class="workspace" id="results" aria-labelledby="resultsHeading" style="margin-top: 25px;">
+   <h2 id="resultsHeading">Migration Results</h2>
+
+    <p class="notice" id="resultsNotice">
+        Loading migration results...
+    </p>
+
+    <div class="panels">
+        <div class="panel">
+            <h3>Total Programs</h3>
+            <p id="totalPrograms">—</p>
+        </div>
+
+        <div class="panel">
+            <h3>Functions Compared</h3>
+            <p id="totalFunctions">—</p>
+        </div>
+
+        <div class="panel">
+            <h3>Equivalent Functions</h3>
+            <p id="equivalentFunctions">—</p>
+        </div>
+
+        <div class="panel">
+            <h3>Not Equivalent</h3>
+            <p id="mismatchedFunctions">—</p>
+        </div>
+         </div>
+        <p class="notice">
+    Project metrics include 7 counted programs and exclude 2 additional test programs.
 </p>
-<button onclick="scanSecurity()">Scan Security</button>
-                      </section>
-        </section>
 
-        <!-- Migration Results Section -->
-        <section class="workspace" id="results" style="margin-top: 25px;">
-            <h2>Migration Results</h2>
+    <div class="panel">
+       <h3 id="comparisonHeading">Function Comparison</h3>
+       <p id="comparisonSummary" aria-live="polite">
+            Comparison details will appear here.
+        </p>
+    </div>
+<!-- Program List -->
+<div class="panel">
+    <h3>Program List</h3>
+    <p>Select a program to view its migration details.</p>
 
-            <p class="notice">
-                Migration results will appear here when project data is connected.
-            </p>
+    <div id="programList" class="notice" aria-live="polite">
+        Loading programs...
+    </div>
+    </div>
+   <div class="panel" id="programDetails" aria-labelledby="programDetailsHeading" style="display: none;">
+  <h3 id="programDetailsHeading">Selected Program Details</h3>
+    <p id="detailName"></p>
+    <p id="detailModel"></p>
+    <p id="detailTokens"></p>
+    <p id="detailGeneration"></p>
+        <p id="detailComparison"></p>
 
-            <div class="panels">
-                <div class="panel">
-                    <h3>Migration Status</h3>
-                    <p>Waiting for migration data.</p>
-                </div>
+<h3 id="functionComparisonHeading">Function-by-Function Comparison</h3>
+    <div id="functionComparison" aria-live="polite">
+        Select a program to view its function results.
+    </div>
 
-                <div class="panel">
-                    <h3>Model &amp; Tokens</h3>
-                    <p>Information will appear when available.</p>
-                </div>
-            </div>
+   <h3 id="codeComparisonHeading">Code Comparison</h3>
+   <div id="codeComparison" aria-live="polite">
+        Select a program to view its code.
+    </div>
+</div>
+</section>
+<script src="data/results.js">
 
-            <div class="panel">
-                <h3>Function Comparison</h3>
-                <p>Comparison data is not available yet.</p>
-            </div>
-        </section>
+</script>
 
-    </main>
+<script>
+    function validateEquivalenceInputs() {
+    const inputs = document.getElementById("testInputs").value;
+    const outputs = document.getElementById("expectedOutputs").value;
+    const result = document.getElementById("equivalenceResult");
 
-    <script>
+    try {
+        const testData = JSON.parse(inputs);
+        const expectedData = JSON.parse(outputs);
+
+        if (!Array.isArray(testData) || !Array.isArray(expectedData)) {
+            throw new Error("Both values must be JSON arrays.");
+        }
+
+        if (testData.length === 0 || expectedData.length === 0) {
+            throw new Error("Please enter test data in both boxes.");
+        }
+
+        result.textContent =
+            "Inputs are valid! Backend connection is still pending.";
+    } catch (error) {
+        result.textContent = "Invalid input: " + error.message;
+    }
+}
+function loadMigrationResults() {
+    const data = window.CODEFORGE_RESULTS;
+
+    if (!data || !data.summary) {
+        document.getElementById("resultsNotice").textContent =
+            "Migration results could not be loaded.";
+        return;
+    }
+
+    const summary = data.summary;
+
+    document.getElementById("totalPrograms").textContent =
+        summary.programs;
+
+    document.getElementById("totalFunctions").textContent =
+        summary.functions_compared;
+
+    document.getElementById("equivalentFunctions").textContent =
+        summary.equivalent;
+
+    document.getElementById("mismatchedFunctions").textContent =
+        summary.functions_compared - summary.equivalent;
+
+    document.getElementById("resultsNotice").textContent =
+        "Project results loaded from " + data.generated_on;
+
+    document.getElementById("comparisonSummary").textContent =
+        "Compared " + summary.functions_compared +
+        " functions; " + summary.equivalent +
+        " were equivalent.";
+}
+
+loadMigrationResults();
 function showFiles() {
     const fileInput = document.getElementById("phpFile");
     const folderInput = document.getElementById("phpFolder");
-    const status = document.getElementById("fileStatus");
+    const phpCode = document.getElementById("phpCode");
     const fileList = document.getElementById("fileList");
+    const fileStatus = document.getElementById("fileStatus");
 
     const files = [
         ...fileInput.files,
         ...folderInput.files
     ];
 
-    fileList.innerHTML = "";
-
-    const phpFiles = files.filter(file =>
-        file.name.toLowerCase().endsWith(".php")
-    );
-
-    if (phpFiles.length === 0) {
-        status.textContent = "Please select PHP files or a folder.";
-        fileList.textContent = "No PHP files selected.";
-        document.getElementById("phpCode").value = "";
+    if (files.length === 0) {
+        fileStatus.textContent = "No file selected.";
+        fileList.textContent = "Selected PHP files will appear here.";
+        phpCode.value = "";
         return;
     }
 
-    status.textContent = phpFiles.length + " PHP file(s) selected.";
+    const validFiles = files.filter(file =>
+        file.name.toLowerCase().endsWith(".php")
+    );
 
-    phpFiles.forEach(file => {
-        const fileButton = document.createElement("button");
-        fileButton.textContent = file.webkitRelativePath || file.name;
+    fileStatus.textContent =
+        validFiles.length + " PHP file(s) selected.";
 
-        fileButton.onclick = function () {
-            const reader = new FileReader();
+    fileList.textContent = "";
 
-            reader.onload = function (event) {
-                document.getElementById("phpCode").value = event.target.result;
-            };
+    validFiles.forEach(file => {
+        const item = document.createElement("p");
+        item.textContent = file.webkitRelativePath || file.name;
+        fileList.appendChild(item);
+    });
 
-            reader.readAsText(file);
-        };
+    if (validFiles.length === 0) {
+        phpCode.value = "";
+        fileStatus.textContent = "No valid PHP files selected.";
+        return;
+    }
 
-        fileList.appendChild(fileButton);
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        phpCode.value = String(reader.result);
+    };
+
+    reader.onerror = function () {
+        phpCode.value = "";
+        fileStatus.textContent = "Could not read the selected file.";
+    };
+
+    reader.readAsText(validFiles[0]);
+}
+
+async function convertCode() {
+    const phpCode = document.getElementById("phpCode").value.trim();
+    const pythonCode = document.getElementById("pythonCode");
+
+    if (!phpCode) {
+        alert("Please select a PHP file first.");
+        return;
+    }
+
+    pythonCode.value = "Converting... Please wait.";
+
+    try {
+const response = await fetch("http://127.0.0.1:8000/api/migrate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                php: phpCode,
+                filename: "upload.php"
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Migration failed.");
+        }
+
+        pythonCode.value = data.generated_code || "No Python code was returned.";
+
+        if (data.syntax_ok === false) {
+            alert("Python code was generated, but a syntax error was detected:\n" + data.syntax_error);
+        } else {
+            alert("Migration completed. Equivalence has not been tested for this uploaded file.");
+        }
+
+    } catch (error) {
+        pythonCode.value = "";
+        alert("Migration failed: " + error.message +
+            "\n\nPlease make sure the FastAPI backend is running.");
+    }
+}
+
+function loadProgramList() {
+    const data = window.CODEFORGE_RESULTS;
+    const programList = document.getElementById("programList");
+
+    if (!data || !Array.isArray(data.programs)) {
+        programList.textContent = "Program data could not be loaded.";
+        return;
+    }
+
+    programList.innerHTML = "";
+
+    data.programs.forEach((program) => {
+        const card = document.createElement("div");
+        card.className = "panel";
+        card.style.cursor = "pointer";
+card.style.marginBottom = "12px";
+card.style.transition = "all 0.2s ease";
+
+card.addEventListener("mouseenter", function () {
+    card.style.transform = "translateY(-3px)";
+});
+
+card.addEventListener("mouseleave", function () {
+    card.style.transform = "translateY(0)";
+});
+
+        const name = document.createElement("h3");
+        name.textContent = program.name || "Unnamed program";
+        const type = document.createElement("p");
+
+type.textContent = program.counted === false
+    ? "Type: Test Program"
+    : "Type: Counted Program";
+
+        const model = document.createElement("p");
+        model.textContent = "Model: " + (program.model || "Not available");
+
+        const tokens = document.createElement("p");
+        tokens.textContent = "Tokens: " + (program.tokens ?? "Not available");
+
+        const status = document.createElement("p");
+        status.textContent =
+            "Generation: " + (program.generation_status || "Not available");
+
+        const comparison = document.createElement("p");
+        comparison.textContent =
+            "Comparison: " + (program.comparison_status || "Not available");
+            comparison.style.color = program.comparison_status === "compared"
+    ? "#22c55e"
+    : "#fbbf24";
+
+       card.append(name, type, model, tokens, status, comparison);
+        card.style.cursor = "pointer";
+
+card.addEventListener("click", function () {
+    document.getElementById("programDetails").style.display = "block";
+
+    document.getElementById("detailName").textContent =
+        "Program: " + (program.name || "Unnamed program");
+
+    document.getElementById("detailModel").textContent =
+        "Model: " + (program.model || "Not available");
+
+    document.getElementById("detailTokens").textContent =
+        "Tokens: " + (program.tokens ?? "Not available");
+
+    document.getElementById("detailGeneration").textContent =
+        "Generation: " + (program.generation_status || "Not available");
+
+    document.getElementById("detailComparison").textContent =
+        "Comparison: " + (program.comparison_status || "Not available");
+
+    const functionComparison =
+        document.getElementById("functionComparison");
+
+    functionComparison.innerHTML = "";
+
+    if (!Array.isArray(program.functions) || program.functions.length === 0) {
+        functionComparison.textContent =
+            "Function results are not available for this program.";
+    } else {
+        const table = document.createElement("table");
+        table.className = "function-table";
+
+        const header = document.createElement("tr");
+
+        ["Function", "Verdict", "Matched", "Total", "Failures"].forEach(
+            function (heading) {
+                const th = document.createElement("th");
+                th.textContent = heading;
+                header.appendChild(th);
+            }
+        );
+
+        table.appendChild(header);
+
+        program.functions.forEach(function (func) {
+            const row = document.createElement("tr");
+
+            [
+                func.function || "Unnamed",
+                func.verdict || "Unknown",
+                func.matched ?? 0,
+                func.total ?? 0,
+                Array.isArray(func.failures) ? func.failures.length : 0
+            ].forEach(function (value) {
+                const cell = document.createElement("td");
+                cell.textContent = String(value);
+                row.appendChild(cell);
+            });
+            const verdictCell = row.children[1];
+
+if (verdictCell) {
+    verdictCell.style.fontWeight = "bold";
+    verdictCell.style.color =
+        func.verdict === "EQUIVALENT" ? "#22c55e" :
+        func.verdict === "NOT_EQUIVALENT" ? "#f87171" :
+        "#fbbf24";
+}
+
+            table.appendChild(row);
+
+            if (Array.isArray(func.failures) && func.failures.length > 0) {
+                const failureRow = document.createElement("tr");
+                const failureCell = document.createElement("td");
+                failureCell.colSpan = 5;
+
+                const failureDetails = document.createElement("details");
+                const summary = document.createElement("summary");
+                summary.textContent = "View failures for " + func.function;
+
+                const failureText = document.createElement("pre");
+                failureText.textContent = JSON.stringify(func.failures, null, 2);
+
+                failureDetails.append(summary, failureText);
+                failureCell.appendChild(failureDetails);
+                failureRow.appendChild(failureCell);
+                table.appendChild(failureRow);
+            }
+        });
+
+        functionComparison.appendChild(table);
+    }
+
+    const codeComparison = document.getElementById("codeComparison");
+    codeComparison.innerHTML = "";
+    // Explanation
+const explanation = document.createElement("p");
+explanation.innerHTML = "<strong>Explanation:</strong> " +
+    (program.explanation || "No explanation available.");
+codeComparison.appendChild(explanation);
+
+// Assumptions
+const assumptionsHeading = document.createElement("h4");
+assumptionsHeading.textContent = "Assumptions";
+codeComparison.appendChild(assumptionsHeading);
+
+const assumptionsList = document.createElement("ul");
+
+(program.assumptions || []).forEach(function (item) {
+    const li = document.createElement("li");
+    li.textContent = item;
+    assumptionsList.appendChild(li);
+});
+
+if (!program.assumptions || program.assumptions.length === 0) {
+    assumptionsList.innerHTML = "<li>No assumptions available.</li>";
+}
+
+codeComparison.appendChild(assumptionsList);
+
+// Warnings
+const warningsHeading = document.createElement("h4");
+warningsHeading.textContent = "Warnings";
+codeComparison.appendChild(warningsHeading);
+
+const warningsList = document.createElement("ul");
+
+(program.warnings || []).forEach(function (item) {
+    const li = document.createElement("li");
+    li.textContent = item;
+    warningsList.appendChild(li);
+});
+
+if (!program.warnings || program.warnings.length === 0) {
+    warningsList.innerHTML = "<li>No warnings available.</li>";
+}
+
+codeComparison.appendChild(warningsList);
+
+    [
+        ["Legacy PHP", program.legacy_php],
+        ["Migrated Python", program.migrated_python]
+    ].forEach(function (item) {
+        const heading = document.createElement("h4");
+        heading.textContent = item[0];
+
+        const code = document.createElement("pre");
+        code.textContent = item[1] || "Code not available.";
+
+        codeComparison.append(heading, code);
+    });
+
+    document.getElementById("programDetails").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+        programList.appendChild(card);
     });
 }
 
-function convertCode() {
-    const pythonBox = document.getElementById("pythonCode");
-
-    pythonBox.value =
-        "AI migration is not connected yet. Demo only.\n\n" +
-        "Connect the backend to generate real Python code.";
-}
-
-
-function scanSecurity() {
-    const report = document.getElementById("securityReport");
-
-    report.textContent =
-        "Security scanning is not connected yet. Demo only. " +
-        "Connect the security backend to show real scan results.";
-}
-
+loadProgramList();
 </script>
+<footer class="site-footer">
+    <p>© 2026 CodeForge AI. All rights reserved.</p>
+    <p>Built for modernizing legacy PHP applications.</p>
+</footer>
 </body>
 </html>
