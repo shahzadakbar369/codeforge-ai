@@ -1,0 +1,48 @@
+{
+  "program": "02_support_desk",
+  "file": "legacy.php",
+  "reviewed_by_hand": true,
+  "vulnerabilities": [
+    {
+      "id": "02-sqli-1",
+      "type": "sql_injection",
+      "function": "addTicket",
+      "line": 17,
+      "sink_line": 18,
+      "description": "Tagged by the model as sql_injection on line 18 (function addTicket). line = where the SQL text is built, sink_line = where it is run.",
+      "origin": "model_tag"
+    },
+    {
+      "id": "02-cmdi-1",
+      "type": "command_injection",
+      "function": "archiveLogs",
+      "line": 46,
+      "sink_line": 46,
+      "description": "Tagged by the model as command_injection on line 46 (function archiveLogs).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "02-xss-1",
+      "type": "xss",
+      "function": "outputTicket",
+      "line": 59,
+      "sink_line": 59,
+      "description": "Tagged by the model as xss on line 59 (function outputTicket).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "02-xss-2",
+      "type": "xss",
+      "function": "(main code)",
+      "line": 115,
+      "sink_line": 115,
+      "description": "Ticket subject from the database is echoed without htmlspecialchars in the search result list; not tagged by the model.",
+      "origin": "added_in_review"
+    }
+  ],
+  "safe_functions": [
+    "addTicketSafe",
+    "archiveLogsSafe",
+    "outputTicketSafe"
+  ]
+}

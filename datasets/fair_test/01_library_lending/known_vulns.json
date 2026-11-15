@@ -1,0 +1,66 @@
+{
+  "program": "01_library_lending",
+  "file": "legacy.php",
+  "reviewed_by_hand": true,
+  "vulnerabilities": [
+    {
+      "id": "01-sqli-1",
+      "type": "sql_injection",
+      "function": "getMemberById",
+      "line": 15,
+      "sink_line": 16,
+      "description": "Tagged by the model as sql_injection on line 15 (function getMemberById). line = where the SQL text is built, sink_line = where it is run.",
+      "origin": "model_tag"
+    },
+    {
+      "id": "01-sqli-2",
+      "type": "sql_injection",
+      "function": "searchBooks",
+      "line": 23,
+      "sink_line": 24,
+      "description": "Tagged by the model as sql_injection on line 23 (function searchBooks). line = where the SQL text is built, sink_line = where it is run.",
+      "origin": "model_tag"
+    },
+    {
+      "id": "01-xss-1",
+      "type": "xss",
+      "function": "displayMember",
+      "line": 30,
+      "sink_line": 30,
+      "description": "Tagged by the model as xss on line 30 (function displayMember).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "01-xss-2",
+      "type": "xss",
+      "function": "displayMember",
+      "line": 31,
+      "sink_line": 31,
+      "description": "Second echo in displayMember prints the member email without htmlspecialchars; the model tagged only the first echo (line 30).",
+      "origin": "added_in_review"
+    },
+    {
+      "id": "01-cmdi-1",
+      "type": "command_injection",
+      "function": "runBackup",
+      "line": 37,
+      "sink_line": 37,
+      "description": "Tagged by the model as command_injection on line 37 (function runBackup).",
+      "origin": "model_tag"
+    },
+    {
+      "id": "01-xss-3",
+      "type": "xss",
+      "function": "(main code)",
+      "line": 87,
+      "sink_line": 87,
+      "description": "Book title and author from the database are echoed without htmlspecialchars in the search case; not tagged by the model.",
+      "origin": "added_in_review"
+    }
+  ],
+  "safe_functions": [
+    "safeBackup",
+    "safeDisplayMember",
+    "safeGetMember"
+  ]
+}

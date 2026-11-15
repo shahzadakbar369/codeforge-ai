@@ -1,0 +1,36 @@
+{
+  "total": {
+    "planted": 15,
+    "found": 13,
+    "missed": 2,
+    "false_alarms": 2
+  },
+  "programs": {
+    "01_library_lending": {
+      "planted": 6,
+      "found": 6,
+      "missed": [],
+      "false_alarms": [
+        "line 52 (codeforge-php-shell-call-with-variable)"
+      ]
+    },
+    "02_support_desk": {
+      "planted": 4,
+      "found": 3,
+      "missed": [
+        "02-sqli-1"
+      ],
+      "false_alarms": [
+        "line 52 (codeforge-php-shell-call-with-variable)"
+      ]
+    },
+    "03_photo_gallery": {
+      "planted": 5,
+      "found": 4,
+      "missed": [
+        "03-sqli-1"
+      ],
+      "false_alarms": []
+    }
+  }
+}
