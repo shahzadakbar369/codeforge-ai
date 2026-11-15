@@ -24,13 +24,13 @@ Dates come from the commit history where possible. Check any entry with:
 | PHP parser v0 | Started. Lists functions, parameters and calls; class methods are listed without their class | Shahzad | `tools/parse_php.py`, commit 89dbcee |
 | Repair loop (3 tries at most) | Run on 04_payroll (10 to 11 of 11, same inputs for repair and grading) and on 07_unsafe_input (6 of 8 before and after, separate repair inputs, not repaired) | Shahzad | `pipeline/run_pipeline.py`, `results/repair/summary.json`, commit 30013c8 |
 | Backend (FastAPI) | Started. Health check and UI serving checked; migrate, parse and results endpoints not tested yet; scan endpoint is a stub | Shahzad | `backend/app.py`, commit 89dbcee |
-| Security scan in the backend and UI | Not confirmed. `tools/security_scan.py` and `frontend/data/security.js` were not found in Shahzad's checkout on 2026-11-15 (they may be on an unmerged branch) | Tahir with Shahzad | `dir` output, 2026-11-15 |
+| Security scan in the backend and UI | Not built yet. `tools/security_scan.py` and `frontend/data/security.js` are not on develop and not on the only unmerged branch (tahir/fair-test), checked 2026-11-15 | Tahir with Shahzad | `dir` output, 2026-11-15 |
 | Legacy PHP runner (golden master) | Done | Tahir | `tools/php_harness.php`, `tools/run_legacy.py`, commit d10a007 |
 | Dev programs 1 to 7 | Done | Tahir | `datasets/dev/01_calculator` to `07_unsafe_input` |
-| Semgrep on legacy PHP | Built-in p/php rules: 0 findings on all 8 programs, missed all planted vulnerabilities. Custom rules: 6 of 6 planted found, 1 false alarm. The custom rules were written after seeing the planted code, so that result is optimistic | Tahir | `results/security_legacy_notes.md`, `results/scanner_score.json` |
+| Semgrep on legacy PHP | Built-in p/php rules: 0 findings on all 8 programs, missed all planted vulnerabilities. Custom rules: 6 of 6 planted found, 1 false alarm. The custom rules were written after seeing the planted code, so that result is optimistic. Fair test (3 new programs from an unseen LLM, answer keys reviewed, rules unchanged): 13 of 15 found, 2 false alarms. That work is on branch tahir/fair-test and is not merged yet | Tahir | `results/security_legacy_notes.md`, `results/scanner_score.json`, `results/fair_test_score.json`, commit 79f6f6b |
 | Security on migrated Python (05 and 07) | Done. The migration kept all 6 planted vulnerabilities. Bandit found 3 of 6 | Tahir | `results/before_after_counts.json`, `results/before_after_notes.md` |
 | Security explainer (LLM explains a finding) | Done. 5 of 5 findings gave valid JSON; Tahir judged 5 of 5 correct | Tahir | `tools/explain_findings.py`, `results/explainer_verdicts.md` |
-| Held-out set | Rebuilt: 10 files from 5 projects (max 3 per project), README with credits and licenses. Not run yet. One file (CodeIgniter array_helper) is not deterministic | Tahir | `datasets/heldout/heldout_sheet.md`, `datasets/heldout/README.md`, commit e4a5c04 |
+| Held-out set | 10 files from 5 projects (max 3 per project), README with credits and licenses. Not run yet. No inputs.json or outputs.json exist for these files, so it cannot be graded yet. On 2026-11-15 `04_smarty_modifier_count_words.php` was tracked in git but missing from Shahzad's working folder | Tahir | `datasets/heldout/heldout_sheet.md`, `datasets/heldout/README.md`, commit e4a5c04 |
 | User flow and wireframes | Done | Ayesha | `docs/USER_FLOW.md`, `docs/WIREFRAME.md`, commits 598721c, 4bedab0 |
 
 The held-out set has not been run, so no result exists yet on code the team has not seen.
@@ -61,7 +61,7 @@ The held-out set has not been run, so no result exists yet on code the team has 
 | 2026-10-25 | Shahzad | Wrote PHP parser v0 and ran it on 04_payroll: it listed 19 functions and 15 calls between them. Limits: class methods are listed without their class and calls through `$this->` are not tracked. Drafted with Claude. | Python 3.14.5, Claude (drafting) | `tools/parse_php.py`, commit 89dbcee |
 | 2026-10-25 | Shahzad | Wrote the repair loop: for each program it compares the baseline Python with the real PHP outputs, shows the model the cases that differ, asks for a fix (3 tries at most), and keeps the best version, never a worse one. Baseline files are not changed. Run on 04_payroll: 10 of 11 functions before, 11 of 11 after. This used the same inputs for repair and grading, so it is a dev-set result only, not a held-out result. Drafted with Claude. | Python 3.14.5, groq 1.7.0, model openai/gpt-oss-20b, Claude (drafting) | `pipeline/run_pipeline.py`, `pipeline/llm.py`, `results/repair/04_payroll/`, `results/repair/summary.json` |
 | 2026-10-25 | Shahzad | Added a FastAPI backend skeleton that also serves the frontend. Checked: `/api/health` returns `{"ok":true}` and the UI loads at `127.0.0.1:8000`. Not tested yet: `/api/migrate`, `/api/parse`, `/api/results`. `/api/scan` is a stub that returns 501 until Tahir's security module exists. Drafted with Claude. | fastapi 0.162.0, uvicorn 0.54.0, Claude (drafting) | `backend/app.py`, commit 89dbcee |
-| 2026-11-15 | Shahzad | Added a Docker mode to the comparison (`--docker`): the generated Python runs in a Linux container (python:3.12-slim, network off), like the PHP. Dev baseline went from 68 to 69 of 72 functions equivalent: `07 echo_message` now matches, so its mismatch depended on the Windows host. Still different: `04 round_money`, `07 count_words_shell`, `07 greeting_html_safe` (PHP writes &#039; for an apostrophe, Python html.escape writes &#x27;). | Python 3.14.5, Docker 29.9.2, python:3.12-slim | `baseline/compare.py`, `results/baseline/comparison.json`, commit <hash> |
+| 2026-11-15 | Shahzad | Added a Docker mode to the comparison (`--docker`): the generated Python runs in a Linux container (python:3.12-slim, network off), like the PHP. Dev baseline went from 68 to 69 of 72 functions equivalent: `07 echo_message` now matches, so its mismatch depended on the Windows host. Still different: `04 round_money`, `07 count_words_shell`, `07 greeting_html_safe` (PHP writes &#039; for an apostrophe, Python html.escape writes &#x27;). | Python 3.14.5, Docker 29.9.2, python:3.12-slim | `baseline/compare.py`, `results/baseline/comparison.json`, commit ecdfac1 (Docker mode and repair guard against hard-coding and regressions, committed 2026-11-11; the 69 of 72 run is from 2026-11-15) |
 | 2026-11-15 | Shahzad | Ran the repair loop in Docker on 07_unsafe_input with separate repair inputs: 6 of 8 functions before and after, no attempt improved it, logged as not repaired. 04_payroll was repaired from 10 to 11 of 11 on 2026-10-25 (same inputs for repair and grading). The repair inputs for `greeting_html_safe` are "Bob" and "<b>Bold</b>", with no apostrophe, so the model never saw the failing case. `count_words_shell` fails because PHP `(int)` of non-numeric output gives 0 while Python `int()` raises an error. | Python 3.14.5, groq 1.7.0, openai/gpt-oss-20b, Docker | `pipeline/run_pipeline.py`, `results/repair/summary.json`, `datasets/dev/07_unsafe_input/repair_inputs.json`, commit 30013c8 |
 
 ## 3. Decisions
@@ -124,29 +124,31 @@ Security results (Tahir, dev set only):
 |---|---|
 | Built-in Semgrep p/php rules on legacy PHP | 0 findings on 8 programs; missed all planted vulnerabilities |
 | Custom Semgrep PHP rules on legacy PHP | 6 of 6 planted found, 1 false alarm. Rules were written after seeing the planted code, so this is optimistic |
+| Same custom rules, unchanged, on 3 new programs from an unseen LLM (answer keys reviewed) | 13 of 15 found, 2 false alarms. Branch tahir/fair-test, commit 79f6f6b, not merged. Legacy PHP only, not migrated code |
 | Bandit on migrated Python (05 and 07) | 3 of 6 planted found |
 | Migration effect on planted vulnerabilities | All 6 kept |
 | LLM explainer on 5 findings | 5 of 5 valid JSON, 5 of 5 judged correct by Tahir (one judged by the person who wrote the script) |
 
-Held-out set: 10 files from 5 projects. Not run. No held-out number exists.
+Held-out set: 10 files from 5 projects. Not run. No golden outputs recorded yet. No held-out number exists.
 
 ## 5. Open items and blockers
 
-- Confirm where `tools/security_scan.py` and `frontend/data/security.js` are (not found in Shahzad's checkout on 2026-11-15). Owner: Tahir.
+- Build `tools/security_scan.py` and `frontend/data/security.js` (not on develop, not on tahir/fair-test). Owner: Tahir.
+- Merge tahir/fair-test into develop and add a log entry for it in Tahir's section. Owner: Tahir.
 - Add a `--dir` flag to the baseline script so it can run held-out files, and test it before the feature freeze (2026-11-20). Owner: Shahzad.
 - Run the baseline on the held-out set (2026-11-21 to 2026-11-22). Baseline only: the input generator for `repair_inputs.json` does not exist, so no held-out repair result is possible. Owner: Shahzad.
-- Decide how to grade the non-deterministic held-out file (CodeIgniter array_helper): exclude it or report it separately. Owner: Tahir.
+- Restore `datasets/heldout/files/04_smarty_modifier_count_words.php` in the working folder (git restore) and check that the held-out README and sheet match the 10 files in git. Owner: Shahzad with Tahir.
+- Record inputs.json and outputs.json for every held-out file (none exist yet). Owner: Tahir.
 - Review the repaired `round_money` by hand to confirm it fixes the rounding rule and does not special-case the test value. Owner: Shahzad.
 - Re-run the 07 comparison on the committed `results/baseline/07_unsafe_input/migrated.py` and update `results/baseline_review_07.md` (Tahir's earlier run showed 2 mismatches, the Docker run shows 2 of 8 functions). Owner: Tahir.
 - Connect the security scan to the backend (`/api/scan` is a stub). Owner: Tahir with Shahzad.
 - Show results from `window.CODEFORGE_RESULTS`, including verdicts other than EQUIVALENT and MISMATCH, in the UI. Owner: Ayesha.
-- Fill in the commit hash for the 2026-11-15 `--docker` entry. Owner: Shahzad.
 - Write the README (`.env` setup, `compare.py --docker`, `uvicorn`), the deck and the demo script. Owner: Shahzad.
 
 Limits to state in the report:
 
 - Repair is graded on inputs it can see (04), and where inputs are separate (07) it fixed nothing.
-- The Semgrep result is optimistic because the rules were written after seeing the code.
+- The 6 of 6 Semgrep result is optimistic because the rules were written after seeing the code. The fairer number is 13 of 15 with 2 false alarms on 3 new programs, on legacy PHP only.
 - The held-out set has not been run.
 
 ## 6. Team contributions
