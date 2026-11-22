@@ -1,0 +1,37 @@
+{
+  "job_id": "271465ddc3cf4c34a00199478d4d5941",
+  "status": "failed",
+  "message": "403: Error code: 403 - {'error': {'message': 'Access denied. Please check your network settings.'}}",
+  "layout": {
+    "file_map": {
+      "lib/math.php": "converted.lib.math",
+      "main.php": "converted.main"
+    },
+    "dependencies": [
+      {
+        "file": "main.php",
+        "from": "main.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/math.php'",
+        "kind": "include",
+        "target_files": [],
+        "resolved": false
+      },
+      {
+        "file": "main.php",
+        "from": "demo_total",
+        "line": 1,
+        "to": "demo_add",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/math.php"
+        ],
+        "resolved": true
+      }
+    ],
+    "scope": "Static names and literal relative includes only. Dynamic dispatch and full architecture equivalence are not proven."
+  },
+  "structure": null,
+  "verification": null,
+  "tokens": 0
+}

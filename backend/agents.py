@@ -3,9 +3,11 @@ import ast
 import json
 import re
 import subprocess
+from contextvars import ContextVar
 from pathlib import Path
 
 from pipeline import llm
+REQUEST_OBSERVER = ContextVar('request_observer', default=None)
 
 
 def parser_agent(sources):
@@ -14,10 +16,23 @@ def parser_agent(sources):
     parser = Parser(Language(tree_sitter_php.language_php()))
     functions, edges, warnings = [], [], []
     for filename, source in sources.items():
+        if not re.search(r'<\?(?:php\b|=)', source, re.I):
+            warnings.append(f'{filename}: Invalid PHP input. Start your code with <?php and enter valid PHP statements. Plain text cannot be migrated.')
+            continue
         raw = source.encode()
         root = parser.parse(raw).root_node
         if root.has_error:
-            warnings.append(f"{filename}: PHP syntax errors detected")
+            pending = [root]
+            while pending:
+                node = pending.pop()
+                if node.type == 'ERROR' or node.is_missing:
+                    warnings.append(f'{filename}: Invalid PHP syntax at line {node.start_point.row + 1}. Correct the code before migrating.')
+                    break
+                pending.extend(reversed(node.named_children))
+            else:
+                warnings.append(f'{filename}: Invalid PHP syntax. Correct the code before migrating.')
+        if not any(n.type not in ('php_tag', 'comment', 'text', 'text_interpolation') for n in root.named_children):
+            warnings.append(f'{filename}: No PHP statements found. Enter PHP code, not just an opening tag or comments.')
         def walk(node, owner=None, caller=None):
             if node.type == 'class_declaration':
                 name = node.child_by_field_name('name')
@@ -61,9 +76,26 @@ def security_agent(sources):
     return {'findings': findings, 'scope': 'Heuristic source review. Potential findings require review; this is not a complete OWASP audit.'}
 
 
-def model_json(prompt):
-    text, tokens, error = llm.call_llm(llm.get_client(), llm.DEFAULT_MODEL, prompt)
+def model_json(prompt, max_tokens=4500):
+    client = llm.get_client()
+    if llm.DEFAULT_MODEL.startswith('openai/gpt-oss'):
+        # Keep the frozen baseline helper unchanged; configure only web-agent calls.
+        from types import SimpleNamespace
+        create = client.chat.completions.create
+        def structured_create(**kwargs):
+            return create(**kwargs, reasoning_effort='low', reasoning_format='hidden',
+                          response_format={'type': 'json_object'})
+        client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=structured_create)))
+    text, tokens, error = llm.call_llm(client, llm.DEFAULT_MODEL, prompt, max_tokens=max_tokens)
+    observer = REQUEST_OBSERVER.get()
+    if observer:
+        observer({'model': llm.DEFAULT_MODEL, 'prompt_bytes': len(prompt.encode('utf-8')),
+                  'max_output_tokens': max_tokens, 'tokens_used': tokens,
+                  'result': 'error' if error else 'response',
+                  'error': error.split(':', 1)[0] if error else None})
     if error:
+        if error.startswith('403:'):
+            raise RuntimeError('Groq denied access (HTTP 403). Check your Groq account access and network/proxy settings. This is a model-service error, not a PHP format error.')
         raise RuntimeError(error)
     return llm.parse_json(text), tokens
 
@@ -83,6 +115,18 @@ Project sources:\n''' + json.dumps(sources) + '\nAST graph:\n' + json.dumps(grap
     return data, tokens
 
 
+def matching_value(left, right):
+    if type(left) in (int, float) and type(right) in (int, float):
+        return left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, list):
+        return len(left) == len(right) and all(matching_value(a, b) for a, b in zip(left, right))
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(matching_value(left[k], right[k]) for k in left)
+    return left == right
+
+
 def docker_run(folder, image, command):
     result = subprocess.run(['docker', 'run', '--rm', '--network', 'none', '--read-only',
         '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--memory', '256m',
@@ -94,7 +138,7 @@ def docker_run(folder, image, command):
     return json.loads(result.stdout)
 
 
-def test_agent(folder, sources, graph, code, update):
+def test_agent(folder, sources, graph, code, update, module_name='migrated'):
     """Generate characterization cases; compare real PHP; repair at most twice."""
     functions = [f for f in graph['functions'] if not f['class']]
     if not functions:
@@ -128,23 +172,26 @@ echo json_encode($out,JSON_PARTIAL_OUTPUT_ON_ERROR);
     (folder / 'runner.py').write_text('''import json, contextlib, io
 out=[]
 with contextlib.redirect_stdout(io.StringIO()):
- import migrated
+ import importlib
+ migrated = importlib.import_module('MODULE_NAME')
  for c in json.load(open('/work/cases.json')):
   try: out.append({'ok':True,'value':getattr(migrated,c['function'])(*c['args'])})
   except Exception: out.append({'ok':False})
 print(json.dumps(out, allow_nan=False))
-''', encoding='utf-8')
+'''.replace('MODULE_NAME', module_name), encoding='utf-8')
     expected = docker_run(folder, 'php:8.3-cli', ['php', 'harness.php'])
     repeated = docker_run(folder, 'php:8.3-cli', ['php', 'harness.php'])
     if expected != repeated:
         return code, {'status': 'UNTESTABLE', 'reason': 'PHP results changed between repeated runs.', 'cases': []}, tokens
     history = []
     for attempt in range(3):
-        (folder / 'migrated.py').write_text(code, encoding='utf-8')
+        module_file = folder.joinpath(*module_name.split('.')).with_suffix('.py')
+        module_file.parent.mkdir(parents=True, exist_ok=True)
+        module_file.write_text(code, encoding='utf-8')
         actual = docker_run(folder, 'python:3.12-slim', ['python', '-B', 'runner.py'])
         if not isinstance(actual, list) or not isinstance(expected, list) or len(actual) != len(cases) or len(expected) != len(cases):
             raise RuntimeError('Harness returned an unexpected number of results')
-        results = [{**c, 'expected': e, 'actual': a, 'verdict': 'EQUIVALENT' if e.get('ok') and a.get('ok') and e.get('value') == a.get('value') else ('UNTESTABLE' if not e.get('ok') else 'MISMATCH')} for c, e, a in zip(cases, expected, actual)]
+        results = [{**c, 'expected': e, 'actual': a, 'verdict': 'EQUIVALENT' if e.get('ok') and a.get('ok') and matching_value(e.get('value'), a.get('value')) else ('UNTESTABLE' if not e.get('ok') else 'MISMATCH')} for c, e, a in zip(cases, expected, actual)]
         failures = [r for r in results if r['verdict'] == 'MISMATCH']
         history.append({'attempt': attempt, 'mismatches': len(failures)})
         if not failures or attempt == 2:

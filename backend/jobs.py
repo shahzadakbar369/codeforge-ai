@@ -6,6 +6,7 @@ import re
 import threading
 import uuid
 import zipfile
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path, PurePosixPath
 from urllib.request import Request, urlopen
@@ -59,6 +60,9 @@ def ingest(body):
         raise ValueError('Add at least one PHP file')
     if len(sources) > 100 or sum(len(s) for s in sources.values()) > 45000:
         raise ValueError('Limit: 100 PHP files and 45,000 source characters per job')
+    validation = parser_agent(sources)
+    if validation['warnings']:
+        raise ValueError('; '.join(validation['warnings']))
     return sources
 
 def read(job_id):
@@ -73,9 +77,16 @@ def save(job_id, **changes):
         data.update(changes)
         temp = path.with_suffix('.tmp')
         temp.write_text(json.dumps(data, indent=2), encoding='utf-8')
-        temp.replace(path)
+        for attempt in range(10):
+            try:
+                temp.replace(path)
+                break
+            except PermissionError:
+                if attempt == 9:
+                    raise
+                time.sleep(0.02)
 
-def create(sources):
+def create(sources, owner_id=None):
     job_id = uuid.uuid4().hex
     folder = STORE / job_id
     folder.mkdir(parents=True)
@@ -83,91 +94,157 @@ def create(sources):
         path = folder / 'source' / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding='utf-8')
-    save(job_id, status='queued', stage=0, message='Waiting for agents', files=list(sources))
+    if owner_id:
+        from backend import auth
+        auth.register_job(job_id, owner_id, ', '.join(sources))
+    save(job_id, status='queued', stage=0, message='Waiting for agents', files=list(sources), owner_id=owner_id)
     POOL.submit(run, job_id, sources)
     return {'job_id': job_id}
 
 def run(job_id, sources):
+    from backend import structure
+    import time
     folder = STORE / job_id
-    report = {'sources': sources, 'tokens': 0, 'limits': ['Generated test inputs cover a sample of behavior only.', 'Security findings are heuristic and need review.', 'Frameworks, classes and external services can require manual migration.']}
+    report = {'sources': sources, 'tokens': 0, 'modules': {}, 'limits': [
+        'Static structure checks do not prove architecture or behavioral equivalence.',
+        'Generated characterization cases are also used for repair, not independent grading.',
+        'Classes, namespaces, dynamic includes, frameworks and external services need review.',
+        'Security findings are heuristic and require review.']}
+    events = []
+    from backend.agents import REQUEST_OBSERVER
+    def observe(request):
+        report.setdefault('llm_requests', []).append(request)
+        save(job_id, report=report)
+    observer_token = REQUEST_OBSERVER.set(observe)
+    def update(stage, message, status='running'):
+        events.append({'stage': stage, 'status': status, 'message': message, 'time': time.time()})
+        save(job_id, status=status, stage=stage, message=message, events=list(events), report=report)
     try:
-        save(job_id, status='running', stage=0, message='Building PHP AST and dependencies')
+        update(0, 'Building PHP AST and dependency graph')
         report['graph'] = parser_agent(sources)
         if report['graph']['warnings']:
             raise ValueError('; '.join(report['graph']['warnings']))
-        save(job_id, stage=1, message='Reviewing OWASP-class security risks')
+        report['layout'] = structure.plan(sources, report['graph'])
+        update(1, 'Reviewing OWASP-class security risks')
         report['security'] = security_agent(sources)
-        save(job_id, stage=2, message='Translating to typed Python')
-        data, tokens = migration_agent(sources, report['graph'])
-        report.update(generated_code=data['generated_code'], explanation=data.get('explanation', ''), tokens=tokens)
-        save(job_id, stage=3, message='Generating and running Docker characterization tests')
-        try:
-            code, verification, used = test_agent(folder, sources, report['graph'], data['generated_code'], lambda message: save(job_id, message=message))
-            report.update(generated_code=code, verification=verification, tokens=tokens + used)
-        except Exception as exc:
-            report['verification'] = {'status': 'ERROR', 'reason': str(exc), 'cases': []}
+        modules, notes = {}, []
+        reusable = structure.previous_translations(read(job_id).get('owner_id'), sources, report['layout'], job_id)
+        report['translation_files'] = []
+        for name in report['layout']['translation_order']:
+            source = sources[name]
+            module = report['layout']['file_map'][name]
+            if module in reusable:
+                update(2, 'Reusing completed translation: ' + name)
+                code, explanation, tokens = reusable[module]['code'], 'Reused from job ' + reusable[module]['job_id'], 0
+            else:
+                update(2, 'Translating ' + name)
+                code, explanation, tokens = structure.translate_file(name, source, report['graph'], report['layout'])
+            modules[module] = code
+            report['tokens'] += tokens
+            report['modules'] = dict(modules)
+            report['translation_files'].append({'file': name, 'module': module, 'status': 'REUSED' if module in reusable else 'GENERATED',
+                                               'source_job': reusable.get(module, {}).get('job_id'), 'tokens_this_run': tokens})
+            # Checkpoint each completed file, even if the next request or process fails.
+            save(job_id, report=report)
+            notes.append(name + ': ' + explanation)
+        structure.write_modules(folder, modules)
+        cases, histories, outcomes = [], [], []
+        for name, source in sources.items():
+            module = report['layout']['file_map'][name]
+            update(3, 'Checking behavior: ' + name)
+            graph = {**report['graph'], 'functions': [f for f in report['graph']['functions'] if f['file'] == name]}
+            try:
+                code, verification, tokens = test_agent(folder, {name: source}, graph, modules[module],
+                    lambda message: update(3, message), module_name=module)
+                modules[module] = code
+                structure.write_modules(folder, modules)
+                report['tokens'] += tokens
+            except Exception as exc:
+                verification = {'status': 'ERROR', 'reason': str(exc), 'cases': []}
+            outcomes.append({'file': name, **verification})
+            cases.extend(verification.get('cases', []))
+            histories.extend({'file': name, **h} for h in verification.get('history', []))
+        verdicts = [v['status'] for v in outcomes]
+        overall = next((v for v in ('ERROR', 'MISMATCH', 'UNTESTABLE', 'UNTESTED') if v in verdicts), 'EQUIVALENT')
+        report.update(modules=modules, explanation='\n'.join(notes), verification={
+            'status': overall, 'reason': 'Per-file characterization. Read each file outcome and function verdict.',
+            'cases': cases, 'history': histories, 'files': outcomes})
         for function in report['graph']['functions']:
-            cases = [c for c in report['verification']['cases'] if c['file'] == function['file'] and c['function'] == function['name'] and not function['class']]
-            if cases:
-                function['verdict'] = 'MISMATCH' if any(c['verdict'] == 'MISMATCH' for c in cases) else ('EQUIVALENT' if all(c['verdict'] == 'EQUIVALENT' for c in cases) else 'UNTESTABLE')
+            mine = [c for c in cases if c['file'] == function['file'] and c['function'] == function['name'] and not function['class']]
+            if mine:
+                function['verdict'] = 'MISMATCH' if any(c['verdict'] == 'MISMATCH' for c in mine) else ('EQUIVALENT' if all(c['verdict'] == 'EQUIVALENT' for c in mine) else 'UNTESTABLE')
+        report['structure'] = structure.check_structure(report['graph'], report['layout'], modules)
+        report['generated_code'] = '\n\n'.join('# ' + module + '\n' + code for module, code in modules.items())
         package = folder / 'project'
         package.mkdir(exist_ok=True)
-        (package / 'migrated.py').write_text(report['generated_code'], encoding='utf-8')
-        (package / 'app.py').write_text('''from fastapi import FastAPI, HTTPException
+        structure.write_modules(package, modules)
+        # The wrapper maps source/module-qualified function names without flattening modules.
+        registry = {}
+        for f in report['graph']['functions']:
+            if not f['class'] and not f['name'].startswith('_'):
+                module = report['layout']['file_map'][f['file']]
+                registry[module + ':' + f['name']] = [module, f['name']]
+        (package / 'registry.json').write_text(json.dumps(registry, indent=2), encoding='utf-8')
+        (package / 'app.py').write_text(GENERATED_APP, encoding='utf-8')
+        (package / 'requirements.txt').write_text('fastapi\nuvicorn\n', encoding='utf-8')
+        (package / 'report.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+        (package / 'README.md').write_text('Review report.json and converted/ before execution. Install requirements and run uvicorn app:app --reload. GET /health lists module-qualified function names; POST /functions/{name} accepts {"args": [...]}. Static checks are not a proof of equivalence. Original sources are in source/.', encoding='utf-8')
+        for name, content in sources.items():
+            path = package / 'source' / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding='utf-8')
+        tests = package / 'tests'
+        tests.mkdir(exist_ok=True)
+        (tests / 'test_characterization.py').write_text(GENERATED_TEST, encoding='utf-8')
+        with zipfile.ZipFile(folder / 'project.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+            for path in package.rglob('*'):
+                if path.is_file():
+                    z.write(path, str(path.relative_to(package)))
+        update(4, 'Project ready. Review structure checks, security and test outcomes.', 'completed')
+    except Exception as exc:
+        if isinstance(exc, structure.TranslationSyntaxError):
+            report['translation_error'] = exc.diagnostics
+            report['tokens'] += exc.tokens
+        update(read(job_id).get('stage', 0), str(exc), 'failed')
+    finally:
+        REQUEST_OBSERVER.reset(observer_token)
+
+GENERATED_APP = r'''from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import inspect
-import migrated
+import importlib
+import json
+from pathlib import Path
 app = FastAPI(title="Migrated project")
-FUNCTIONS = {n:f for n,f in vars(migrated).items() if inspect.isfunction(f) and f.__module__ == migrated.__name__ and not n.startswith('_')}
+REGISTRY = json.loads(Path(__file__).with_name('registry.json').read_text())
 class Call(BaseModel):
     args: list
 @app.get('/health')
 def health():
-    return {'ok': True, 'functions': list(FUNCTIONS)}
+    return {'ok': True, 'functions': list(REGISTRY)}
 @app.post('/functions/{name}')
 def invoke(name: str, body: Call):
-    if name not in FUNCTIONS:
+    if name not in REGISTRY:
         raise HTTPException(404, 'Function not found')
-    return {'result': FUNCTIONS[name](*body.args)}
-''', encoding='utf-8')
-        (package / 'requirements.txt').write_text('fastapi\nuvicorn\n', encoding='utf-8')
-        (package / 'README.md').write_text('Review report.json before running generated code. Install requirements, then run `uvicorn app:app --reload`. POST /functions/{name} with {"args": [...]} calls a migrated function.\n', encoding='utf-8')
-        (package / 'report.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
-        for name, content in sources.items():
-            original = package / 'source' / name
-            original.parent.mkdir(parents=True, exist_ok=True)
-            original.write_text(content, encoding='utf-8')
-        if report['verification']['cases']:
-            tests = package / 'tests'
-            tests.mkdir(exist_ok=True)
-            (tests / 'test_characterization.py').write_text('''import contextlib
-import io
+    module, function = REGISTRY[name]
+    return {'result': getattr(importlib.import_module(module), function)(*body.args)}
+'''
+
+GENERATED_TEST = r'''import importlib
 import json
 import sys
 import unittest
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-with contextlib.redirect_stdout(io.StringIO()):
-    import migrated
-
+REPORT = json.loads((ROOT / 'report.json').read_text(encoding='utf-8'))
 class CharacterizationTests(unittest.TestCase):
-    def test_recorded_php_returns(self):
-        report = json.loads((ROOT / 'report.json').read_text(encoding='utf-8'))
-        for case in report['verification']['cases']:
-            if not case['expected'].get('ok'):
-                continue
+    def test_recorded_returns(self):
+        cases = [c for c in REPORT['verification']['cases'] if c['expected'].get('ok')]
+        if not cases:
+            self.skipTest('No successful PHP observations were recorded')
+        for case in cases:
             with self.subTest(function=case['function'], args=case['args']):
-                value = getattr(migrated, case['function'])(*case['args'])
-                self.assertEqual(value, case['expected']['value'])
-''', encoding='utf-8')
-        for filename in ('cases.json', 'runner.py', 'harness.php'):
-            if (folder / filename).exists():
-                (package / filename).write_bytes((folder / filename).read_bytes())
-        with zipfile.ZipFile(folder / 'project.zip', 'w', zipfile.ZIP_DEFLATED) as z:
-            for path in package.rglob('*'):
-                if path.is_file():
-                    z.write(path, str(path.relative_to(package)))
-        save(job_id, status='completed', stage=4, message='Project ready. Review verification and security findings.', report=report)
-    except Exception as exc:
-        save(job_id, status='failed', message=str(exc), report=report)
+                module = REPORT['layout']['file_map'][case['file']]
+                actual = getattr(importlib.import_module(module), case['function'])(*case['args'])
+                self.assertEqual(actual, case['expected']['value'])
+'''

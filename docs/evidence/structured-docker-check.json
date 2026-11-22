@@ -1,0 +1,70 @@
+{
+  "scope": "Deterministic fixtures; Docker was unavailable, so no PHP/Python execution occurred. This verifies static structure and packaging only.",
+  "job_id": "e2e07f96e3d7475aa37d904d1062f720",
+  "status": "completed",
+  "message": "Project ready. Review structure checks, security and test outcomes.",
+  "structure": {
+    "functions": [
+      {
+        "source": "lib/math.php",
+        "symbol": "demo_add",
+        "module": "converted.lib.math",
+        "status": "PRESENT"
+      },
+      {
+        "source": "main.php",
+        "symbol": "demo_total",
+        "module": "converted.main",
+        "status": "PRESENT"
+      }
+    ],
+    "dependencies": [
+      {
+        "file": "main.php",
+        "from": "main.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/math.php'",
+        "kind": "include",
+        "target_files": [
+          "lib/math.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "main.php",
+        "from": "demo_total",
+        "line": 1,
+        "to": "demo_add",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/math.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      }
+    ],
+    "status": "STATIC_CHECKS_PASSED",
+    "scope": "Static names and literal relative includes only. Dynamic dispatch and full architecture equivalence are not proven."
+  },
+  "verification": {
+    "status": "UNTESTED",
+    "reason": "Per-file characterization. Read each file outcome and function verdict.",
+    "cases": [],
+    "history": [],
+    "files": [
+      {
+        "file": "lib/math.php",
+        "status": "UNTESTED",
+        "reason": "Command '['docker', 'info']' timed out after 10 seconds",
+        "cases": []
+      },
+      {
+        "file": "main.php",
+        "status": "UNTESTED",
+        "reason": "Docker is not running",
+        "cases": []
+      }
+    ]
+  }
+}

@@ -36,3 +36,7 @@ This is a local, single-user development service. Bind it to loopback; there is 
 API: `POST /api/jobs` accepts JSON with `files: [{name, content}]`, `archive` (base64 ZIP), or `repository`. Poll `GET /api/jobs/{id}`, read `/report`, then fetch `/download`. Existing health, parse, migrate and results endpoints are retained; `/api/scan` now returns heuristic findings.
 
 Run backend integration checks with `.venv\Scripts\python.exe -m unittest backend.test_workflow -v`.
+
+## Structured modules and private workspaces (2026-11-19)
+
+The studio now requires signup/login and saves each user's migration history. Start the server as above and create an account in the browser. SQLite and job data stay under ignored data/. Old anonymous jobs are retained but not automatically assigned to new accounts. Output now uses converted/ Python modules, registry.json and structural mapping rather than one migrated.py. See [the upgrade guide](docs/UPGRADE_2026-11-19.md) for current behavior, API session/CSRF requirements and verification limits; the earlier PDF describes the previous version. Custom migration instructions remain deferred.

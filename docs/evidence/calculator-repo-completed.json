@@ -1,0 +1,155 @@
+{
+  "job_id": "0bbb51e17d4047a1b949f3299d15f556",
+  "status": "completed",
+  "source_files": 11,
+  "source_modules": 11,
+  "reused_files": 9,
+  "file_map": [
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/calc.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/calc.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/public/index.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/public/index.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Addition.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/Operations/Addition.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Division.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/Operations/Division.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Multiplication.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/Operations/Multiplication.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/OperationInterface.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/Operations/OperationInterface.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Subtraction.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/Operations/Subtraction.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/src/RPNCalculator.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/src/RPNCalculator.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/tests/IntegrationWebTest.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/tests/IntegrationWebTest.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/tests/OperationsTest.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/tests/OperationsTest.py"
+    },
+    {
+      "source": "SamymaS-Calculatrice-PHP-e0b4492/tests/RPNCalculatorTest.php",
+      "python": "converted/SamymaS_Calculatrice_PHP_e0b4492/tests/RPNCalculatorTest.py"
+    }
+  ],
+  "structure_status": "NEEDS_REVIEW",
+  "verification_status": "UNTESTED",
+  "verification_files": [
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/calc.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/public/index.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Addition.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Division.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Multiplication.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/OperationInterface.php",
+      "status": "UNTESTED",
+      "reason": "Command '['docker', 'info']' timed out after 10 seconds"
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/Operations/Subtraction.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/src/RPNCalculator.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/tests/IntegrationWebTest.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/tests/OperationsTest.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    },
+    {
+      "file": "SamymaS-Calculatrice-PHP-e0b4492/tests/RPNCalculatorTest.php",
+      "status": "UNTESTED",
+      "reason": "No standalone functions available for characterization."
+    }
+  ],
+  "llm_requests": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "prompt_bytes": 5676,
+      "max_output_tokens": 4500,
+      "tokens_used": 1922,
+      "result": "response",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "prompt_bytes": 3059,
+      "max_output_tokens": 4500,
+      "tokens_used": 911,
+      "result": "response",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "prompt_bytes": 3339,
+      "max_output_tokens": 4500,
+      "tokens_used": 988,
+      "result": "response",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "prompt_bytes": 3339,
+      "max_output_tokens": 4500,
+      "tokens_used": 975,
+      "result": "response",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "prompt_bytes": 3946,
+      "max_output_tokens": 4500,
+      "tokens_used": 1880,
+      "result": "response",
+      "error": null
+    }
+  ],
+  "zip_syntax_check": "All Python files compile; generated code was not executed on the host."
+}
