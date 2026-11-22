@@ -3,8 +3,17 @@ import ast
 import keyword
 import posixpath
 import re
+import hashlib
+from pathlib import Path
 from pathlib import PurePosixPath
 from backend import agents
+
+
+def translation_fingerprint():
+    """Invalidate cached translations when code, prompt helpers or model changes."""
+    root = Path(__file__).resolve().parent.parent
+    content = b''.join((root / p).read_bytes() for p in ('backend/structure.py', 'backend/agents.py', 'pipeline/llm.py'))
+    return hashlib.sha256(content + agents.llm.DEFAULT_MODEL.encode()).hexdigest()
 
 
 def budgeted_json(prompt):
@@ -39,6 +48,8 @@ def previous_translations(owner_id, sources, layout, current_job):
             continue
         try:
             previous = jobs.read(row['id']).get('report', {})
+            if previous.get('translation_fingerprint') != translation_fingerprint():
+                continue
             if previous.get('sources') != sources or previous.get('layout', {}).get('file_map') != layout['file_map']:
                 continue
             for module, code in previous.get('modules', {}).items():
@@ -140,6 +151,7 @@ def translate_file(name, source, graph, layout):
                   'Use absolute imports from the supplied converted module map for cross-file calls. '
                   'PHP namespace/use declarations must become Python imports from that map, never PHP syntax. '
                   'Return executable Python syntax only, without Markdown fences. '
+                  'Return JSON-compatible native Python values; Decimal may be used internally but numeric public results should be int or float. '
                   'PHP round is half away from zero; implement Decimal semantics, not Python round. '
                   'Keep explanations under 50 words. Do not reproduce unrelated source. '
                   'This is unit ' + str(index + 1) + ' in ' + name + '. Context: ' + __import__('json').dumps(context, separators=(',', ':'), ensure_ascii=False)

@@ -1,0 +1,312 @@
+{
+  "scope": "Local single-process HTTP API test; 2,000 pre-provisioned fixture users. Groq, remote imports and Docker disabled. This is not 2,000 real LLM migrations or a distributed load test.",
+  "phases": [
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 250,
+      "max_in_flight": 25,
+      "requests": 1000,
+      "seconds": 18.549,
+      "requests_per_second": 53.91,
+      "status_counts": {
+        "200": 750,
+        "404": 250
+      },
+      "unexpected_results": 0,
+      "latency_ms": {
+        "p50": 351.86,
+        "p95": 1079.32,
+        "p99": 1719.51,
+        "max": 2623.22
+      }
+    },
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 750,
+      "max_in_flight": 100,
+      "requests": 3000,
+      "seconds": 63.463,
+      "requests_per_second": 47.27,
+      "status_counts": {
+        "200": 2250,
+        "404": 750
+      },
+      "unexpected_results": 0,
+      "latency_ms": {
+        "p50": 1334.39,
+        "p95": 6269.24,
+        "p99": 9077.21,
+        "max": 15213.72
+      }
+    },
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 2000,
+      "max_in_flight": 400,
+      "requests": 8000,
+      "seconds": 187.134,
+      "requests_per_second": 42.75,
+      "status_counts": {
+        "200": 5995,
+        "RemoteProtocolError": 8,
+        "404": 1996,
+        "ReadError": 1
+      },
+      "unexpected_results": 9,
+      "latency_ms": {
+        "p50": 6929.53,
+        "p95": 26642.89,
+        "p99": 42742.36,
+        "max": 83240.02
+      }
+    },
+    {
+      "name": "Job admission burst with two parked workers",
+      "virtual_users": 1000,
+      "max_in_flight": 100,
+      "requests": 1000,
+      "seconds": 18.899,
+      "requests_per_second": 52.91,
+      "status_counts": {
+        "429": 988,
+        "200": 12
+      },
+      "unexpected_results": 0,
+      "latency_ms": {
+        "p50": 1209.13,
+        "p95": 5008.7,
+        "p99": 7840.22,
+        "max": 11319.63
+      }
+    }
+  ],
+  "security": [
+    {
+      "check": "Signed-out history denied",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Please sign in"
+    },
+    {
+      "check": "Other user status denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user report denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user download denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Invalid CSRF rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Session verification failed. Refresh and retry"
+    },
+    {
+      "check": "Cross-origin mutation rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "Cross-origin login rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "SQL injection login does not authenticate",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Invalid email or password"
+    },
+    {
+      "check": "Path traversal rejected: ../outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: /outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: C:\\outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "ZIP traversal rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Invalid PHP rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: a.php: Invalid PHP input. Start your code with <?php and enter valid PHP statements. Plain text cannot be migrated."
+    },
+    {
+      "check": "NUL filename rejected 0",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "NUL filename rejected 1",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "NUL filename rejected 2",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Case-colliding filenames rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Duplicate or case-colliding source path"
+    },
+    {
+      "check": "Job oversized request rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Request body exceeds the endpoint upload limit"
+    },
+    {
+      "check": "Legacy parser oversized body rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Request body exceeds the endpoint upload limit"
+    }
+  ],
+  "server_pid": 836,
+  "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+  "orphan_folder_probe": {
+    "before": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "after": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "new_folders_for_three_rejected_requests": 0
+  },
+  "legacy_large_parse_seconds": 0.025,
+  "submitted_jobs": [
+    "59446f71d5e746239893bcd4764c09e6",
+    "9b0e4ddd563240799bf1509704a9f5da",
+    "acaa20544ec14758a5e77d98fc82a1d6",
+    "59db2cad022c461ca9a5b899565ddca6",
+    "7cc89f1a0ade4ea889b3d57138d818bd",
+    "ee7b2809211f4cb58883955d9ca2da41",
+    "08a86bff9f3840c5bb6acd644dd59086",
+    "6a9d0dee42ce49ddb737a2df2bfef253",
+    "3b57cfd190474836835a4264ac8f5661",
+    "ef96c7dee4bd4ec183756072273ce7bc",
+    "4d807134cce54c93ad030379afd424cf",
+    "6df329c69baa48fbb9aca5fb87fb367a"
+  ],
+  "queue_after_burst": {
+    "queued_tasks": 10,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 2,
+      "completed": 0,
+      "failed": 0
+    },
+    "persisted_job_records": 2012,
+    "job_folders": 2012
+  },
+  "queue_after_drain_observation": {
+    "queued_tasks": 0,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 12,
+      "completed": 11,
+      "failed": 0
+    },
+    "persisted_job_records": 2012,
+    "job_folders": 2012
+  },
+  "drain_observation_seconds": 3.06,
+  "login_throttle": {
+    "requests": 35,
+    "status_counts": {
+      "401": 30,
+      "429": 5
+    },
+    "seconds": 58.16,
+    "different_valid_account_after_limit_status": 200
+  },
+  "case_collision_probe": [],
+  "scanner_probes": {
+    "comment_only_false_positive": {
+      "findings": [],
+      "scope": "AST-filtered heuristic source review; comments and string literals are excluded. Variable calls require manual review. Not a complete OWASP audit or taint analysis."
+    },
+    "dynamic_command_call_false_negative": {
+      "findings": [
+        {
+          "file": "dynamic.php",
+          "line": 1,
+          "category": "Dynamic execution review",
+          "severity": "INFO",
+          "message": "Variable-function call: resolve its target and input flow manually. This is not a confirmed vulnerability."
+        }
+      ],
+      "scope": "AST-filtered heuristic source review; comments and string literals are excluded. Variable calls require manual review. Not a complete OWASP audit or taint analysis."
+    }
+  },
+  "external_services": "Disabled. No Groq calls, GitHub downloads or Docker executions were permitted."
+}

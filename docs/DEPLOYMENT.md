@@ -1,38 +1,52 @@
-# A running link: Vercel and the Docker worker
+# Free demonstration link and hosting
 
-Checked against official Vercel documentation on 2026-11-16. No deployment was created.
+Checked 23 November 2026 against the official documentation linked below.
 
-## Can we use Vercel?
+## Best option for this presentation: local app + temporary HTTPS tunnel
 
-Yes for the React frontend. Vercel also supports FastAPI and custom OCI container images, so saying it cannot host Python or containers would be incorrect. However, the current backend is not a drop-in Vercel deployment: it writes job files under the application directory, uses a process-local ThreadPoolExecutor after returning the request, and launches sibling PHP/Python containers via a Docker daemon. Hosting an app in a container does not by itself provide the Docker daemon/mount semantics this code expects.
+The full app needs persistent SQLite/job files, a background worker and a Docker daemon that can run PHP/Python containers. A Cloudflare Quick Tunnel can share the working laptop application without moving those components. It is a temporary demonstration link, not an always-on cloud deployment. Cloudflare documents that no account/domain is needed, links change on restart and uptime is not guaranteed.
 
-Official FastAPI guidance uses queue-backed workers for tasks that outlive an API request. Vercel instances can scale down. This implementation needs persistent job state/artifacts and a compatible execution worker before hosting all stages there. A translation-only deployment that silently skips Docker would not be the full working demo.
+1. Start Docker Desktop. Keep the laptop on power, awake and connected to the internet.
+2. Terminal 1, from the project root:
 
-## Least disruptive complete setup
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\start_demo.ps1
+```
 
-Use a dedicated Linux VM with Docker for FastAPI, its job files and the verification worker. Either serve the built React app from that same FastAPI service behind HTTPS, or put React on Vercel and proxy /api/* to the backend's HTTPS address. The single-server option preserves the current same-origin routing with fewer moving parts.
+3. Terminal 2:
 
-Before external access, implement authentication/access restriction and request/job limits; the current service is explicitly a loopback, single-user prototype. Keep GROQ_API_KEY only on the backend. Never add it to VITE_ variables, the React bundle or public Git files. Use a private class-demo audience before considering public access. Docker runtime access belongs on the worker host, never in the browser.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\share_demo.ps1
+```
 
-## Vercel frontend settings (after a reachable backend exists)
+The second script downloads the official Windows cloudflared client when missing and checks the release checksum. Share the printed HTTPS trycloudflare.com URL privately with the instructor/team. New users also need the invitation code from terminal 1 (saved only under ignored tmp/presentation/demo-invite.txt). Existing accounts sign in normally. Do not share your Groq key or personal login. The invitation gates registration, not an entire-network security perimeter.
 
-- Import the GitHub repository into Vercel.
-- Root directory: frontend/react-app.
-- Framework preset: Vite.
-- Build command: npm run build.
-- Output directory: dist.
-- Add a rewrite from /api/:path* to the chosen HTTPS backend's /api/:path*. Preserve job and download paths. Configure /docs separately if you want its header link to work; Swagger also needs /openapi.json.
-- Keep requests on the frontend origin through the rewrite, or explicitly configure backend CORS if using direct browser requests. A Vercel frontend cannot reach a visitor's localhost server as a shared hosted backend.
-- Test create, polling, report and ZIP download from the deployed frontend. A page loading is not proof that migration works.
+Both terminals and the laptop must remain running. Ctrl+C in terminal 2 closes public access. Restarting it generates a different URL. Generate the link shortly before the presentation if you cannot keep the laptop running overnight. The free tunnel is suitable for a small demonstration, not load testing or permanent service. Backend Groq quotas still apply; free tunneling does not make inference unlimited.
 
-The actual backend hostname, hosting account and access policy are not configured yet, so no placeholder production rewrite or misleading live link has been added.
+Use -Port 8002 on both scripts if choosing another port. Stop the existing server before restarting; the app enforces one process per database. The backend trusts proxy headers only from loopback, which is where the tunnel connects. Verify signup, secure login cookie, migration, polling, history, report and download using the HTTPS link before sharing.
 
-## Before the morning presentation
+## Can Vercel host it?
 
-The verified local app is the dependable full demo. Keep Docker Desktop and the local server running; use http://127.0.0.1:8001. A cloud link needs the backend hosting work above. Avoid a last-minute full serverless rewrite if the goal is a reliable presentation.
+Vercel supports both React/Vite and FastAPI. The existing backend is not a drop-in serverless deployment: it depends on local durable files, one process with an admission counter, background ThreadPoolExecutor work and sibling Docker containers. A container deployment does not automatically provide the Docker-daemon/mount setup this worker expects. Vercel's FastAPI guide recommends queue/workflow integrations for work independent of an API response.
+
+For permanent hosting, move metadata/artifacts to durable storage, use queue-backed workers and a compatible sandbox worker host. A simpler initial deployment is one persistent Linux VM with Docker and HTTPS, serving the built React app from FastAPI. VM availability/pricing and account requirements vary; no permanent free VM is promised here.
+
+A free Vercel frontend alone will show the interface but cannot make a shared backend appear at a visitor's localhost. Once you have a durable HTTPS backend, import frontend/react-app as a Vite project (npm run build, output dist), and proxy /api/*, /docs and /openapi.json to that backend. Same-origin cookie/CSRF behavior must be tested. No fake production hostname or placeholder deployment has been added.
+
+## What about Render free?
+
+Render has free web services, but its free service filesystem is ephemeral and free services do not support persistent disks. A redeploy/restart/spin-down can lose local SQLite/history/artifacts. Hosting an app container is also different from supplying the Docker worker environment required here. A translation-only version that skips execution is not the full verified demo. Do not promise the current full application as a free persistent Render deployment.
+
+## What to say to the instructor
+
+“We have a working HTTPS demonstration link connected to our local Docker-backed worker. It demonstrates the full workflow while our laptop is online. Permanent deployment needs a persistent worker, durable storage and operational monitoring.”
+
+A stable, rehearsed demo makes a good impression; label the hosting arrangement accurately and keep the local app plus a saved successful report as backup.
 
 ## Official references
 
-- FastAPI support and background work: https://vercel.com/docs/frameworks/backend/fastapi
-- Function lifecycle, duration and payload constraints: https://vercel.com/docs/functions/limitations
-- Custom OCI containers and scale-down behavior: https://vercel.com/docs/functions/runtimes/container
+- Cloudflare Quick Tunnels: https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/
+- Official client downloads: https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/
+- Vercel FastAPI and background work: https://vercel.com/docs/frameworks/backend/fastapi
+- Render free limitations: https://render.com/docs/free
+- Render persistent disks: https://render.com/docs/disks

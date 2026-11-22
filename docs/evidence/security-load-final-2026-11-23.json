@@ -1,0 +1,274 @@
+{
+  "scope": "Local single-process HTTP API test; 2,000 pre-provisioned fixture users. Groq, remote imports and Docker disabled. This is not 2,000 real LLM migrations or a distributed load test.",
+  "phases": [
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 2000,
+      "max_in_flight": 400,
+      "requests": 8000,
+      "seconds": 205.408,
+      "requests_per_second": 38.95,
+      "status_counts": {
+        "429": 799,
+        "200": 5233,
+        "RemoteProtocolError": 15,
+        "404": 1953
+      },
+      "unexpected_results": 15,
+      "latency_ms": {
+        "p50": 6698.41,
+        "p95": 29648.27,
+        "p99": 45421.56,
+        "max": 95026.79
+      }
+    },
+    {
+      "name": "Job admission burst with two parked workers",
+      "virtual_users": 1000,
+      "max_in_flight": 100,
+      "requests": 1000,
+      "seconds": 14.39,
+      "requests_per_second": 69.49,
+      "status_counts": {
+        "429": 988,
+        "200": 12
+      },
+      "unexpected_results": 0,
+      "latency_ms": {
+        "p50": 822.54,
+        "p95": 4820.79,
+        "p99": 6324.08,
+        "max": 7420.85
+      }
+    }
+  ],
+  "security": [
+    {
+      "check": "Signed-out history denied",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Please sign in"
+    },
+    {
+      "check": "Other user status denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user report denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user download denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Invalid CSRF rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Session verification failed. Refresh and retry"
+    },
+    {
+      "check": "Cross-origin mutation rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "Cross-origin login rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "SQL injection login does not authenticate",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Invalid email or password"
+    },
+    {
+      "check": "Path traversal rejected: ../outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: /outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: C:\\outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "ZIP traversal rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Invalid PHP rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: a.php: Invalid PHP input. Start your code with <?php and enter valid PHP statements. Plain text cannot be migrated."
+    },
+    {
+      "check": "NUL filename rejected 0",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "NUL filename rejected 1",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "NUL filename rejected 2",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Case-colliding filenames rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Duplicate or case-colliding source path"
+    },
+    {
+      "check": "Job oversized request rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Request body exceeds the endpoint upload limit"
+    },
+    {
+      "check": "Legacy parser oversized body rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Request body exceeds the endpoint upload limit"
+    }
+  ],
+  "server_pid": 20824,
+  "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+  "orphan_folder_probe": {
+    "before": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "after": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "new_folders_for_three_rejected_requests": 0
+  },
+  "legacy_large_parse_seconds": 0.027,
+  "submitted_jobs": [
+    "3d95d804d06748a38d5149b44cf3e385",
+    "9b90e97fda41425398acf98c182bf2d9",
+    "59f200ac542a4ae69638fb0efdc1d28a",
+    "dee345de706e4989b8e2c7e2adbfb835",
+    "3406dbd9682c408d93ed2f0c3d20fcd1",
+    "bcfab0394f4e444ba39b4ede9eb66062",
+    "06910979df7e4cf685f797729e6d3931",
+    "794868601e56406098a1a893908a340a",
+    "210b4f6d60ff479a8ae6628a94b35e3f",
+    "dd8d8c7658e84d2aaf59089bb5f99aa1",
+    "991bd70ac28a4390b928ec4bbb45b8ab",
+    "1fa8d3fc7982450984741337ad6a9b6f"
+  ],
+  "queue_after_burst": {
+    "queued_tasks": 10,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 2,
+      "completed": 0,
+      "failed": 0
+    },
+    "persisted_job_records": 2012,
+    "job_folders": 2012
+  },
+  "queue_after_drain_observation": {
+    "queued_tasks": 0,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 12,
+      "completed": 12,
+      "failed": 0
+    },
+    "persisted_job_records": 2012,
+    "job_folders": 2012
+  },
+  "drain_observation_seconds": 3.06,
+  "login_throttle": {
+    "requests": 35,
+    "status_counts": {
+      "401": 30,
+      "429": 5
+    },
+    "seconds": 57.87,
+    "different_valid_account_after_limit_status": 200
+  },
+  "case_collision_probe": [],
+  "scanner_probes": {
+    "comment_only_false_positive": {
+      "findings": [],
+      "scope": "AST-filtered heuristic source review; comments and string literals are excluded. Variable calls require manual review. Not a complete OWASP audit or taint analysis."
+    },
+    "dynamic_command_call_false_negative": {
+      "findings": [
+        {
+          "file": "dynamic.php",
+          "line": 1,
+          "category": "Dynamic execution review",
+          "severity": "INFO",
+          "message": "Variable-function call: resolve its target and input flow manually. This is not a confirmed vulnerability."
+        }
+      ],
+      "scope": "AST-filtered heuristic source review; comments and string literals are excluded. Variable calls require manual review. Not a complete OWASP audit or taint analysis."
+    }
+  },
+  "external_services": "Disabled. No Groq calls, GitHub downloads or Docker executions were permitted."
+}

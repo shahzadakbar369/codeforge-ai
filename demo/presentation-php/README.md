@@ -1,0 +1,1 @@
+Controlled three-file procedural PHP demo: add, subtract and calculator with cross-file requires. Upload this folder. Expected mapping: converted/lib/add.py, converted/lib/subtract.py, converted/calculator.py. This is a rehearsal fixture, not an unseen evaluation dataset.

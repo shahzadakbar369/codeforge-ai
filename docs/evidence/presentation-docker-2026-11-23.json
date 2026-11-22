@@ -1,0 +1,481 @@
+{
+  "scope": "Declared translation/test-input fixtures with real Docker execution; no Groq inference",
+  "status": "completed",
+  "message": "Project ready. Review structure checks, security and test outcomes.",
+  "source_files": 3,
+  "module_files": 3,
+  "structure": {
+    "functions": [
+      {
+        "source": "lib/add.php",
+        "symbol": "add_values",
+        "module": "converted.lib.add",
+        "status": "PRESENT"
+      },
+      {
+        "source": "lib/subtract.php",
+        "symbol": "subtract_values",
+        "module": "converted.lib.subtract",
+        "status": "PRESENT"
+      },
+      {
+        "source": "calculator.php",
+        "symbol": "calculate_value",
+        "module": "converted.calculator",
+        "status": "PRESENT"
+      }
+    ],
+    "dependencies": [
+      {
+        "file": "calculator.php",
+        "from": "calculator.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/add.php'",
+        "kind": "include",
+        "target_files": [
+          "lib/add.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculator.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/subtract.php'",
+        "kind": "include",
+        "target_files": [
+          "lib/subtract.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculate_value",
+        "line": 1,
+        "to": "subtract_values",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/subtract.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculate_value",
+        "line": 1,
+        "to": "add_values",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/add.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      }
+    ],
+    "status": "STATIC_CHECKS_PASSED",
+    "scope": "Static names and literal relative includes only. Dynamic dispatch and full architecture equivalence are not proven."
+  },
+  "verification": {
+    "status": "EQUIVALENT",
+    "reason": "Per-file characterization. Read each file outcome and function verdict.",
+    "cases": [
+      {
+        "file": "lib/add.php",
+        "function": "add_values",
+        "args": [
+          0,
+          0
+        ],
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/add.php",
+        "function": "add_values",
+        "args": [
+          -2,
+          3
+        ],
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/add.php",
+        "function": "add_values",
+        "args": [
+          2.5,
+          1.5
+        ],
+        "expected": {
+          "ok": true,
+          "value": 4
+        },
+        "actual": {
+          "ok": true,
+          "value": 4
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/add.php",
+        "function": "add_values",
+        "args": [
+          999999999999999999,
+          3
+        ],
+        "expected": {
+          "ok": true,
+          "value": 1000000000000000002
+        },
+        "actual": {
+          "ok": true,
+          "value": 1000000000000000002
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/subtract.php",
+        "function": "subtract_values",
+        "args": [
+          0,
+          0
+        ],
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/subtract.php",
+        "function": "subtract_values",
+        "args": [
+          -2,
+          3
+        ],
+        "expected": {
+          "ok": true,
+          "value": -5
+        },
+        "actual": {
+          "ok": true,
+          "value": -5
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "lib/subtract.php",
+        "function": "subtract_values",
+        "args": [
+          2.5,
+          1.5
+        ],
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "calculator.php",
+        "function": "calculate_value",
+        "args": [
+          0
+        ],
+        "expected": {
+          "ok": true,
+          "value": 3
+        },
+        "actual": {
+          "ok": true,
+          "value": 3
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "calculator.php",
+        "function": "calculate_value",
+        "args": [
+          -2
+        ],
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "file": "calculator.php",
+        "function": "calculate_value",
+        "args": [
+          2.5
+        ],
+        "expected": {
+          "ok": true,
+          "value": 5.5
+        },
+        "actual": {
+          "ok": true,
+          "value": 5.5
+        },
+        "verdict": "EQUIVALENT"
+      }
+    ],
+    "history": [
+      {
+        "file": "lib/add.php",
+        "attempt": 0,
+        "mismatches": 0
+      },
+      {
+        "file": "lib/subtract.php",
+        "attempt": 0,
+        "mismatches": 0
+      },
+      {
+        "file": "calculator.php",
+        "attempt": 0,
+        "mismatches": 0
+      }
+    ],
+    "files": [
+      {
+        "file": "lib/add.php",
+        "status": "EQUIVALENT",
+        "cases": [
+          {
+            "file": "lib/add.php",
+            "function": "add_values",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "lib/add.php",
+            "function": "add_values",
+            "args": [
+              -2,
+              3
+            ],
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "lib/add.php",
+            "function": "add_values",
+            "args": [
+              2.5,
+              1.5
+            ],
+            "expected": {
+              "ok": true,
+              "value": 4
+            },
+            "actual": {
+              "ok": true,
+              "value": 4
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "lib/add.php",
+            "function": "add_values",
+            "args": [
+              999999999999999999,
+              3
+            ],
+            "expected": {
+              "ok": true,
+              "value": 1000000000000000002
+            },
+            "actual": {
+              "ok": true,
+              "value": 1000000000000000002
+            },
+            "verdict": "EQUIVALENT"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 0
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      },
+      {
+        "file": "lib/subtract.php",
+        "status": "EQUIVALENT",
+        "cases": [
+          {
+            "file": "lib/subtract.php",
+            "function": "subtract_values",
+            "args": [
+              0,
+              0
+            ],
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "lib/subtract.php",
+            "function": "subtract_values",
+            "args": [
+              -2,
+              3
+            ],
+            "expected": {
+              "ok": true,
+              "value": -5
+            },
+            "actual": {
+              "ok": true,
+              "value": -5
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "lib/subtract.php",
+            "function": "subtract_values",
+            "args": [
+              2.5,
+              1.5
+            ],
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1.0
+            },
+            "verdict": "EQUIVALENT"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 0
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      },
+      {
+        "file": "calculator.php",
+        "status": "EQUIVALENT",
+        "cases": [
+          {
+            "file": "calculator.php",
+            "function": "calculate_value",
+            "args": [
+              0
+            ],
+            "expected": {
+              "ok": true,
+              "value": 3
+            },
+            "actual": {
+              "ok": true,
+              "value": 3
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "calculator.php",
+            "function": "calculate_value",
+            "args": [
+              -2
+            ],
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "file": "calculator.php",
+            "function": "calculate_value",
+            "args": [
+              2.5
+            ],
+            "expected": {
+              "ok": true,
+              "value": 5.5
+            },
+            "actual": {
+              "ok": true,
+              "value": 5.5
+            },
+            "verdict": "EQUIVALENT"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 0
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      }
+    ]
+  },
+  "tokens": 0,
+  "translation_error": null
+}

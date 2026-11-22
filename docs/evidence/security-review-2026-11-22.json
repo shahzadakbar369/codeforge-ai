@@ -1,0 +1,423 @@
+{
+  "date": "2026-11-22",
+  "commit": "cb80ceb",
+  "environment": "Windows-10-10.0.19045-SP0",
+  "scope": "Local single-process HTTP API test; 2,000 pre-provisioned fixture users. Groq, remote imports and Docker disabled. This is not 2,000 real LLM migrations or a distributed load test.",
+  "read_results": [
+    {
+      "virtual_users": 250,
+      "concurrent_requests": 25,
+      "requests": 1000,
+      "rps": 116.95,
+      "p95_ms": 560.8,
+      "p99_ms": 855.64,
+      "http_statuses": {
+        "200": 750,
+        "404": 250
+      },
+      "transport_errors": 0,
+      "raw_assertion_mismatches": 1
+    },
+    {
+      "virtual_users": 750,
+      "concurrent_requests": 100,
+      "requests": 3000,
+      "rps": 136.47,
+      "p95_ms": 2408.14,
+      "p99_ms": 4489.75,
+      "http_statuses": {
+        "200": 2250,
+        "404": 750
+      },
+      "transport_errors": 0,
+      "raw_assertion_mismatches": 1
+    },
+    {
+      "virtual_users": 2000,
+      "concurrent_requests": 400,
+      "requests": 8000,
+      "rps": 111.15,
+      "p95_ms": 10667.17,
+      "p99_ms": 15888.15,
+      "http_statuses": {
+        "200": 5998,
+        "ReadError": 1,
+        "RemoteProtocolError": 1,
+        "404": 2000
+      },
+      "transport_errors": 2,
+      "raw_assertion_mismatches": 3
+    }
+  ],
+  "test_harness_corrections": {
+    "read_history_assertions": "One mismatch per phase was an overstrict test oracle: setup created an extra legitimate user-0 job. The raw counters are retained; a DB-backed ownership recheck succeeded for 20 users.",
+    "queue": "First queue invocation hit a test-harness TypeError parsing a POST response as a history list; corrected and rerun independently. This is not counted as an application failure.",
+    "test_instrumentation": "An initial stats probe scanning 2,000 fixture files timed out before load traffic; replaced by lightweight counters."
+  },
+  "ownership_recheck_users": 20,
+  "security_probes": [
+    {
+      "check": "Signed-out history denied",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Please sign in"
+    },
+    {
+      "check": "Other user status denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user report denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user download denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Invalid CSRF rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Session verification failed. Refresh and retry"
+    },
+    {
+      "check": "Cross-origin mutation rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "Cross-origin login rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "SQL injection login does not authenticate",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Invalid email or password"
+    },
+    {
+      "check": "Path traversal rejected: ../outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: /outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: C:\\outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "ZIP traversal rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Invalid PHP rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: a.php: Invalid PHP input. Start your code with <?php and enter valid PHP statements. Plain text cannot be migrated."
+    },
+    {
+      "check": "NUL filename rejected 0",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "NUL filename rejected 1",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "NUL filename rejected 2",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "Case-colliding filenames",
+      "status": 200,
+      "expected": null,
+      "matches_expectation": null,
+      "detail": null
+    },
+    {
+      "check": "Job oversized request rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Upload exceeds 15 MB"
+    },
+    {
+      "check": "Legacy parser accepts 1MB source beyond job source limit",
+      "status": 200,
+      "expected": null,
+      "matches_expectation": null,
+      "detail": null
+    }
+  ],
+  "orphans": {
+    "before": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "after": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2003
+    },
+    "new_folders_for_three_rejected_requests": 3
+  },
+  "case_collision": [
+    {
+      "job_id": "87346f702e194568b89a22e614755411",
+      "physical_php_files": 1,
+      "physical_file_contains_second_submission": true
+    }
+  ],
+  "scanner_probes": {
+    "comment_false_positive": {
+      "findings": [
+        {
+          "file": "a.php",
+          "line": 1,
+          "category": "A03: Injection",
+          "severity": "HIGH",
+          "message": "Review untrusted input reaching this execution or query sink."
+        }
+      ],
+      "scope": "Heuristic source review. Potential findings require review; this is not a complete OWASP audit."
+    },
+    "dynamic_call_missed": {
+      "findings": [],
+      "scope": "Heuristic source review. Potential findings require review; this is not a complete OWASP audit."
+    }
+  },
+  "queue_results": [
+    {
+      "name": "Job admission burst with two parked workers",
+      "virtual_users": 1000,
+      "max_in_flight": 100,
+      "requests": 1000,
+      "seconds": 133.705,
+      "requests_per_second": 7.48,
+      "status_counts": {
+        "200": 1000
+      },
+      "unexpected_results": 0,
+      "latency_ms": {
+        "p50": 13323.62,
+        "p95": 14505.05,
+        "p99": 16530.23,
+        "max": 16990.67
+      }
+    }
+  ],
+  "queue_after_burst": {
+    "queued_tasks": 998,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 2,
+      "completed": 0,
+      "failed": 0
+    },
+    "persisted_job_records": 3000,
+    "job_folders": 3000
+  },
+  "queue_after_drain": {
+    "queued_tasks": 759,
+    "fixture_jobs": 2000,
+    "worker_metrics": {
+      "started": 241,
+      "completed": 239,
+      "failed": 0
+    },
+    "persisted_job_records": 3000,
+    "job_folders": 3000
+  },
+  "drain_seconds": 45.58,
+  "login_throttle": {
+    "requests": 35,
+    "status_counts": {
+      "401": 30,
+      "429": 5
+    },
+    "seconds": 67.22,
+    "different_valid_account_after_limit_status": 429
+  },
+  "external_services": "Disabled; no real Groq, GitHub imports or Docker execution. All storage under ignored tmp/security-load; production data was not targeted.",
+  "load_generator": "Same laptop as the server; one Uvicorn process; 2,000 seeded accounts/sessions; maximum 400 in-flight read requests and 100 in-flight submissions. Not 2,000 simultaneous real migrations.",
+  "findings": [
+    {
+      "priority": "P1",
+      "title": "Unbounded job admission and no per-user quota",
+      "evidence": "Confirmed: 1,000 HTTP 200 submissions, two parked workers and 998 queued tasks.",
+      "locations": [
+        "backend/jobs.py:16",
+        "backend/jobs.py:89",
+        "backend/jobs.py:101"
+      ],
+      "improvement": "Bound the global queue, enforce per-user active/queued/cost/storage limits, return 429/503 with Retry-After, and reserve capacity before writing files."
+    },
+    {
+      "priority": "P1",
+      "title": "Legacy API limits differ from the main job route",
+      "evidence": "Confirmed: /api/parse accepted a 1MB PHP source; main jobs accept only 45,000 source characters. /api/migrate bypasses job admission by code inspection; not invoked against a real provider.",
+      "locations": [
+        "backend/app.py:129",
+        "backend/app.py:134"
+      ],
+      "improvement": "Apply uniform body/source/rate limits and move model calls behind the same bounded job service; remove unused legacy endpoints."
+    },
+    {
+      "priority": "P1",
+      "title": "Windows case collisions overwrite submitted source",
+      "evidence": "Confirmed: Case.php and case.php accepted as two sources, but one physical PHP file remained with the second contents.",
+      "locations": [
+        "backend/jobs.py:19",
+        "backend/jobs.py:52",
+        "backend/jobs.py:89"
+      ],
+      "improvement": "Canonicalize Unicode and filesystem case rules, detect collisions and file/directory conflicts before any write; use platform-safe paths."
+    },
+    {
+      "priority": "P2",
+      "title": "Rejected requests leave orphan directories",
+      "evidence": "Confirmed: three NUL-containing filename requests returned 400 but added three unowned job folders.",
+      "locations": [
+        "backend/jobs.py:19",
+        "backend/jobs.py:89"
+      ],
+      "improvement": "Validate all paths before allocation; transactional staging and cleanup on failure; disk quotas and artifact retention."
+    },
+    {
+      "priority": "P1",
+      "title": "API latency degrades significantly with concurrency",
+      "evidence": "Observed: p95 0.561s at 25, 2.408s at 100, 10.667s at 400 in-flight read requests; two transport failures at the largest stage. No server-500 response in read stages.",
+      "locations": [
+        "backend/app.py:37",
+        "backend/auth.py:18",
+        "backend/jobs.py:73"
+      ],
+      "improvement": "Move synchronous database/disk work off the event loop, initialize schema once, store lightweight status separately from source/report artifacts, use polling backoff/SSE; profile before database migration. SQLite is not by itself proven to be the sole bottleneck."
+    },
+    {
+      "priority": "P2",
+      "title": "Shared-IP login throttle can block unrelated valid users",
+      "evidence": "Confirmed: 35 failed logins yielded 30x401 and 5x429; a different valid fixture account then received 429 from the same client IP.",
+      "locations": [
+        "backend/auth.py:101"
+      ],
+      "improvement": "Use combined IP/account/global adaptive rate controls with atomic counters and concurrency limits; consider shared campus/NAT users."
+    },
+    {
+      "priority": "P1",
+      "title": "Queued work is process-local rather than durable",
+      "evidence": "Code review: ThreadPoolExecutor queue has no restart requeue/reconciliation. This test did not claim a successful restart recovery.",
+      "locations": [
+        "backend/jobs.py:16",
+        "backend/jobs.py:101"
+      ],
+      "improvement": "Use a durable queue and separate workers, leases/heartbeats, idempotency, cancellation and explicit interrupted/failed states."
+    },
+    {
+      "priority": "P2",
+      "title": "Security scanner has demonstrated false positives and misses",
+      "evidence": "Confirmed without executing PHP: commented system($x) was flagged HIGH; a dynamically assembled command function call was missed.",
+      "locations": [
+        "backend/agents.py:63"
+      ],
+      "improvement": "Integrate maintained Semgrep/Bandit checks, AST/data-flow analysis where possible, findings provenance and tests for known false positives/negatives."
+    },
+    {
+      "priority": "P1",
+      "title": "Host-side Docker output capture is unbounded",
+      "evidence": "Code review only: subprocess.run(capture_output=True) collects untrusted stdout/stderr without a byte cap. No memory-exhaustion or Docker-breakout attack was executed.",
+      "locations": [
+        "backend/agents.py:130"
+      ],
+      "improvement": "Bound streamed output and result sizes; use named/labeled containers with explicit timeout kill/removal, verify cleanup and isolate execution workers."
+    },
+    {
+      "priority": "P2",
+      "title": "Migration correctness and supply-chain checks remain incomplete",
+      "evidence": "Earlier calculator run completed with class behavior UNTESTED; this load test uses deterministic fixtures. Python compilation does not verify dependencies or behavior.",
+      "locations": [
+        "backend/agents.py:141",
+        "backend/structure.py:200"
+      ],
+      "improvement": "Add class/HTTP characterization and independent grading inputs; version cache entries by model/prompt/helper version, validate imports and dependencies, review generated project security before deployment."
+    }
+  ],
+  "positive_controls": [
+    "Unauthenticated history returned 401",
+    "Other-user status/report/download returned 404",
+    "Invalid CSRF and cross-origin mutations/login returned 403",
+    "SQL-injection login payload did not authenticate",
+    "Absolute, relative, Windows-drive and ZIP traversal payloads were rejected",
+    "Invalid PHP and >15MB job requests were rejected",
+    "A DB-backed recheck confirmed 20 users only received owned history rows"
+  ],
+  "not_tested": [
+    "Real LLM migration capacity, provider billing and rate limits",
+    "Docker escape, host memory exhaustion or hostile-program execution",
+    "Browser DOM/XSS automation, TLS deployment and distributed multi-host traffic",
+    "Full signup/login load for 2,000 users; fixture sessions were pre-provisioned"
+  ],
+  "reproduce": [
+    ".\\.venv\\Scripts\\python.exe -m tools.security_load_test",
+    "$env:CODEFORGE_AUDIT_MODE = 'queue'; .\\.venv\\Scripts\\python.exe -m tools.security_load_test"
+  ],
+  "references": [
+    "https://api-security.owasp.org/editions/2023/en/0xa4-unrestricted-resource-consumption/",
+    "https://fastapi.tiangolo.com/async/",
+    "https://sqlite.org/whentouse.html"
+  ]
+}

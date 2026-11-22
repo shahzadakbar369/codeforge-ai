@@ -1,0 +1,27 @@
+{
+  "case_collision": [
+    {
+      "job_id": "87346f702e194568b89a22e614755411",
+      "physical_php_files": 1,
+      "physical_file_contains_second_submission": true
+    }
+  ],
+  "owner_zero_job_count_after_setup_and_aborted_burst": 3,
+  "comment_false_positive": {
+    "findings": [
+      {
+        "file": "a.php",
+        "line": 1,
+        "category": "A03: Injection",
+        "severity": "HIGH",
+        "message": "Review untrusted input reaching this execution or query sink."
+      }
+    ],
+    "scope": "Heuristic source review. Potential findings require review; this is not a complete OWASP audit."
+  },
+  "dynamic_call_missed": {
+    "findings": [],
+    "scope": "Heuristic source review. Potential findings require review; this is not a complete OWASP audit."
+  },
+  "read_harness_note": "Each read phase counted one extra history assertion mismatch because the case-collision setup added another legitimate user-0 job. Transport failures are separate. The queue phase was rerun after correcting this test-harness issue."
+}

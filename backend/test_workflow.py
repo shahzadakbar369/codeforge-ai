@@ -14,6 +14,9 @@ from backend.app import app
 
 class WorkflowTests(unittest.TestCase):
     def setUp(self):
+        self.active_patch = patch.object(jobs, 'ACTIVE', {})
+        self.active_patch.start()
+        self.addCleanup(self.active_patch.stop)
         self.account_dir = tempfile.TemporaryDirectory()
         self.db_patch = patch.object(auth, 'DB', Path(self.account_dir.name) / 'accounts.sqlite3')
         self.db_patch.start()
@@ -228,7 +231,8 @@ class WorkflowTests(unittest.TestCase):
         layout = plan(source, parser_agent(source))
         with tempfile.TemporaryDirectory() as directory, patch.object(jobs, 'STORE', Path(directory)), patch.object(jobs.POOL, 'submit'):
             old = self.client.post('/api/jobs', json={'files':[{'name':k,'content':v} for k,v in source.items()]}).json()['job_id']
-            jobs.save(old, status='failed', report={'sources':source, 'layout':layout, 'modules':{'converted.example':'def total(): return 1'}})
+            from backend.structure import translation_fingerprint
+            jobs.save(old, status='failed', report={'sources':source, 'layout':layout, 'translation_fingerprint':translation_fingerprint(), 'modules':{'converted.example':'def total(): return 1'}})
             uid = self.client.get('/api/auth/me').json()['id']
             found = previous_translations(uid, source, layout, 'new-job')
             self.assertEqual(found['converted.example']['job_id'], old)
@@ -241,6 +245,7 @@ class WorkflowTests(unittest.TestCase):
             first=self.client.post('/api/jobs',json=body).json()['job_id']
             second=self.client.post('/api/jobs',json=body).json()['job_id']
             (jobs.STORE/first/'status.json').write_text('{unfinished',encoding='utf-8')
+            (jobs.STORE/first/'progress.json').write_text('{unfinished',encoding='utf-8')
             with self.assertLogs(level='ERROR'):
                 response=self.client.get('/api/jobs')
             self.assertEqual(response.status_code,200)

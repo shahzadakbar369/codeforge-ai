@@ -1,0 +1,28 @@
+{
+  "scope": "External HTTPS frontend/authentication/validation checks; no model call through the tunnel in this probe",
+  "url": "https://jury-would-population-herein.trycloudflare.com",
+  "checks": {
+    "frontend": 200,
+    "frontend_has_app": true,
+    "health": 200,
+    "build": "5ef5e18f0d20",
+    "signed_out_history": 401,
+    "signup_without_invite": 403,
+    "invited_signup": 200,
+    "https_secure_cookie": true,
+    "own_history": 200,
+    "invalid_php": 400,
+    "valid_parse": 200,
+    "logout": 200,
+    "signed_out_again": 401
+  },
+  "final_build_verified": "6ce4085f0bb0",
+  "final_checks": {
+    "https_login_cookie": true,
+    "private_history": 200,
+    "legacy_bypass_retired": 410,
+    "invalid_zip": 400,
+    "unknown_job": 404,
+    "logout": 200
+  }
+}

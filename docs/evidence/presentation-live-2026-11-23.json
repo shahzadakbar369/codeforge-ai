@@ -1,0 +1,2565 @@
+{
+  "scope": "Live Groq translation and test inputs with real Docker execution",
+  "status": "completed",
+  "message": "Project ready. Review structure checks, security and test outcomes.",
+  "source_files": 3,
+  "module_files": 3,
+  "structure": {
+    "functions": [
+      {
+        "source": "lib/add.php",
+        "symbol": "add_values",
+        "module": "converted.lib.add",
+        "status": "PRESENT"
+      },
+      {
+        "source": "lib/subtract.php",
+        "symbol": "subtract_values",
+        "module": "converted.lib.subtract",
+        "status": "PRESENT"
+      },
+      {
+        "source": "calculator.php",
+        "symbol": "calculate_value",
+        "module": "converted.calculator",
+        "status": "PRESENT"
+      }
+    ],
+    "dependencies": [
+      {
+        "file": "calculator.php",
+        "from": "calculator.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/add.php'",
+        "kind": "include",
+        "target_files": [
+          "lib/add.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculator.php",
+        "line": 1,
+        "to": "require_once __DIR__ . '/lib/subtract.php'",
+        "kind": "include",
+        "target_files": [
+          "lib/subtract.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculate_value",
+        "line": 1,
+        "to": "subtract_values",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/subtract.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      },
+      {
+        "file": "calculator.php",
+        "from": "calculate_value",
+        "line": 1,
+        "to": "add_values",
+        "kind": "function_call_expression",
+        "target_files": [
+          "lib/add.php"
+        ],
+        "resolved": true,
+        "status": "IMPORT_PRESENT"
+      }
+    ],
+    "status": "STATIC_CHECKS_PASSED",
+    "scope": "Static names and literal relative includes only. Dynamic dispatch and full architecture equivalence are not proven."
+  },
+  "verification": {
+    "status": "MISMATCH",
+    "reason": "Per-file characterization. Read each file outcome and function verdict.",
+    "cases": [
+      {
+        "function": "add_values",
+        "args": [
+          0,
+          0
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -1,
+          -1
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": -2
+        },
+        "actual": {
+          "ok": true,
+          "value": -2
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -100,
+          200
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 100
+        },
+        "actual": {
+          "ok": true,
+          "value": 100
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          2147483647,
+          0
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 2147483647
+        },
+        "actual": {
+          "ok": true,
+          "value": 2147483647
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          0,
+          2147483647
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 2147483647
+        },
+        "actual": {
+          "ok": true,
+          "value": 2147483647
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -2147483648,
+          -1
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": -2147483649
+        },
+        "actual": {
+          "ok": true,
+          "value": -2147483649
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          1.5,
+          2.5
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 4
+        },
+        "actual": {
+          "ok": true,
+          "value": 4.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -2.5,
+          3.5
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          3.14,
+          0
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 3.14
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.14
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          0,
+          3.14
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 3.14
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.14
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          123456789,
+          987654321
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 1111111110
+        },
+        "actual": {
+          "ok": true,
+          "value": 1111111110
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -999999999,
+          999999999
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -0.0001,
+          0.0001
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -1000,
+          1000
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          999999999,
+          1
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 1000000000
+        },
+        "actual": {
+          "ok": true,
+          "value": 1000000000
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -1,
+          999999999
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 999999998
+        },
+        "actual": {
+          "ok": true,
+          "value": 999999998
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -1,
+          2147483647
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 2147483646
+        },
+        "actual": {
+          "ok": true,
+          "value": 2147483646
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          2147483647,
+          -1
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 2147483646
+        },
+        "actual": {
+          "ok": true,
+          "value": 2147483646
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -123456,
+          123456
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -987654321,
+          987654321
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          -2147483648,
+          2147483647
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": -1
+        },
+        "actual": {
+          "ok": true,
+          "value": -1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          2147483647,
+          -2147483648
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": -1
+        },
+        "actual": {
+          "ok": true,
+          "value": -1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          0,
+          1
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "add_values",
+        "args": [
+          1,
+          0
+        ],
+        "file": "lib/add.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          0,
+          0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          10,
+          5
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 5
+        },
+        "actual": {
+          "ok": true,
+          "value": 5.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -5,
+          -10
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 5
+        },
+        "actual": {
+          "ok": true,
+          "value": 5.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -5,
+          5
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -10
+        },
+        "actual": {
+          "ok": true,
+          "value": -10.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          5,
+          -5
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 10
+        },
+        "actual": {
+          "ok": true,
+          "value": 10.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          0,
+          -10
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 10
+        },
+        "actual": {
+          "ok": true,
+          "value": 10.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -10,
+          0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -10
+        },
+        "actual": {
+          "ok": true,
+          "value": -10.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          2147483647,
+          2147483646
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -2147483648,
+          0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -2147483648
+        },
+        "actual": {
+          "ok": true,
+          "value": -2147483648.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          1.5,
+          0.5
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          0.0,
+          1.0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -1
+        },
+        "actual": {
+          "ok": true,
+          "value": -1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          1e-09,
+          1e-09
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          1000000000.0,
+          100000000.0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 900000000
+        },
+        "actual": {
+          "ok": true,
+          "value": 900000000.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -1000000000.0,
+          -100000000.0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -900000000
+        },
+        "actual": {
+          "ok": true,
+          "value": -900000000.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          3.14159,
+          2.71828
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 0.42330999999999985
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.42330999999999985
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -3.14159,
+          -2.71828
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -0.42330999999999985
+        },
+        "actual": {
+          "ok": true,
+          "value": -0.42330999999999985
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -10000000000.0,
+          10000000000.0
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -20000000000
+        },
+        "actual": {
+          "ok": true,
+          "value": -20000000000.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          1e-10,
+          -1e-10
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 2e-10
+        },
+        "actual": {
+          "ok": true,
+          "value": 2e-10
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          0,
+          2147483647
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -2147483647
+        },
+        "actual": {
+          "ok": true,
+          "value": -2147483647.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -2147483648,
+          2147483647
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -4294967295
+        },
+        "actual": {
+          "ok": true,
+          "value": -4294967295.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          9999999999999999,
+          9999999999999998
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 1
+        },
+        "actual": {
+          "ok": true,
+          "value": 1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -9999999999999999,
+          -9999999999999998
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": -1
+        },
+        "actual": {
+          "ok": true,
+          "value": -1.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          1.7976931348623157e+308,
+          1.7976931348623157e+308
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "subtract_values",
+        "args": [
+          -1.7976931348623157e+308,
+          -1.7976931348623157e+308
+        ],
+        "file": "lib/subtract.php",
+        "expected": {
+          "ok": true,
+          "value": 0
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          0
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 3
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -1
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 2
+        },
+        "actual": {
+          "ok": true,
+          "value": 2.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          1
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 4
+        },
+        "actual": {
+          "ok": true,
+          "value": 4.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          10
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 13
+        },
+        "actual": {
+          "ok": true,
+          "value": 13.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -10
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -7
+        },
+        "actual": {
+          "ok": true,
+          "value": -7.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          1000000
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 1000003
+        },
+        "actual": {
+          "ok": true,
+          "value": 1000003.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -1000000
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -999997
+        },
+        "actual": {
+          "ok": true,
+          "value": -999997.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          1.5
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 4.5
+        },
+        "actual": {
+          "ok": true,
+          "value": 4.5
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -2.7
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 0.2999999999999998
+        },
+        "actual": {
+          "ok": true,
+          "value": 0.2999999999999998
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          0.0
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 3
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          9999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 10000000002
+        },
+        "actual": {
+          "ok": true,
+          "value": 10000000002.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -9999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -9999999996
+        },
+        "actual": {
+          "ok": true,
+          "value": -9999999996.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          2.71828
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 5.71828
+        },
+        "actual": {
+          "ok": true,
+          "value": 5.71828
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -3.14159
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -0.14158999999999988
+        },
+        "actual": {
+          "ok": true,
+          "value": -0.14158999999999988
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          1e-10
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 3.0000000001
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.0000000001
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -1e-10
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 2.9999999999
+        },
+        "actual": {
+          "ok": true,
+          "value": 2.9999999999
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          10000000000.0
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 10000000003
+        },
+        "actual": {
+          "ok": true,
+          "value": 10000000003.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -10000000000.0
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -9999999997
+        },
+        "actual": {
+          "ok": true,
+          "value": -9999999997.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          1e-06
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 3.000001
+        },
+        "actual": {
+          "ok": true,
+          "value": 3.000001
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -1e-06
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 2.999999
+        },
+        "actual": {
+          "ok": true,
+          "value": 2.999999
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          123456789
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 123456792
+        },
+        "actual": {
+          "ok": true,
+          "value": 123456792.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -123456789
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -123456786
+        },
+        "actual": {
+          "ok": true,
+          "value": -123456786.0
+        },
+        "verdict": "EQUIVALENT"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          999999999999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 1000000000000000002
+        },
+        "actual": {
+          "ok": true,
+          "value": 1e+18
+        },
+        "verdict": "MISMATCH"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -999999999999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -999999999999999996
+        },
+        "actual": {
+          "ok": true,
+          "value": -1e+18
+        },
+        "verdict": "MISMATCH"
+      }
+    ],
+    "history": [
+      {
+        "file": "lib/add.php",
+        "attempt": 0,
+        "mismatches": 0
+      },
+      {
+        "file": "lib/subtract.php",
+        "attempt": 0,
+        "mismatches": 0
+      },
+      {
+        "file": "calculator.php",
+        "attempt": 0,
+        "mismatches": 2
+      },
+      {
+        "file": "calculator.php",
+        "attempt": 1,
+        "mismatches": 8
+      },
+      {
+        "file": "calculator.php",
+        "attempt": 2,
+        "mismatches": 2
+      }
+    ],
+    "files": [
+      {
+        "file": "lib/add.php",
+        "status": "EQUIVALENT",
+        "cases": [
+          {
+            "function": "add_values",
+            "args": [
+              0,
+              0
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -1,
+              -1
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": -2
+            },
+            "actual": {
+              "ok": true,
+              "value": -2
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -100,
+              200
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 100
+            },
+            "actual": {
+              "ok": true,
+              "value": 100
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              2147483647,
+              0
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 2147483647
+            },
+            "actual": {
+              "ok": true,
+              "value": 2147483647
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              0,
+              2147483647
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 2147483647
+            },
+            "actual": {
+              "ok": true,
+              "value": 2147483647
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -2147483648,
+              -1
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": -2147483649
+            },
+            "actual": {
+              "ok": true,
+              "value": -2147483649
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              1.5,
+              2.5
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 4
+            },
+            "actual": {
+              "ok": true,
+              "value": 4.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -2.5,
+              3.5
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              3.14,
+              0
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 3.14
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.14
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              0,
+              3.14
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 3.14
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.14
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              123456789,
+              987654321
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 1111111110
+            },
+            "actual": {
+              "ok": true,
+              "value": 1111111110
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -999999999,
+              999999999
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -0.0001,
+              0.0001
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -1000,
+              1000
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              999999999,
+              1
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 1000000000
+            },
+            "actual": {
+              "ok": true,
+              "value": 1000000000
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -1,
+              999999999
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 999999998
+            },
+            "actual": {
+              "ok": true,
+              "value": 999999998
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -1,
+              2147483647
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 2147483646
+            },
+            "actual": {
+              "ok": true,
+              "value": 2147483646
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              2147483647,
+              -1
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 2147483646
+            },
+            "actual": {
+              "ok": true,
+              "value": 2147483646
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -123456,
+              123456
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -987654321,
+              987654321
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              -2147483648,
+              2147483647
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": -1
+            },
+            "actual": {
+              "ok": true,
+              "value": -1
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              2147483647,
+              -2147483648
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": -1
+            },
+            "actual": {
+              "ok": true,
+              "value": -1
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              0,
+              1
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "add_values",
+            "args": [
+              1,
+              0
+            ],
+            "file": "lib/add.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1
+            },
+            "verdict": "EQUIVALENT"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 0
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      },
+      {
+        "file": "lib/subtract.php",
+        "status": "EQUIVALENT",
+        "cases": [
+          {
+            "function": "subtract_values",
+            "args": [
+              0,
+              0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              10,
+              5
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 5
+            },
+            "actual": {
+              "ok": true,
+              "value": 5.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -5,
+              -10
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 5
+            },
+            "actual": {
+              "ok": true,
+              "value": 5.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -5,
+              5
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -10
+            },
+            "actual": {
+              "ok": true,
+              "value": -10.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              5,
+              -5
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 10
+            },
+            "actual": {
+              "ok": true,
+              "value": 10.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              0,
+              -10
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 10
+            },
+            "actual": {
+              "ok": true,
+              "value": 10.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -10,
+              0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -10
+            },
+            "actual": {
+              "ok": true,
+              "value": -10.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              2147483647,
+              2147483646
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -2147483648,
+              0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -2147483648
+            },
+            "actual": {
+              "ok": true,
+              "value": -2147483648.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              1.5,
+              0.5
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              0.0,
+              1.0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -1
+            },
+            "actual": {
+              "ok": true,
+              "value": -1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              1e-09,
+              1e-09
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              1000000000.0,
+              100000000.0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 900000000
+            },
+            "actual": {
+              "ok": true,
+              "value": 900000000.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -1000000000.0,
+              -100000000.0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -900000000
+            },
+            "actual": {
+              "ok": true,
+              "value": -900000000.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              3.14159,
+              2.71828
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 0.42330999999999985
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.42330999999999985
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -3.14159,
+              -2.71828
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -0.42330999999999985
+            },
+            "actual": {
+              "ok": true,
+              "value": -0.42330999999999985
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -10000000000.0,
+              10000000000.0
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -20000000000
+            },
+            "actual": {
+              "ok": true,
+              "value": -20000000000.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              1e-10,
+              -1e-10
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 2e-10
+            },
+            "actual": {
+              "ok": true,
+              "value": 2e-10
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              0,
+              2147483647
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -2147483647
+            },
+            "actual": {
+              "ok": true,
+              "value": -2147483647.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -2147483648,
+              2147483647
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -4294967295
+            },
+            "actual": {
+              "ok": true,
+              "value": -4294967295.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              9999999999999999,
+              9999999999999998
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 1
+            },
+            "actual": {
+              "ok": true,
+              "value": 1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -9999999999999999,
+              -9999999999999998
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": -1
+            },
+            "actual": {
+              "ok": true,
+              "value": -1.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              1.7976931348623157e+308,
+              1.7976931348623157e+308
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "subtract_values",
+            "args": [
+              -1.7976931348623157e+308,
+              -1.7976931348623157e+308
+            ],
+            "file": "lib/subtract.php",
+            "expected": {
+              "ok": true,
+              "value": 0
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.0
+            },
+            "verdict": "EQUIVALENT"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 0
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      },
+      {
+        "file": "calculator.php",
+        "status": "MISMATCH",
+        "cases": [
+          {
+            "function": "calculate_value",
+            "args": [
+              0
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 3
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -1
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 2
+            },
+            "actual": {
+              "ok": true,
+              "value": 2.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              1
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 4
+            },
+            "actual": {
+              "ok": true,
+              "value": 4.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              10
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 13
+            },
+            "actual": {
+              "ok": true,
+              "value": 13.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -10
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -7
+            },
+            "actual": {
+              "ok": true,
+              "value": -7.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              1000000
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 1000003
+            },
+            "actual": {
+              "ok": true,
+              "value": 1000003.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -1000000
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -999997
+            },
+            "actual": {
+              "ok": true,
+              "value": -999997.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              1.5
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 4.5
+            },
+            "actual": {
+              "ok": true,
+              "value": 4.5
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -2.7
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 0.2999999999999998
+            },
+            "actual": {
+              "ok": true,
+              "value": 0.2999999999999998
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              0.0
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 3
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              9999999999
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 10000000002
+            },
+            "actual": {
+              "ok": true,
+              "value": 10000000002.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -9999999999
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -9999999996
+            },
+            "actual": {
+              "ok": true,
+              "value": -9999999996.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              2.71828
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 5.71828
+            },
+            "actual": {
+              "ok": true,
+              "value": 5.71828
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -3.14159
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -0.14158999999999988
+            },
+            "actual": {
+              "ok": true,
+              "value": -0.14158999999999988
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              1e-10
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 3.0000000001
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.0000000001
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -1e-10
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 2.9999999999
+            },
+            "actual": {
+              "ok": true,
+              "value": 2.9999999999
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              10000000000.0
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 10000000003
+            },
+            "actual": {
+              "ok": true,
+              "value": 10000000003.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -10000000000.0
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -9999999997
+            },
+            "actual": {
+              "ok": true,
+              "value": -9999999997.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              1e-06
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 3.000001
+            },
+            "actual": {
+              "ok": true,
+              "value": 3.000001
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -1e-06
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 2.999999
+            },
+            "actual": {
+              "ok": true,
+              "value": 2.999999
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              123456789
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 123456792
+            },
+            "actual": {
+              "ok": true,
+              "value": 123456792.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -123456789
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -123456786
+            },
+            "actual": {
+              "ok": true,
+              "value": -123456786.0
+            },
+            "verdict": "EQUIVALENT"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              999999999999999999
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": 1000000000000000002
+            },
+            "actual": {
+              "ok": true,
+              "value": 1e+18
+            },
+            "verdict": "MISMATCH"
+          },
+          {
+            "function": "calculate_value",
+            "args": [
+              -999999999999999999
+            ],
+            "file": "calculator.php",
+            "expected": {
+              "ok": true,
+              "value": -999999999999999996
+            },
+            "actual": {
+              "ok": true,
+              "value": -1e+18
+            },
+            "verdict": "MISMATCH"
+          }
+        ],
+        "history": [
+          {
+            "attempt": 0,
+            "mismatches": 2
+          },
+          {
+            "attempt": 1,
+            "mismatches": 8
+          },
+          {
+            "attempt": 2,
+            "mismatches": 2
+          }
+        ],
+        "reason": "Generated characterization inputs were also used for repair; this is not independent grading."
+      }
+    ]
+  },
+  "tokens": 5600,
+  "translation_error": null
+}

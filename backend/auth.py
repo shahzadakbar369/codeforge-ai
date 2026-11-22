@@ -5,6 +5,7 @@ import os
 import secrets
 import sqlite3
 import time
+import threading
 from pathlib import Path
 from urllib.parse import urlsplit
 from contextlib import contextmanager
@@ -13,19 +14,26 @@ from fastapi import HTTPException, Request
 DB = Path(__file__).resolve().parent.parent / 'data' / 'accounts.sqlite3'
 COOKIE = 'codeforge_session'
 TTL = 60 * 60 * 24 * 7
+SCHEMA_LOCK = threading.Lock()
+INITIALIZED = set()
 
 @contextmanager
 def connect():
     DB.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(DB, timeout=15)
     db.row_factory = sqlite3.Row
-    db.executescript('''
+    with SCHEMA_LOCK:
+        if str(DB.resolve()) not in INITIALIZED:
+            db.execute('PRAGMA journal_mode=WAL')
+            db.executescript('''
     CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, salt TEXT NOT NULL, password TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY, user_id TEXT NOT NULL, csrf TEXT NOT NULL, expires REAL NOT NULL);
     CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY, user_id TEXT NOT NULL, created REAL NOT NULL, label TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS attempts(client TEXT, at REAL);
     CREATE INDEX IF NOT EXISTS jobs_owner ON jobs(user_id, created);
+    CREATE INDEX IF NOT EXISTS attempts_client ON attempts(client, at);
     ''')
+            INITIALIZED.add(str(DB.resolve()))
     try:
         with db:
             yield db
@@ -89,6 +97,10 @@ def register_job(job_id, uid, label):
     with connect() as db:
         db.execute('INSERT INTO jobs VALUES (?,?,?,?)', (job_id, uid, time.time(), label[:200]))
 
+def unregister_job(job_id, uid):
+    with connect() as db:
+        db.execute('DELETE FROM jobs WHERE id=? AND user_id=?', (job_id, uid))
+
 def owns(job_id, uid):
     with connect() as db:
         return db.execute('SELECT 1 FROM jobs WHERE id=? AND user_id=?', (job_id, uid)).fetchone() is not None
@@ -98,12 +110,16 @@ def history(uid):
         return [dict(row) for row in db.execute('SELECT id,created,label FROM jobs WHERE user_id=? ORDER BY created DESC LIMIT 100', (uid,))]
 
 
-def limit_attempts(request):
+def limit_attempts(request, email=''):
     client = request.client.host if request.client else 'unknown'
     now = time.time()
+    account_key = 'account:' + digest(email.strip().lower())
+    ip_key = 'ip:' + client
     with connect() as db:
+        db.execute('BEGIN IMMEDIATE')
         db.execute('DELETE FROM attempts WHERE at < ?', (now - 900,))
-        count = db.execute('SELECT COUNT(*) FROM attempts WHERE client=?', (client,)).fetchone()[0]
-        if count >= 30:
-            raise HTTPException(429, 'Too many sign-in attempts. Try again in 15 minutes')
-        db.execute('INSERT INTO attempts VALUES (?,?)', (client, now))
+        for key, maximum in ((account_key, 30), (ip_key, 300)):
+            count = db.execute('SELECT COUNT(*) FROM attempts WHERE client=?', (key,)).fetchone()[0]
+            if count >= maximum:
+                raise HTTPException(429, 'Too many sign-in attempts. Try again in 15 minutes', headers={'Retry-After': '900'})
+        db.executemany('INSERT INTO attempts VALUES (?,?)', ((account_key, now), (ip_key, now)))

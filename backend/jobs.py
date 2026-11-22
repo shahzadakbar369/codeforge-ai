@@ -7,6 +7,9 @@ import threading
 import uuid
 import zipfile
 import time
+import os
+import shutil
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path, PurePosixPath
 from urllib.request import Request, urlopen
@@ -15,16 +18,55 @@ from backend.agents import parser_agent, security_agent, migration_agent, test_a
 STORE = Path(__file__).resolve().parent.parent / 'data' / 'jobs'
 POOL = ThreadPoolExecutor(max_workers=2)
 LOCK = threading.Lock()
+ADMISSION = threading.Lock()
+ACTIVE = {}
+MAX_PENDING = max(1, int(os.getenv('CODEFORGE_MAX_PENDING', '12')))
+MAX_PER_USER = max(1, int(os.getenv('CODEFORGE_MAX_PER_USER', '2')))
+INGEST_SLOTS = threading.BoundedSemaphore(4)
+
+
+class CapacityError(RuntimeError):
+    pass
 
 def safe_name(name):
-    path = PurePosixPath(name.replace('\\', '/'))
-    if path.is_absolute() or '..' in path.parts or ':' in name or not path.parts:
+    if not isinstance(name, str) or not name or len(name) > 220 or any(ord(c) < 32 for c in name):
         raise ValueError('Invalid file path')
+    name = unicodedata.normalize('NFC', name)
+    path = PurePosixPath(name.replace('\\', '/'))
+    if path.is_absolute() or '..' in path.parts or any(c in name for c in ':<>"|?*') or not path.parts:
+        raise ValueError('Invalid file path')
+    for part in path.parts:
+        if part.endswith((' ', '.')) or re.fullmatch(r'(?i)(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?', part):
+            raise ValueError('Reserved or ambiguous file path')
     return str(path)
 
+
+def validate_sources(sources):
+    if not isinstance(sources, dict) or not sources or len(sources) > 100:
+        raise ValueError('Add between 1 and 100 PHP files')
+    canonical, result, total = set(), {}, 0
+    for name, content in sources.items():
+        name = safe_name(name)
+        if not name.lower().endswith('.php') or not isinstance(content, str):
+            raise ValueError('Sources must contain PHP filenames and text content')
+        key = name.casefold()
+        if key in canonical or any(key.startswith(p + '/') or p.startswith(key + '/') for p in canonical):
+            raise ValueError('Duplicate, case-colliding or conflicting source path')
+        canonical.add(key)
+        result[name] = content
+        total += len(content)
+    if total > 45000:
+        raise ValueError('Limit: 100 PHP files and 45,000 source characters per job')
+    return result
+
 def ingest(body):
+    if not isinstance(body, dict):
+        raise ValueError('Expected a JSON object')
     files, archive = body.get('files', []), body.get('archive')
-    repo = body.get('repository', '').strip()
+    repo = body.get('repository', '')
+    if not isinstance(repo, str) or not isinstance(files, list) or (archive is not None and not isinstance(archive, str)):
+        raise ValueError('Use a repository URL, base64 ZIP or list of source files')
+    repo = repo.strip()
     if repo:
         match = re.fullmatch(r'https://github\.com/([\w.-]+)/([\w.-]+?)(?:\.git)?/?', repo)
         if not match:
@@ -50,25 +92,33 @@ def ingest(body):
                         raise ValueError('PHP sources exceed 2 MB')
                     files.append({'name': name, 'content': z.read(item).decode('utf-8-sig')})
     sources = {}
+    seen = set()
     for file in files:
+        if not isinstance(file, dict) or 'name' not in file or 'content' not in file:
+            raise ValueError('Each source needs a name and text content')
         name = safe_name(file['name'])
         if name.lower().endswith('.php'):
-            if name in sources:
-                raise ValueError('Duplicate source path')
+            if name.casefold() in seen:
+                raise ValueError('Duplicate or case-colliding source path')
+            seen.add(name.casefold())
             sources[name] = file['content']
-    if not sources:
-        raise ValueError('Add at least one PHP file')
-    if len(sources) > 100 or sum(len(s) for s in sources.values()) > 45000:
-        raise ValueError('Limit: 100 PHP files and 45,000 source characters per job')
+    sources = validate_sources(sources)
     validation = parser_agent(sources)
     if validation['warnings']:
         raise ValueError('; '.join(validation['warnings']))
+    from backend.structure import plan
+    plan(sources, validation)  # Detect Python module-name collisions before persistence.
     return sources
 
-def read(job_id):
+def read(job_id, summary=False):
     if not re.fullmatch(r'[a-f0-9]{32}', job_id):
         raise FileNotFoundError('Job not found')
-    return json.loads((STORE / job_id / 'status.json').read_text(encoding='utf-8'))
+    folder = STORE / job_id
+    path = folder / ('progress.json' if summary and (folder / 'progress.json').exists() else 'status.json')
+    data = json.loads(path.read_text(encoding='utf-8'))
+    if summary:
+        data.pop('report', None)
+    return data
 
 def save(job_id, **changes):
     with LOCK:
@@ -77,35 +127,86 @@ def save(job_id, **changes):
         data.update(changes)
         temp = path.with_suffix('.tmp')
         temp.write_text(json.dumps(data, indent=2), encoding='utf-8')
-        for attempt in range(10):
-            try:
-                temp.replace(path)
-                break
-            except PermissionError:
-                if attempt == 9:
-                    raise
-                time.sleep(0.02)
+        replace_status(temp, path)
+        progress = {k: v for k, v in data.items() if k != 'report'}
+        temp = path.with_name('progress.tmp')
+        temp.write_text(json.dumps(progress), encoding='utf-8')
+        replace_status(temp, path.with_name('progress.json'))
+
+
+def replace_status(temp, path):
+    for attempt in range(10):
+        try:
+            temp.replace(path)
+            return
+        except PermissionError:
+            if attempt == 9:
+                raise
+            time.sleep(0.02)
 
 def create(sources, owner_id=None):
+    sources = validate_sources(sources)
     job_id = uuid.uuid4().hex
     folder = STORE / job_id
-    folder.mkdir(parents=True)
-    for name, content in sources.items():
-        path = folder / 'source' / name
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding='utf-8')
-    if owner_id:
-        from backend import auth
-        auth.register_job(job_id, owner_id, ', '.join(sources))
-    save(job_id, status='queued', stage=0, message='Waiting for agents', files=list(sources), owner_id=owner_id)
-    POOL.submit(run, job_id, sources)
+    registered = False
+    with ADMISSION:
+        if len(ACTIVE) >= MAX_PENDING or sum(owner == owner_id for owner in ACTIVE.values()) >= MAX_PER_USER:
+            raise CapacityError('Migration queue is full or your account already has two active jobs. Retry after a job finishes.')
+        ACTIVE[job_id] = owner_id
+    try:
+        STORE.mkdir(parents=True, exist_ok=True)
+        if shutil.disk_usage(STORE).free < 100_000_000:
+            raise CapacityError('Workspace disk space is low. Ask the operator to archive old jobs.')
+        folder.mkdir()
+        for name, content in sources.items():
+            path = folder / 'source' / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding='utf-8')
+        if owner_id:
+            from backend import auth
+            auth.register_job(job_id, owner_id, ', '.join(sources))
+            registered = True
+        save(job_id, status='queued', stage=0, message='Waiting for agents', files=list(sources), owner_id=owner_id)
+        future = POOL.submit(run, job_id, sources)
+        future.add_done_callback(lambda _: release(job_id))
+    except Exception:
+        release(job_id)
+        try:
+            if registered:
+                from backend import auth
+                auth.unregister_job(job_id, owner_id)
+        finally:
+            # Only this newly allocated UUID directory is removed.
+            if folder.exists():
+                shutil.rmtree(folder)
+        raise
     return {'job_id': job_id}
+
+
+def release(job_id):
+    with ADMISSION:
+        ACTIVE.pop(job_id, None)
+
+
+def recover_interrupted():
+    """Single-process startup: retain artifacts, never silently rerun billable calls."""
+    if not STORE.exists():
+        return
+    for folder in STORE.iterdir():
+        if not folder.is_dir() or not re.fullmatch(r'[a-f0-9]{32}', folder.name):
+            continue
+        try:
+            state = read(folder.name, summary=True)
+            if state.get('status') in ('running', 'queued'):
+                save(folder.name, status='failed', message='Server restarted before this job finished. Start a new migration with the same sources to reuse eligible completed translations.')
+        except (OSError, ValueError):
+            continue
 
 def run(job_id, sources):
     from backend import structure
     import time
     folder = STORE / job_id
-    report = {'sources': sources, 'tokens': 0, 'modules': {}, 'limits': [
+    report = {'sources': sources, 'tokens': 0, 'modules': {}, 'translation_fingerprint': structure.translation_fingerprint(), 'limits': [
         'Static structure checks do not prove architecture or behavioral equivalence.',
         'Generated characterization cases are also used for repair, not independent grading.',
         'Classes, namespaces, dynamic includes, frameworks and external services need review.',
@@ -233,10 +334,18 @@ GENERATED_TEST = r'''import importlib
 import json
 import sys
 import unittest
+from decimal import Decimal
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 REPORT = json.loads((ROOT / 'report.json').read_text(encoding='utf-8'))
+def normalize(value):
+    if isinstance(value, Decimal):
+        if not value.is_finite(): raise ValueError('Non-finite numeric return')
+        return int(value) if value == value.to_integral_value() else float(value)
+    if isinstance(value, list): return [normalize(v) for v in value]
+    if isinstance(value, dict): return {k: normalize(v) for k,v in value.items()}
+    return value
 class CharacterizationTests(unittest.TestCase):
     def test_recorded_returns(self):
         cases = [c for c in REPORT['verification']['cases'] if c['expected'].get('ok')]
@@ -245,6 +354,6 @@ class CharacterizationTests(unittest.TestCase):
         for case in cases:
             with self.subTest(function=case['function'], args=case['args']):
                 module = REPORT['layout']['file_map'][case['file']]
-                actual = getattr(importlib.import_module(module), case['function'])(*case['args'])
+                actual = normalize(getattr(importlib.import_module(module), case['function'])(*case['args']))
                 self.assertEqual(actual, case['expected']['value'])
 '''

@@ -1,0 +1,228 @@
+{
+  "scope": "Local single-process HTTP API test; 2,000 pre-provisioned fixture users. Groq, remote imports and Docker disabled. This is not 2,000 real LLM migrations or a distributed load test.",
+  "phases": [
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 250,
+      "max_in_flight": 25,
+      "requests": 1000,
+      "seconds": 8.551,
+      "requests_per_second": 116.95,
+      "status_counts": {
+        "200": 750,
+        "404": 250
+      },
+      "unexpected_results": 1,
+      "latency_ms": {
+        "p50": 158.35,
+        "p95": 560.8,
+        "p99": 855.64,
+        "max": 1204.42
+      }
+    },
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 750,
+      "max_in_flight": 100,
+      "requests": 3000,
+      "seconds": 21.983,
+      "requests_per_second": 136.47,
+      "status_counts": {
+        "200": 2250,
+        "404": 750
+      },
+      "unexpected_results": 1,
+      "latency_ms": {
+        "p50": 435.49,
+        "p95": 2408.14,
+        "p99": 4489.75,
+        "max": 6987.64
+      }
+    },
+    {
+      "name": "Authenticated read ramp",
+      "virtual_users": 2000,
+      "max_in_flight": 400,
+      "requests": 8000,
+      "seconds": 71.976,
+      "requests_per_second": 111.15,
+      "status_counts": {
+        "200": 5998,
+        "ReadError": 1,
+        "RemoteProtocolError": 1,
+        "404": 2000
+      },
+      "unexpected_results": 3,
+      "latency_ms": {
+        "p50": 2281.34,
+        "p95": 10667.17,
+        "p99": 15888.15,
+        "max": 31109.71
+      }
+    }
+  ],
+  "security": [
+    {
+      "check": "Signed-out history denied",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Please sign in"
+    },
+    {
+      "check": "Other user status denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user report denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Other user download denied",
+      "status": 404,
+      "expected": 404,
+      "matches_expectation": true,
+      "detail": "Job not found"
+    },
+    {
+      "check": "Invalid CSRF rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Session verification failed. Refresh and retry"
+    },
+    {
+      "check": "Cross-origin mutation rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "Cross-origin login rejected",
+      "status": 403,
+      "expected": 403,
+      "matches_expectation": true,
+      "detail": "Cross-origin request rejected"
+    },
+    {
+      "check": "SQL injection login does not authenticate",
+      "status": 401,
+      "expected": 401,
+      "matches_expectation": true,
+      "detail": "Invalid email or password"
+    },
+    {
+      "check": "Path traversal rejected: ../outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: /outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Path traversal rejected: C:\\outside.php",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "ZIP traversal rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: Invalid file path"
+    },
+    {
+      "check": "Invalid PHP rejected",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: a.php: Invalid PHP input. Start your code with <?php and enter valid PHP statements. Plain text cannot be migrated."
+    },
+    {
+      "check": "NUL filename rejected 0",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "NUL filename rejected 1",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "NUL filename rejected 2",
+      "status": 400,
+      "expected": 400,
+      "matches_expectation": true,
+      "detail": "Could not load source: embedded null character"
+    },
+    {
+      "check": "Case-colliding filenames",
+      "status": 200,
+      "expected": null,
+      "matches_expectation": null,
+      "detail": null
+    },
+    {
+      "check": "Job oversized request rejected",
+      "status": 413,
+      "expected": 413,
+      "matches_expectation": true,
+      "detail": "Upload exceeds 15 MB"
+    },
+    {
+      "check": "Legacy parser accepts 1MB source beyond job source limit",
+      "status": 200,
+      "expected": null,
+      "matches_expectation": null,
+      "detail": null
+    }
+  ],
+  "server_pid": 15120,
+  "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+  "orphan_folder_probe": {
+    "before": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2000
+    },
+    "after": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2000,
+      "job_folders": 2003
+    },
+    "new_folders_for_three_rejected_requests": 3
+  },
+  "legacy_large_parse_seconds": 0.256,
+  "interrupted_by": "TypeError: string indices must be integers, not 'str'"
+}

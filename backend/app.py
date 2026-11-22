@@ -5,7 +5,6 @@ Run from the repo root:
     uvicorn backend.app:app --reload
 Then open http://127.0.0.1:8000
 """
-import ast
 import json
 import sys
 import hashlib
@@ -13,7 +12,11 @@ import os
 import logging
 import sqlite3
 import uuid
+import hmac
+import threading
+import zipfile
 from pathlib import Path
+from contextlib import asynccontextmanager
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -24,11 +27,49 @@ from backend import jobs, auth
 from backend.agents import security_agent
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
+from pydantic import Field
+from starlette.concurrency import run_in_threadpool
 
-from pipeline import llm  # noqa: E402
-from tools import parse_php  # noqa: E402
 
-app = FastAPI(title="CodeForge AI")
+@asynccontextmanager
+async def lifespan(app):
+    # Admission accounting is local to one process. Enforce that deployment contract.
+    auth.DB.parent.mkdir(parents=True, exist_ok=True)
+    with (auth.DB.parent / 'server.lock').open('a+b') as handle:
+        try:
+            if handle.seek(0, os.SEEK_END) == 0:
+                handle.write(b'0')
+                handle.flush()
+            handle.seek(0)
+            if os.name == 'nt':
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            raise RuntimeError(
+                'Cannot acquire the CodeForge server lock. Another backend may already be running. '
+                'Open http://127.0.0.1:8001 or stop the existing server with Ctrl+C before restarting. '
+                'For the background demo, run: powershell -NoProfile -ExecutionPolicy Bypass '
+                '-File .\\tools\\stop_demo.ps1 (this also closes the public tunnel). '
+                'If no backend is running, check write permissions for the data directory.'
+            ) from None
+        try:
+            await run_in_threadpool(jobs.recover_interrupted)
+            yield
+        finally:
+            handle.seek(0)
+            if os.name == 'nt':
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+app = FastAPI(title="CodeForge AI", lifespan=lifespan)
+AUTH_SLOTS = threading.BoundedSemaphore(4)
+BODY_SLOTS = threading.BoundedSemaphore(8)
+API_SLOTS = threading.BoundedSemaphore(32)
 BUILD_ID = hashlib.sha256(b''.join((ROOT / 'backend' / name).read_bytes() for name in
     ('app.py', 'agents.py', 'structure.py', 'jobs.py', 'auth.py'))).hexdigest()[:12]
 
@@ -37,11 +78,28 @@ BUILD_ID = hashlib.sha256(b''.join((ROOT / 'backend' / name).read_bytes() for na
 async def protect_api(request: Request, call_next):
     try:
         if request.url.path.startswith('/api/') and request.url.path not in ('/api/health', '/api/auth/login', '/api/auth/signup'):
-            request.state.account = auth.require(request)
+            request.state.account = await run_in_threadpool(auth.require, request)
         elif request.method == 'POST':
             auth.check_origin(request)
+        if request.method in ('POST', 'PUT', 'PATCH'):
+            if not BODY_SLOTS.acquire(blocking=False):
+                raise HTTPException(429, 'Other uploads are in progress. Retry shortly.', headers={'Retry-After': '5'})
+            try:
+                import asyncio
+                limit = 15_000_000 if request.url.path == '/api/jobs' else 300_000
+                payload = bytearray()
+                async with asyncio.timeout(30):
+                    async for chunk in request.stream():
+                        if len(payload) + len(chunk) > limit:
+                            raise HTTPException(413, 'Request body exceeds the endpoint upload limit')
+                        payload.extend(chunk)
+                request._body = bytes(payload)
+            except TimeoutError:
+                raise HTTPException(408, 'Upload timed out. Retry with a smaller upload.')
+            finally:
+                BODY_SLOTS.release()
     except HTTPException as exc:
-        return JSONResponse({'detail': exc.detail}, status_code=exc.status_code)
+        return JSONResponse({'detail': exc.detail}, status_code=exc.status_code, headers=exc.headers)
     except sqlite3.OperationalError:
         logging.exception('Database unavailable during authentication')
         return JSONResponse({'detail': 'The database is temporarily busy or unavailable. Retry shortly.'}, status_code=503)
@@ -55,9 +113,23 @@ async def protect_api(request: Request, call_next):
         logging.exception('Request %s failed: %s', error_id, request.url.path)
         return JSONResponse({'detail': 'Unexpected backend error. Check the server terminal.', 'error_id': error_id}, status_code=500)
 
+
+@app.middleware('http')
+async def bound_api_concurrency(request: Request, call_next):
+    if not request.url.path.startswith('/api/') or request.url.path == '/api/health':
+        return await call_next(request)
+    if not API_SLOTS.acquire(blocking=False):
+        return JSONResponse({'detail': 'The server is busy. Retry shortly.'}, status_code=429,
+                            headers={'Retry-After': '2'})
+    try:
+        return await call_next(request)
+    finally:
+        API_SLOTS.release()
+
 class Credentials(BaseModel):
-    email: str
-    password: str
+    email: str = Field(max_length=254)
+    password: str = Field(max_length=128)
+    invite_code: str = Field(default='', max_length=128)
 
 @app.post('/api/auth/signup')
 def signup(body: Credentials, request: Request):
@@ -68,8 +140,16 @@ def login(body: Credentials, request: Request):
     return establish_session(body, request, False)
 
 def establish_session(body, request, signup):
-    auth.limit_attempts(request)
-    token, account = auth.credentials(body.email, body.password, signup)
+    auth.limit_attempts(request, body.email)
+    invite = os.getenv('CODEFORGE_INVITE_CODE', '')
+    if signup and invite and not hmac.compare_digest(body.invite_code, invite):
+        raise HTTPException(403, 'An invitation code from the demo host is required to create an account.')
+    if not AUTH_SLOTS.acquire(blocking=False):
+        raise HTTPException(429, 'Other sign-ins are in progress. Retry shortly.', headers={'Retry-After': '2'})
+    try:
+        token, account = auth.credentials(body.email, body.password, signup)
+    finally:
+        AUTH_SLOTS.release()
     response = JSONResponse(account)
     response.set_cookie(auth.COOKIE, token, httponly=True, samesite='strict',
                         secure=request.url.scheme == 'https', max_age=auth.TTL, path='/')
@@ -92,7 +172,7 @@ def history(request: Request):
     rows = auth.history(request.state.account['id'])
     for row in rows:
         try:
-            state = jobs.read(row['id'])
+            state = jobs.read(row['id'], summary=True)
             row.update(status=state['status'], message=state.get('message', ''))
         except FileNotFoundError:
             row.update(status='unavailable', message='Job files unavailable')
@@ -103,8 +183,8 @@ def history(request: Request):
 
 
 class PhpIn(BaseModel):
-    php: str
-    filename: str = "upload.php"
+    php: str = Field(min_length=1, max_length=45000)
+    filename: str = Field(default="upload.php", max_length=220)
 
 
 def _load(path):
@@ -127,68 +207,57 @@ def results():
 
 @app.post("/api/parse")
 def parse(body: PhpIn):
-    return parse_php.parse_sources({body.filename: body.php}, body.filename)
+    from backend.agents import parser_agent
+    try:
+        return parser_agent(jobs.validate_sources({body.filename: body.php}))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
 
 
-@app.post("/api/migrate")
+@app.post("/api/migrate", deprecated=True)
 def migrate(body: PhpIn):
-    """One LLM pass. Equivalence cannot be tested for an uploaded file because there are no
-    recorded PHP outputs for it, so the response says so instead of claiming a result."""
-    try:
-        client = llm.get_client()
-    except RuntimeError as e:
-        raise HTTPException(500, str(e))
-    text, tokens, error = llm.call_llm(client, llm.DEFAULT_MODEL, llm.MIGRATE_PROMPT.format(php=body.php))
-    if error:
-        raise HTTPException(502, error)
-    try:
-        data = llm.parse_json(text)
-    except ValueError:
-        raise HTTPException(502, "The model did not return valid JSON.")
-    code, syntax_error = data["generated_code"], None
-    try:
-        ast.parse(code)
-    except SyntaxError as e:
-        syntax_error = str(e)
-    return {
-        "generated_code": code,
-        "explanation": data.get("explanation", ""),
-        "syntax_ok": syntax_error is None,
-        "syntax_error": syntax_error,
-        "tokens": tokens,
-        "equivalence": "not tested (no recorded PHP outputs for an uploaded file)",
-    }
+    raise HTTPException(410, 'Use POST /api/jobs for queued migration, progress, reports and downloads.')
 
 
 @app.post("/api/scan")
 def scan(body: PhpIn):
-    return security_agent({body.filename: body.php})
+    try:
+        return security_agent(jobs.ingest({'files': [{'name': body.filename, 'content': body.php}]}))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
 
 
 @app.post('/api/jobs', openapi_extra={'requestBody': {'required': True, 'content': {'application/json': {'schema': {'type': 'object', 'properties': {'repository': {'type': 'string'}, 'archive': {'type': 'string'}, 'files': {'type': 'array', 'items': {'type': 'object', 'properties': {'name': {'type': 'string'}, 'content': {'type': 'string'}}}}}}}}}})
 async def create_job(request: Request):
-    payload = bytearray()
-    async for chunk in request.stream():
-        payload.extend(chunk)
-        if len(payload) > 15_000_000:
-            raise HTTPException(413, 'Upload exceeds 15 MB')
     try:
-        body = json.loads(payload)
+        body = await request.json()
         if not isinstance(body, dict):
             raise ValueError('Expected a JSON object')
-        from starlette.concurrency import run_in_threadpool
-        sources = await run_in_threadpool(jobs.ingest, body)
-        return jobs.create(sources, owner_id=request.state.account['id'])
-    except Exception as exc:
+        return await run_in_threadpool(submit_job, body, request.state.account['id'])
+    except jobs.CapacityError as exc:
+        raise HTTPException(429, str(exc), headers={'Retry-After': '15'})
+    except (ValueError, TypeError, KeyError, UnicodeError, zipfile.BadZipFile) as exc:
         raise HTTPException(400, f'Could not load source: {exc}')
+    except OSError:
+        logging.exception('Source import or workspace write failed')
+        raise HTTPException(503, 'Source import or workspace storage unavailable. Check the repository and retry.')
+
+
+def submit_job(body, owner_id):
+    if not jobs.INGEST_SLOTS.acquire(blocking=False):
+        raise jobs.CapacityError('Other uploads are being validated. Retry shortly.')
+    try:
+        return jobs.create(jobs.ingest(body), owner_id=owner_id)
+    finally:
+        jobs.INGEST_SLOTS.release()
 
 
 @app.get('/api/jobs/{job_id}')
-def job_status(job_id: str, request: Request):
+def job_status(job_id: str, request: Request, summary: bool = False):
     if not auth.owns(job_id, request.state.account['id']):
         raise HTTPException(404, 'Job not found')
     try:
-        return jobs.read(job_id)
+        return jobs.read(job_id, summary=summary)
     except FileNotFoundError:
         raise HTTPException(404, 'Job not found')
     except (OSError, ValueError, KeyError):

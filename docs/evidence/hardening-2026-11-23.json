@@ -1,0 +1,222 @@
+{
+  "date": "2026-11-23",
+  "scope": "Presentation hardening of a single-process local prototype; not a production certification",
+  "checks": {
+    "backend_tests": 32,
+    "backend_tests_status": "passed",
+    "react_production_build": "passed",
+    "python_compilation": "passed",
+    "npm_production_audit_reported_vulnerabilities": 0,
+    "pdf_pages": 5,
+    "pdf_visual_review": "passed",
+    "browser_visual_review": "automation timed out; no pass claimed"
+  },
+  "fixes": [
+    "bounded job/API/upload/login admission and Retry-After",
+    "consistent source/body limits and retired direct migration bypass",
+    "Windows/path/case/module collision validation",
+    "failed submission rollback and low-disk guard",
+    "WAL/schema initialization and blocking authentication off event loop",
+    "lightweight non-overlapping progress polling and backoff",
+    "single-process lock, interrupted-job recovery and fingerprinted checkpoint reuse",
+    "account/IP login throttling",
+    "AST-filtered scanner plus dynamic-call manual review",
+    "bounded Docker output/time and explicit container cleanup",
+    "corrective model JSON and test-target retry",
+    "per-case JSON serialization with precise integral Decimal projection",
+    "invitation-only demo signup and non-success indicators for untested stages"
+  ],
+  "docker_fixture": {
+    "source_files": 3,
+    "module_files": 3,
+    "verdict": "EQUIVALENT",
+    "cases": 10,
+    "scope": "Declared translation/test-input fixtures with real Docker execution; no Groq inference"
+  },
+  "live_groq": {
+    "source_files": 3,
+    "module_files": 3,
+    "structure": "STATIC_CHECKS_PASSED",
+    "verdict": "MISMATCH",
+    "cases": 72,
+    "matching": 70,
+    "mismatches": [
+      {
+        "function": "calculate_value",
+        "args": [
+          999999999999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": 1000000000000000002
+        },
+        "actual": {
+          "ok": true,
+          "value": 1e+18
+        },
+        "verdict": "MISMATCH"
+      },
+      {
+        "function": "calculate_value",
+        "args": [
+          -999999999999999999
+        ],
+        "file": "calculator.php",
+        "expected": {
+          "ok": true,
+          "value": -999999999999999996
+        },
+        "actual": {
+          "ok": true,
+          "value": -1e+18
+        },
+        "verdict": "MISMATCH"
+      }
+    ],
+    "reported_tokens": 5600,
+    "scope": "One procedural three-file rehearsal, not independent grading or a benchmark"
+  },
+  "isolated_load": {
+    "scope": "Local single-process HTTP API test; 2,000 pre-provisioned fixture users. Groq, remote imports and Docker disabled. This is not 2,000 real LLM migrations or a distributed load test.",
+    "phases": [
+      {
+        "name": "Authenticated read ramp",
+        "virtual_users": 2000,
+        "max_in_flight": 400,
+        "requests": 8000,
+        "seconds": 205.408,
+        "requests_per_second": 38.95,
+        "status_counts": {
+          "429": 799,
+          "200": 5233,
+          "RemoteProtocolError": 15,
+          "404": 1953
+        },
+        "unexpected_results": 15,
+        "latency_ms": {
+          "p50": 6698.41,
+          "p95": 29648.27,
+          "p99": 45421.56,
+          "max": 95026.79
+        }
+      },
+      {
+        "name": "Job admission burst with two parked workers",
+        "virtual_users": 1000,
+        "max_in_flight": 100,
+        "requests": 1000,
+        "seconds": 14.39,
+        "requests_per_second": 69.49,
+        "status_counts": {
+          "429": 988,
+          "200": 12
+        },
+        "unexpected_results": 0,
+        "latency_ms": {
+          "p50": 822.54,
+          "p95": 4820.79,
+          "p99": 6324.08,
+          "max": 7420.85
+        }
+      }
+    ],
+    "queue_after_burst": {
+      "queued_tasks": 10,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 2,
+        "completed": 0,
+        "failed": 0
+      },
+      "persisted_job_records": 2012,
+      "job_folders": 2012
+    },
+    "queue_after_drain": {
+      "queued_tasks": 0,
+      "fixture_jobs": 2000,
+      "worker_metrics": {
+        "started": 12,
+        "completed": 12,
+        "failed": 0
+      },
+      "persisted_job_records": 2012,
+      "job_folders": 2012
+    },
+    "orphan_probe": {
+      "before": {
+        "queued_tasks": 0,
+        "fixture_jobs": 2000,
+        "worker_metrics": {
+          "started": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "persisted_job_records": 2000,
+        "job_folders": 2000
+      },
+      "after": {
+        "queued_tasks": 0,
+        "fixture_jobs": 2000,
+        "worker_metrics": {
+          "started": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "persisted_job_records": 2000,
+        "job_folders": 2000
+      },
+      "new_folders_for_three_rejected_requests": 0
+    },
+    "login_throttle": {
+      "requests": 35,
+      "status_counts": {
+        "401": 30,
+        "429": 5
+      },
+      "seconds": 57.87,
+      "different_valid_account_after_limit_status": 200
+    }
+  },
+  "public_demo": {
+    "scope": "External HTTPS frontend/authentication/validation checks; no model call through the tunnel in this probe",
+    "url": "https://jury-would-population-herein.trycloudflare.com",
+    "checks": {
+      "frontend": 200,
+      "frontend_has_app": true,
+      "health": 200,
+      "build": "5ef5e18f0d20",
+      "signed_out_history": 401,
+      "signup_without_invite": 403,
+      "invited_signup": 200,
+      "https_secure_cookie": true,
+      "own_history": 200,
+      "invalid_php": 400,
+      "valid_parse": 200,
+      "logout": 200,
+      "signed_out_again": 401
+    },
+    "final_build_verified": "6ce4085f0bb0",
+    "final_checks": {
+      "https_login_cookie": true,
+      "private_history": 200,
+      "legacy_bypass_retired": 410,
+      "invalid_zip": 400,
+      "unknown_job": 404,
+      "logout": 200
+    }
+  },
+  "remaining": [
+    "Two large-integer live-model mismatches are correctly reported; universal semantic equivalence is not established",
+    "Heavy 400-in-flight read phase still had 15 transport failures and high latency; production scale is not validated",
+    "No durable distributed queue, automatic retention or permanent cloud deployment",
+    "Broader framework/class/HTTP characterization and deeper security data-flow analysis remain future work"
+  ],
+  "delivery": {
+    "guide": "output/pdf/CodeForge_AI_Guide.pdf",
+    "manual": "docs/PRESENTATION_READY.md",
+    "hosting": "docs/DEPLOYMENT.md",
+    "git": "Local and uncommitted; not pushed",
+    "runtime": "Invitation-protected backend and temporary HTTPS tunnel intentionally left running for the user"
+  }
+}
